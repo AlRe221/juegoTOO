@@ -19,15 +19,16 @@ public class Jugador extends Entidad
 	{
 		this.gP = gP;
 		this.mT = mT;
-		this.pantallaX = gP.getAnchoPantalla() / 2;
-		this.pantallaY = gP.getAltoPantalla() / 2;
+		
+		this.pantallaX = gP.getAnchoPantalla() / 2 - (gP.getTamanioTile()/2);
+		this.pantallaY = gP.getAltoPantalla() / 2 - (gP.getTamanioTile()/2);
 		configuracionInicial();
 		getSpritesJugador();
 	}
 	public void configuracionInicial()
 	{
-		this.mundoX = gP.getTamanioTile() * 22;
-		this.mundoY = gP.getTamanioTile() * 39;
+		this.mundoX = gP.getTamanioTile() * 23;
+		this.mundoY = gP.getTamanioTile() * 21;
 		this.velocidad = 4;
 		this.direccion = "abajo";
 	}
@@ -49,45 +50,47 @@ public class Jugador extends Entidad
 	}
 	public void update()
 	{
-		if(mT.getTeclaArriba() == true || mT.getTeclaAbajo() == true || mT.getTeclaIzquierda() == true || mT.getTeclaDerecha() == true)
-			this.contadorSprites++;
-		if(mT.getTeclaArriba())
-		{
-			setY(getY() - getVelocidad());
-			this.direccion = "arriba";
-		} else 
-		{
-			if(mT.getTeclaAbajo())
-			{
-				setY(getY() + getVelocidad());
-				this.direccion = "abajo";
-			}else 
-			{
-				if(mT.getTeclaIzquierda())
+		if(mT.getTeclaArriba() == true || mT.getTeclaAbajo() == true || mT.getTeclaIzquierda() == true || mT.getTeclaDerecha() == true) {
+				this.contadorSprites++;
+				if(mT.getTeclaArriba())
 				{
-					setX(getX() - getVelocidad());
-					this.direccion = "izquierda";
-				}else 
+					setY(getY() - getVelocidad());
+					this.direccion = "arriba";
+				} else 
 				{
-					if(mT.getTeclaDerecha())
+					if(mT.getTeclaAbajo())
 					{
-						setX(getX() + getVelocidad());
-						this.direccion = "derecha";
+						setY(getY() + getVelocidad());
+						this.direccion = "abajo";
+					}else 
+					{
+						if(mT.getTeclaIzquierda())
+						{
+							setX(getX() - getVelocidad());
+							this.direccion = "izquierda";
+						}else 
+						{
+							if(mT.getTeclaDerecha())
+							{
+								setX(getX() + getVelocidad());
+								this.direccion = "derecha";
+							}
+						}
 					}
 				}
-			}
-		}
 		//this.contadorSprites++;
-		if(this.contadorSprites > this.cambiaSprite)
-		{
-			if(this.numeroSprite == 1)
-				this.numeroSprite = 2;
-			else
-				this.numeroSprite = 1;
-			this.contadorSprites = 0;
-		}
-			
+				if(this.contadorSprites > this.cambiaSprite)
+				{
+					if(this.numeroSprite == 1)
+						this.numeroSprite = 2;
+					else
+						this.numeroSprite = 1;
+					this.contadorSprites = 0;
+				}
+		}		
 	}
+	
+	
 	public void draw(Graphics2D g2)
 	{
 		BufferedImage sprite = null;
@@ -120,6 +123,8 @@ public class Jugador extends Entidad
 		}
 		g2.drawImage(sprite, this.pantallaX, this.pantallaY, gP.getTamanioTile(), gP.getTamanioTile(),null);
 	}
+	
+	
 	public int getX()
 	{
 		return this.mundoX;
@@ -140,4 +145,14 @@ public class Jugador extends Entidad
 	{
 		this.mundoY = valor;
 	}
+	
+	
+	public int getPantallaX() {
+		return pantallaX;
+	}
+	public int getPantallaY() {
+		return pantallaY;
+	}
+	
+	
 }

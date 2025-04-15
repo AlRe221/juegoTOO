@@ -27,6 +27,12 @@ public class GamePanel extends JPanel implements Runnable
 	Jugador jugador = new Jugador(this, mT);
 	ManejadorTiles mTi =new ManejadorTiles(this);
 	
+	//world settings
+	public final int maxColMundo = 50; 
+	public final int maxRenMundo = 50; 
+	public final int anchoMundo = tamanioTile * maxColMundo;
+	public final int altoMundo = tamanioTile * maxRenMundo;
+	
 	int FPS = 60;
 	
 	public GamePanel()
@@ -103,4 +109,13 @@ public class GamePanel extends JPanel implements Runnable
 	{
 		return this.altoPantalla;
 	}
+	
+	
+	public Jugador getJugador() {
+		return jugador;
+	}
+	public void setJugador(Jugador jugador) {
+		this.jugador = jugador;
+	}
+	
 }

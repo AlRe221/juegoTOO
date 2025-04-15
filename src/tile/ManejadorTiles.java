@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import Main.GamePanel;
 
 public class ManejadorTiles {
+	
 	private GamePanel gP;
 	private int maxTiles = 10;
 	Tile[] arregloTiles;
@@ -19,25 +20,32 @@ public class ManejadorTiles {
 	public ManejadorTiles(GamePanel gP) {
 		this.gP = gP;
 		this.arregloTiles = new Tile[maxTiles];
-		this.codigosMapaTiles = new int[gP.getMaxRenPantalla()]
-								[gP.getMaxColPantalla()];
+		this.codigosMapaTiles = new int[gP.maxRenMundo]
+								[gP.maxRenMundo];
 		getImagenesTile();
-		cargaMapa();
+		cargaMapa("/mapas/world02.txt");
 	}
-	public void cargaMapa(){
+	public void cargaMapa(String rutaMapa){
 		try {
-			InputStream mapa = getClass().getResourceAsStream("/mapas/mapa01.txt");
+			InputStream mapa = getClass().getResourceAsStream(rutaMapa);
 			BufferedReader br = new BufferedReader(new InputStreamReader(mapa));
+			
 			int ren = 0, col = 0;
-			while(ren < gP.getMaxRenPantalla() && col < gP.getMaxColPantalla()) {
+			
+			while(ren < gP.maxRenMundo && col < gP.maxColMundo) {
 				String renglonDatos = br.readLine();
-				while(col < gP.getMaxColPantalla()) {
+				
+				while(col < gP.maxColMundo) {
+					
 					String[] codigos = renglonDatos.split(" ");
+					
 					int codigo = Integer.parseInt(codigos[col]);
+					
 					this.codigosMapaTiles[ren][col] = codigo;
+					
 					col++;
 				}
-				if(col == gP.getMaxColPantalla()) {
+				if(col == gP.maxColMundo) {
 					ren++;
 					col = 0;
 				}
@@ -66,17 +74,32 @@ public class ManejadorTiles {
 		}
 	}
 	public void draw(Graphics2D g2) {
-		int ren = 0, col = 0;
-		int x = 0, y = 0;
-		while(ren < this.gP.getMaxRenPantalla() && col < this.gP.getMaxColPantalla()) {
-			g2.drawImage(this.arregloTiles[this.codigosMapaTiles[ren][col]].getImagen(), x, y, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
-			col++;
-			x += this.gP.getTamanioTile();
-			if(col == this.gP.getMaxColPantalla()) {
-				col = 0;
-				x = 0;
-				ren++;
-				y += this.gP.getTamanioTile();
+		int renMundo = 0, colMundo = 0;
+		
+		while(renMundo < this.gP.maxRenMundo && colMundo < this.gP.maxColMundo) {
+			
+			int numTile = codigosMapaTiles[renMundo][colMundo];
+			
+			int mundoX = colMundo * gP.getTamanioTile();
+			int mundoY = renMundo * gP.getTamanioTile();
+			
+			int pantallaX = mundoX -gP.getJugador().getX() + gP.getJugador().getPantallaX();
+			int pantallaY = mundoY - gP.getJugador().getY() + gP.getJugador().getPantallaY();
+			
+			if(mundoX + gP.getTamanioTile() > gP.getJugador().getX() - gP.getJugador().getPantallaX() &&
+			   mundoX - gP.getTamanioTile() < gP.getJugador().getX() + gP.getJugador().getPantallaX() &&
+			   mundoY + gP.getTamanioTile() > gP.getJugador().getY() - gP.getJugador().getPantallaX() &&
+			   mundoY - gP.getTamanioTile() < gP.getJugador().getY() + gP.getJugador().getPantallaY()) {
+				
+				g2.drawImage(this.arregloTiles[numTile].getImagen(), pantallaX, pantallaY, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
+			}
+			
+			colMundo++;
+	
+			
+			if(colMundo == this.gP.maxColMundo) {
+				colMundo = 0;
+				renMundo++;
 			}
 		}
 	}
