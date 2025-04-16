@@ -37,10 +37,16 @@ public class Jugador extends Entidad
 		try {
 			this.estatico1 =ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico1.png"));
 			this.estatico2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico2.png"));
-			this.arriba1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverArriba1.png"));
-			this.arriba2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverArriba2.png"));
+			
+			this.arriba1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoArriba1.png"));
+			this.arriba2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoArriba2.png"));
+			
+			this.estaticoA1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoA1.png"));
+			this.estaticoA2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoA2.png"));
+			
 			this.abajo1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoAbajo1.png"));
 			this.abajo2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoAbajo2.png"));
+			
 			this.izquierda1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverIzquierda1.png"));
 			this.izquierda2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverIzquierda2.png"));
 			this.derecha1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverDerecha1.png"));
@@ -50,11 +56,61 @@ public class Jugador extends Entidad
 			System.out.println(e);
 		}
 	}
-	public void update()
+	
+	
+	public void update() {
+	    boolean moviendo = false;
+
+	    if (mT.getTeclaArriba()) {
+	        setY(getY() - getVelocidad());
+	        this.direccion = "arriba";
+	        moviendo = true;
+	    } else if (mT.getTeclaAbajo()) {
+	        setY(getY() + getVelocidad());
+	        this.direccion = "abajo";
+	        moviendo = true;
+	    } else if (mT.getTeclaIzquierda()) {
+	        setX(getX() - getVelocidad());
+	        this.direccion = "izquierda";
+	        moviendo = true;
+	    } else if (mT.getTeclaDerecha()) {
+	        setX(getX() + getVelocidad());
+	        this.direccion = "derecha";
+	        moviendo = true;
+	    }
+
+	    // Si no se está moviendo, aplicar estático dependiendo de la última dirección
+	    if (!moviendo) {
+	        if (this.direccion.equals("arriba")) {
+	            this.direccion = "estaticoArriba";
+	        } else if (this.direccion.equals("abajo")) {
+	            this.direccion = "estatico";
+	        } // Puedes agregar también estaticoIzquierda y estaticoDerecha si quieres
+	    }
+
+	    this.contadorSprites++;
+	    if (this.contadorSprites > this.cambiaSprite) {
+	        if (this.numeroSprite == 1)
+	            this.numeroSprite = 2;
+	        else
+	            this.numeroSprite = 1;
+	        this.contadorSprites = 0;
+	    }
+	}
+
+	
+	/*public void update()
 	{
+	   //aquí se hizo la modicación para que se mueva estando estatico, si no les gusta, pueden: 
+		//borrar las variables de estatico (tanto en getSprite como aqui como en draw y de la clase entidad)
+		//implementar el if que esta en comentarios 
+		//meter todo el codigo restante dentro de este if. 
+		/*if(mT.getTeclaArriba() == true || mT.getTeclaAbajo() == true ||
+			mT.getTeclaIzquierda() == true || mT.getTeclaDerecha() == true) {
+			this.contadorSprites++;
+			}
 		
 		this.direccion = "estatico";
-		
 		if(mT.getTeclaArriba())
 		{
 			setY(getY() - getVelocidad());
@@ -86,7 +142,7 @@ public class Jugador extends Entidad
 						this.numeroSprite = 1;
 					this.contadorSprites = 0;
 				}
-		}		
+		}*/		
 	
 	
 	public void draw(Graphics2D g2)
@@ -124,6 +180,12 @@ public class Jugador extends Entidad
 			if(this.numeroSprite == 2)
 				sprite = this.estatico2; 
 			break;
+		case "estaticoArriba" : 
+			if(this.numeroSprite == 1)
+				sprite = this.estaticoA1; 
+			if(this.numeroSprite == 2)
+				sprite = this.estaticoA2; 
+			break;	
 		}	
 		g2.drawImage(sprite, this.pantallaX, this.pantallaY, gP.getTamanioTile(), gP.getTamanioTile(),null);
 	}
