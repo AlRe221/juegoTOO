@@ -35,10 +35,12 @@ public class Jugador extends Entidad
 	public void getSpritesJugador()
 	{
 		try {
+			this.estatico1 =ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico1.png"));
+			this.estatico2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico2.png"));
 			this.arriba1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverArriba1.png"));
 			this.arriba2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverArriba2.png"));
-			this.abajo1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverAbajo1.png"));
-			this.abajo2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverAbajo2.png"));
+			this.abajo1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoAbajo1.png"));
+			this.abajo2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoAbajo2.png"));
 			this.izquierda1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverIzquierda1.png"));
 			this.izquierda2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverIzquierda2.png"));
 			this.derecha1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverDerecha1.png"));
@@ -50,35 +52,32 @@ public class Jugador extends Entidad
 	}
 	public void update()
 	{
-		if(mT.getTeclaArriba() == true || mT.getTeclaAbajo() == true || mT.getTeclaIzquierda() == true || mT.getTeclaDerecha() == true) {
-				this.contadorSprites++;
-				if(mT.getTeclaArriba())
+		
+		this.direccion = "estatico";
+		
+		if(mT.getTeclaArriba())
+		{
+			setY(getY() - getVelocidad());
+			this.direccion = "arriba";
+		} else 
+			if(mT.getTeclaAbajo())
+			{
+				setY(getY() + getVelocidad());
+				this.direccion = "abajo";
+			}else 
+				if(mT.getTeclaIzquierda())
 				{
-					setY(getY() - getVelocidad());
-					this.direccion = "arriba";
-				} else 
-				{
-					if(mT.getTeclaAbajo())
+					setX(getX() - getVelocidad());
+					this.direccion = "izquierda";
+				}else 
+					if(mT.getTeclaDerecha())
 					{
-						setY(getY() + getVelocidad());
-						this.direccion = "abajo";
-					}else 
-					{
-						if(mT.getTeclaIzquierda())
-						{
-							setX(getX() - getVelocidad());
-							this.direccion = "izquierda";
-						}else 
-						{
-							if(mT.getTeclaDerecha())
-							{
-								setX(getX() + getVelocidad());
-								this.direccion = "derecha";
-							}
-						}
+						setX(getX() + getVelocidad());
+						this.direccion = "derecha";
 					}
-				}
-		//this.contadorSprites++;
+			
+			this.contadorSprites++;
+		 
 				if(this.contadorSprites > this.cambiaSprite)
 				{
 					if(this.numeroSprite == 1)
@@ -88,7 +87,6 @@ public class Jugador extends Entidad
 					this.contadorSprites = 0;
 				}
 		}		
-	}
 	
 	
 	public void draw(Graphics2D g2)
@@ -120,7 +118,13 @@ public class Jugador extends Entidad
 			if(this.numeroSprite == 2)
 				sprite = this.derecha2; 
 			break;
-		}
+		case "estatico" : 
+			if(this.numeroSprite == 1)
+				sprite = this.estatico1; 
+			if(this.numeroSprite == 2)
+				sprite = this.estatico2; 
+			break;
+		}	
 		g2.drawImage(sprite, this.pantallaX, this.pantallaY, gP.getTamanioTile(), gP.getTamanioTile(),null);
 	}
 	
