@@ -11,12 +11,18 @@ public class Tile
 	{
 		return this.imagen;
 	}
+	
 	public void setImagen(BufferedImage imagen)
 	{
 		this.imagen = imagen;
 	}
+	
 	public boolean getColision()
 	{
 		return this.colision;
+	}
+
+	public void setColision(boolean colision) {
+		this.colision = colision;
 	}
 }

@@ -1,6 +1,7 @@
 package entidad;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -22,6 +23,9 @@ public class Jugador extends Entidad
 		
 		this.pantallaX = gP.getAnchoPantalla() / 2 - (gP.getTamanioTile()/2);
 		this.pantallaY = gP.getAltoPantalla() / 2 - (gP.getTamanioTile()/2);
+		
+		this.solidArea = new Rectangle(8,16,32,32); 
+		
 		configuracionInicial();
 		getSpritesJugador();
 	}
@@ -62,19 +66,15 @@ public class Jugador extends Entidad
 	    boolean moviendo = false;
 
 	    if (mT.getTeclaArriba()) {
-	        setY(getY() - getVelocidad());
 	        this.direccion = "arriba";
 	        moviendo = true;
 	    } else if (mT.getTeclaAbajo()) {
-	        setY(getY() + getVelocidad());
 	        this.direccion = "abajo";
 	        moviendo = true;
 	    } else if (mT.getTeclaIzquierda()) {
-	        setX(getX() - getVelocidad());
 	        this.direccion = "izquierda";
 	        moviendo = true;
 	    } else if (mT.getTeclaDerecha()) {
-	        setX(getX() + getVelocidad());
 	        this.direccion = "derecha";
 	        moviendo = true;
 	    }
@@ -87,8 +87,33 @@ public class Jugador extends Entidad
 	            this.direccion = "estatico";
 	        } // Puedes agregar también estaticoIzquierda y estaticoDerecha si quieres
 	    }
+	    
+	    
+	    //revisa coli con tiles
+	    this.colisionOn = false; 
+	    gP.getchecadorColision().checkTile(this);
+	    
+	    
+	    //si no hubo colisión
+	    if(colisionOn == false) {
+	    	switch(direccion) {
+	    	case "arriba":
+	    		 setY(getY() - getVelocidad());
+	    		break; 
+	    	case "abajo" : 
+	    		setY(getY() + getVelocidad());
+	    		break;
+	    	case "izquierda" : 
+	    		setX(getX() - getVelocidad());
+	    		break; 
+	    	case "derecha" :
+	    		setX(getX() + getVelocidad()); 
+	    		break; 
+	    	}
+	    }
 
 	    this.contadorSprites++;
+	    
 	    if (this.contadorSprites > this.cambiaSprite) {
 	        if (this.numeroSprite == 1)
 	            this.numeroSprite = 2;
@@ -220,5 +245,25 @@ public class Jugador extends Entidad
 		return pantallaY;
 	}
 	
+	
+	public int getAreaSolidaX() {
+		return this.solidArea.x;
+	}
+	
+	public int getAreaSolidaY() {
+		return this.solidArea.y;
+	}
+	
+	public int getAreaSolidaWidth() {
+		return this.solidArea.width;
+	}
+	
+	public int getAreaSolidaHeigth() {
+		return this.solidArea.height;
+	}
+	
+	public String getDireccion() {
+		return this.direccion;
+	}
 	
 }

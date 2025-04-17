@@ -59,14 +59,22 @@ public class ManejadorTiles {
 		try {
 			arregloTiles[0] = new Tile();
 			arregloTiles[0].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/agua.png")));
+			arregloTiles[0].setColision(true);
+			
 			arregloTiles[1] = new Tile();
 			arregloTiles[1].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/arbol.png")));
+			arregloTiles[1].setColision(true);
+			
 			arregloTiles[2] = new Tile();
 			arregloTiles[2].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/arena.png")));
+			
 			arregloTiles[3] = new Tile();
 			arregloTiles[3].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/muro.png")));
+			arregloTiles[3].setColision(true);
+			
 			arregloTiles[4] = new Tile();
 			arregloTiles[4].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/pasto.png")));
+			
 			arregloTiles[5] = new Tile();
 			arregloTiles[5].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/suelo.png")));
 		}catch(IOException e) {
@@ -103,4 +111,13 @@ public class ManejadorTiles {
 			}
 		}
 	}
+	
+	public int getCodigoMapaTiles(int ren, int col) {
+		return this.codigosMapaTiles[ren][col];
+		}
+	
+	public boolean getColisionDeTile(int index) {
+		return this.arregloTiles[index].getColision();
+		}
+	
 }
