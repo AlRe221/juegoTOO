@@ -13,7 +13,7 @@ import tile.ManejadorTiles;
 public class GamePanel extends JPanel implements Runnable
 {
 	//Configuracion de pantalla
-		private final int tamanioOriginalTile = 17;
+		private final int tamanioOriginalTile = 16;
 		private final int escala = 3;
 		private final int tamanioTile = tamanioOriginalTile * escala;
 		private final int maxRenPantalla = 15;
