@@ -10,7 +10,8 @@ public class Entidad
 	
 	protected BufferedImage arriba1, arriba2, abajo1, abajo2, izquierda1,
 							izquierda2, derecha1, derecha2,estatico1,estatico2,
-							estaticoA1,estaticoA2;
+							estaticoA1,estaticoA2,estaticoD1,estaticoD2,
+							estaticoI1,estaticoI2;
 	protected String direccion;
 	
 	protected int contadorSprites = 0;

@@ -39,22 +39,29 @@ public class Jugador extends Entidad
 	public void getSpritesJugador()
 	{
 		try {
-			this.estatico1 =ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico1.png"));
-			this.estatico2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico2.png"));
+			
 			
 			this.arriba1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoArriba1.png"));
 			this.arriba2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoArriba2.png"));
-			
 			this.estaticoA1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoA1.png"));
 			this.estaticoA2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoA2.png"));
 			
+			
+			this.estatico1 =ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico1.png"));
+			this.estatico2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico2.png"));
 			this.abajo1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoAbajo1.png"));
 			this.abajo2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoAbajo2.png"));
 			
-			this.izquierda1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverIzquierda1.png"));
-			this.izquierda2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverIzquierda2.png"));
-			this.derecha1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverDerecha1.png"));
-			this.derecha2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/moverDerecha2.png"));
+			
+			this.estaticoI1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoiz1.png"));
+			this.estaticoI2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoiz2.png"));		
+			this.izquierda1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoCamI1.png"));
+			this.izquierda2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoiz1.png"));
+			
+			this.estaticoD1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoD1.png"));
+			this.estaticoD2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoD2.png"));		
+			this.derecha1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoCamD1.png"));
+			this.derecha2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoD1.png"));
 		}catch(IOException e)
 		{
 			System.out.println(e);
@@ -85,7 +92,13 @@ public class Jugador extends Entidad
 	            this.direccion = "estaticoArriba";
 	        } else if (this.direccion.equals("abajo")) {
 	            this.direccion = "estatico";
-	        } // Puedes agregar también estaticoIzquierda y estaticoDerecha si quieres
+	        }else if(this.direccion.equals("derecha")) {
+	        	this.direccion ="estaticoDerecha";
+	        }else if(this.direccion.equals("izquierda")) {
+	        	this.direccion = "estaticoIzquierda";
+	        }	// Puedes agregar también estaticoIzquierda y estaticoDerecha si quieres
+	        
+	        
 	    }
 	    
 	    
@@ -211,7 +224,20 @@ public class Jugador extends Entidad
 			if(this.numeroSprite == 2)
 				sprite = this.estaticoA2; 
 			break;	
-		}	
+		case "estaticoDerecha" : 
+			if(this.numeroSprite == 1)
+				sprite = this.estaticoD1; 
+			if(this.numeroSprite == 2)
+				sprite = this.estaticoD2; 
+			break;
+		case "estaticoIzquierda" : 
+			if(this.numeroSprite == 1)
+				sprite = this.estaticoI1; 
+			if(this.numeroSprite == 2)
+				sprite = this.estaticoI2; 
+			break;	
+		}
+		
 		g2.drawImage(sprite, this.pantallaX, this.pantallaY, gP.getTamanioTile(), gP.getTamanioTile(),null);
 	}
 	
@@ -265,5 +291,4 @@ public class Jugador extends Entidad
 	public String getDireccion() {
 		return this.direccion;
 	}
-	
 }
