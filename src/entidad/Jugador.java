@@ -9,17 +9,20 @@ import javax.imageio.ImageIO;
 
 import Main.GamePanel;
 import Main.ManejadorTeclas;
+import Inventario.*;
 
 public class Jugador extends Entidad
 {
 	private GamePanel gP;
 	private ManejadorTeclas mT;
 	private final int pantallaX, pantallaY;
+	private Inventario inventario; // Inventario del juagador 
 	
 	public Jugador(GamePanel gP, ManejadorTeclas mT)
 	{
 		this.gP = gP;
 		this.mT = mT;
+		this.inventario = new Inventario();
 		
 		this.pantallaX = gP.getAnchoPantalla() / 2 - (gP.getTamanioTile()/2);
 		this.pantallaY = gP.getAltoPantalla() / 2 - (gP.getTamanioTile()/2);
@@ -68,6 +71,46 @@ public class Jugador extends Entidad
 		}
 	}
 	
+	 // Recoge un objeto y lo mete en el inventario
+    public void pickUpObjeto(Objeto obj) {
+        inventario.addObjeto(obj);
+        System.out.println(">> Recogido: " + obj.getTipoObjeto());
+    }
+
+    // Usa la primera Comida que encuentre: la muestra y la retira 
+    public void usarComida() {
+        for (Objeto o : inventario.getObjetos()) {
+            if (o instanceof Comida) {
+                Comida c = (Comida)o;
+                c.mostrarComida();
+                inventario.removeObjeto(c);
+                System.out.println(">> Comida usada y retirada del inventario.");
+                return;
+            }
+        }
+        System.out.println(">> No hay comida en el inventario.");
+    }
+
+    // Equipa (muestra) la primera Arma que encuentre 
+    public void equiparArma() {
+        for (Objeto o : inventario.getObjetos()) {
+            if (o instanceof Arma) {
+                Arma a = (Arma)o;
+                System.out.println(
+                  ">> Arma equipada: " +
+                  a.getTipoArma() +
+                  " (Daño=" + a.getCantidadDanio() + ")"
+                );
+                return;
+            }
+        }
+        System.out.println(">> No tienes armas para equipar.");
+    }
+
+    // Getter para acceder al inventario desde fuera 
+    public Inventario getInventario() {
+        return inventario;
+    }
 	
 	public void update() {
 	    boolean moviendo = false;
@@ -291,4 +334,5 @@ public class Jugador extends Entidad
 	public String getDireccion() {
 		return this.direccion;
 	}
+	
 }
