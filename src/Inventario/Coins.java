@@ -1,15 +1,29 @@
 
 package Inventario;
 
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 public class Coins extends Objeto {
-    private float valorCoin;
+    private double valorCoin;
     private int   cantidadCoin;
 
-    public Coins(float valorCoin, int cantidadCoin, float tiempoVida, boolean haceSonido, float duracion) {
+    public Coins(double valorCoin, int cantidadCoin, double tiempoVida, boolean haceSonido, double duracion) {
         super("Coins", tiempoVida, haceSonido, duracion);
         this.valorCoin    = valorCoin;
         this.cantidadCoin = cantidadCoin;
+        
+        try {
+        	
+        	this.image = ImageIO.read(getClass().getResourceAsStream("/objetos/blueheart.png"));
+        	
+        }catch(IOException e) {
+        	e.printStackTrace();
+        }
     }
+    
+    
 
     public int getCoin(){ return cantidadCoin; }
     public void setCoin(int c){
@@ -19,7 +33,7 @@ public class Coins extends Objeto {
     	this.cantidadCoin++;
 	}
 
-    public float getValorCoin(){ 
+    public double getValorCoin(){ 
     	return valorCoin; 
 	}
     public void  setValorCoin(float v){

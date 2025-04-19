@@ -8,6 +8,10 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import Inventario.Arma;
+import Inventario.Coins;
+import Inventario.Comida;
+import Inventario.Inventario;
 import Inventario.Objeto;
 import entidad.Jugador;
 import tile.ManejadorTiles;
@@ -33,6 +37,9 @@ public class GamePanel extends JPanel implements Runnable
 		Jugador jugador = new Jugador(this, mT);
 		ManejadorTiles mTi =new ManejadorTiles(this);
 		ChecadorColision cC = new ChecadorColision(this);
+		//Inventario inv = new Inventario();
+		Objeto o[] = new Objeto[8];
+		AssetSetter asSet = new AssetSetter(this);
 		
 		//world settings
 		public final int maxColMundo = 50; 
@@ -50,6 +57,15 @@ public class GamePanel extends JPanel implements Runnable
 			this.addKeyListener(mT);
 			this.setFocusable(true);
 		}
+		
+		
+		public void setupGame() {
+			asSet.setObject();
+		}
+		
+		
+		
+		
 		public void iniciaHebraJuego()
 		{
 			hebraJuego=new Thread(this);
@@ -101,13 +117,13 @@ public class GamePanel extends JPanel implements Runnable
 			        // ejecuta acción según tipo
 			        if (!items.isEmpty()) {
 			            Objeto sel = items.get(inventoryCursor);
-			            if (sel instanceof Inventario.Comida)    
+			            if (sel instanceof Comida)    
 			            	jugador.usarComida();
-			            else if (sel instanceof Inventario.Arma)  
+			            else if (sel instanceof Arma)  
 			            	jugador.equiparArma();
-			            else if (sel instanceof Inventario.Coins) {
-			                ((Inventario.Coins)sel).incrementoOro();
-			                System.out.println("Monedas: " + ((Inventario.Coins)sel).getCoin());
+			            else if (sel instanceof Coins) {
+			                ((Coins)sel).incrementoOro();
+			                System.out.println("Monedas: " + ((Coins)sel).getCoin());
 			            }
 			        }
 			        mT.setTeclaEnter(false);
@@ -119,14 +135,20 @@ public class GamePanel extends JPanel implements Runnable
 		    super.paintComponent(g);
 		    Graphics2D g2 = (Graphics2D) g;
 
-		    // 1) Mundo + jugador
+		    // 1) Mundo + jugador + objetos
 		    mTi.draw(g2);
+		    for(int i= 0; i < o.length; i++) {
+		    	if(o[i] != null) {
+		    		o[i].draw(g2,this);
+		    	}
+		    }
 		    jugador.draw(g2);
-
+		    
 		    // 2) Inventario encima, si está abierto
 		    if (inventoryOpen) {
 		        drawInventory(g2);
 		    }
+		    
 
 		    g2.dispose();
 		}
@@ -207,4 +229,8 @@ public class GamePanel extends JPanel implements Runnable
 			this.mTi = mTi;
 		}
 		
+		public Objeto[] getObjetoInv() {
+			return this.o;
+		}
+	
 }

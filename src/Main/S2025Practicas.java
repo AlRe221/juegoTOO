@@ -8,7 +8,7 @@ public class S2025Practicas {
 		JFrame ventana = new JFrame();
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ventana.setResizable(false);
-		ventana.setTitle("TOO - run paquito run *");
+		ventana.setTitle("TOO - Proyecto");
 		
 		GamePanel panelJuego=new GamePanel();
 		ventana.add(panelJuego);
@@ -17,6 +17,8 @@ public class S2025Practicas {
 		ventana.setLocationRelativeTo(null);
 		ventana.setVisible(true);
 		
+		
+		panelJuego.setupGame();
 		panelJuego.iniciaHebraJuego();
 	}
 }
