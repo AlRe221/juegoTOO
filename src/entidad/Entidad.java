@@ -19,6 +19,7 @@ public class Entidad
 	protected int cambiaSprite = 10;
 	
 	protected Rectangle solidArea;
+	protected int solidAreaDefaultX, solidAreaDefaultY;
 	protected boolean colisionOn = false;
 	
 	
@@ -28,5 +29,29 @@ public class Entidad
 	public void setColisionOn(boolean colisionOn) {
 		this.colisionOn = colisionOn;
 	}
+	
+	
+	
+	public Rectangle getSolidArea() {
+		return solidArea;
+	}
+	public void setSolidArea(Rectangle solidArea) {
+		this.solidArea = solidArea;
+	}
+	
+	
+	public int getSolidAreaDefaultX() {
+		return solidAreaDefaultX;
+	}
+	public void setSolidAreaDefaultX(int solidAreaDefaultX) {
+		this.solidAreaDefaultX = solidAreaDefaultX;
+	}
+	public int getSolidAreaDefaultY() {
+		return solidAreaDefaultY;
+	}
+	public void setSolidAreaDefaultY(int solidAreaDefaultY) {
+		this.solidAreaDefaultY = solidAreaDefaultY;
+	}	
+	
 	
 }

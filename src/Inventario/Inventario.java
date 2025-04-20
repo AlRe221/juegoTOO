@@ -29,4 +29,9 @@ public class Inventario {
     public void clear() {
         objetos.clear();
     }
+    
+    public int size() {
+        return objetos.size();
+    }
+
 }

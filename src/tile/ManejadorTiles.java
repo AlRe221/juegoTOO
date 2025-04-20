@@ -81,6 +81,7 @@ public class ManejadorTiles {
 			e.printStackTrace();
 		}
 	}
+	
 	public void draw(Graphics2D g2) {
 		int renMundo = 0, colMundo = 0;
 		
@@ -94,13 +95,46 @@ public class ManejadorTiles {
 			int pantallaX = mundoX -gP.getJugador().getX() + gP.getJugador().getPantallaX();
 			int pantallaY = mundoY - gP.getJugador().getY() + gP.getJugador().getPantallaY();
 			
+			
+			//stop screen camera at the end
+			
+			if(gP.getJugador().getPantallaX() > gP.getJugador().getX()) {
+				pantallaX = mundoX;
+			}
+			
+			if(gP.getJugador().getPantallaY() > gP.getJugador().getY()) {
+				pantallaY = mundoY;
+			}
+			
+			
+			int rOffs = gP.getAnchoPantalla() - gP.getJugador().getPantallaX();
+			if(rOffs > gP.anchoMundo - gP.getJugador().getX()) {
+				pantallaX = gP.getAnchoPantalla() - (gP.anchoMundo - mundoX);
+ 			}
+			
+			
+			int bottomOffs = gP.getAltoPantalla() - gP.getJugador().getPantallaY();
+			if(bottomOffs > gP.altoMundo - gP.getJugador().getY()) {
+				pantallaY = gP.getAltoPantalla() - (gP.altoMundo - mundoY);
+			}
+			
+			
 			if(mundoX + gP.getTamanioTile() > gP.getJugador().getX() - gP.getJugador().getPantallaX() &&
 			   mundoX - gP.getTamanioTile() < gP.getJugador().getX() + gP.getJugador().getPantallaX() &&
-			   mundoY + gP.getTamanioTile() > gP.getJugador().getY() - gP.getJugador().getPantallaX() &&
+			   mundoY + gP.getTamanioTile() > gP.getJugador().getY() - gP.getJugador().getPantallaY() &&
 			   mundoY - gP.getTamanioTile() < gP.getJugador().getY() + gP.getJugador().getPantallaY()) {
 				
 				g2.drawImage(this.arregloTiles[numTile].getImagen(), pantallaX, pantallaY, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
-			}
+				
+			}else {
+				if(gP.getJugador().getPantallaX() > gP.getJugador().getX() ||
+						gP.getJugador().getPantallaY() > gP.getJugador().getY() ||
+						rOffs > gP.anchoMundo - gP.getJugador().getX() ||
+						bottomOffs > gP.altoMundo - gP.getJugador().getY()) {
+					
+					g2.drawImage(this.arregloTiles[numTile].getImagen(), pantallaX, pantallaY, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
+					}
+				}
 			
 			colMundo++;
 	
@@ -119,5 +153,8 @@ public class ManejadorTiles {
 	public boolean getColisionDeTile(int index) {
 		return this.arregloTiles[index].getColision();
 		}
+	public int getMaxFilas() {
+		return this.codigosMapaTiles.length;
+	}
 	
 }

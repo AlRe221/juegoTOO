@@ -7,16 +7,19 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import Inventario.Arma;
+import Inventario.Comida;
+import Inventario.Inventario;
+import Inventario.Objeto;
 import Main.GamePanel;
 import Main.ManejadorTeclas;
-import Inventario.*;
 
 public class Jugador extends Entidad
 {
 	private GamePanel gP;
 	private ManejadorTeclas mT;
 	private final int pantallaX, pantallaY;
-	private Inventario inventario; // Inventario del juagador 
+	private Inventario inventario; // Inventario del juagador  
 	
 	public Jugador(GamePanel gP, ManejadorTeclas mT)
 	{
@@ -28,6 +31,8 @@ public class Jugador extends Entidad
 		this.pantallaY = gP.getAltoPantalla() / 2 - (gP.getTamanioTile()/2);
 		
 		this.solidArea = new Rectangle(8,16,32,32); 
+		this.solidAreaDefaultX = this.solidArea.x;
+		this.solidAreaDefaultY = this.solidArea.y;
 		
 		configuracionInicial();
 		getSpritesJugador();
@@ -150,21 +155,39 @@ public class Jugador extends Entidad
 	    gP.getchecadorColision().checkTile(this);
 	    
 	    
+	    //checar colision contra objeto
+	   int obind = gP.getchecadorColision().checkObjeto(this, true);
+	    meterInventario(obind);
+	   
 	    //si no hubo colisión
 	    if(colisionOn == false) {
 	    	switch(direccion) {
-	    	case "arriba":
-	    		 setY(getY() - getVelocidad());
-	    		break; 
-	    	case "abajo" : 
-	    		setY(getY() + getVelocidad());
+	    	case "arriba":{
+	    		if(getY() - getVelocidad() >= 0) {
+	    			setY(getY() - getVelocidad());
+	    		 }
 	    		break;
-	    	case "izquierda" : 
-	    		setX(getX() - getVelocidad());
+	    		} 
+	    	case "abajo" :{ 
+	    		if(getY() + getVelocidad() <= gP.altoMundo - gP.getTamanioTile()) {
+	    			setY(getY() + getVelocidad());
+	    		}else {
+	    			setY(gP.altoMundo - gP.getTamanioTile());
+	    		}
+	    		break;
+	    		}
+	    	case "izquierda" :{
+	    		if(getX() - getVelocidad() >= 0) {
+	    			setX(getX() - getVelocidad());
+	    		}
+	    		break;
+	    		} 
+	    	case "derecha" :{
+	    		if(getX() + getVelocidad() + gP.getTamanioTile() <= gP.anchoMundo) {
+	    			setX(getX() + getVelocidad()); 
+	    		}
 	    		break; 
-	    	case "derecha" :
-	    		setX(getX() + getVelocidad()); 
-	    		break; 
+	    		}
 	    	}
 	    }
 
@@ -225,6 +248,18 @@ public class Jugador extends Entidad
 				}
 		}*/		
 	
+	public void meterInventario(int index) {
+		int maxElInv = 6; 
+		int contElInv = 0;
+		if(index != 999) { //si es 999, no se ha tocado ningun objeto
+			if(inventario.size() < maxElInv) {
+				inventario.addObjeto(gP.getObjetoInv()[index]);
+				gP.getObjetoInv()[index] = null;
+			}	
+		}
+	}
+	
+	
 	
 	public void draw(Graphics2D g2)
 	{
@@ -281,7 +316,31 @@ public class Jugador extends Entidad
 			break;	
 		}
 		
-		g2.drawImage(sprite, this.pantallaX, this.pantallaY, gP.getTamanioTile(), gP.getTamanioTile(),null);
+		int x = this.pantallaX; 
+		int y = this.pantallaY; 
+		
+		if(pantallaX > this.mundoX) {
+			x = this.mundoX;
+		}
+		
+		if(pantallaY > this.mundoY) {
+			y = this.mundoY;
+		}
+		
+		int rOffs = gP.getAnchoPantalla() - this.pantallaX;
+		
+		if(rOffs > gP.anchoMundo - this.mundoX) {
+			x = gP.getAnchoPantalla() - (gP.anchoMundo - mundoX);
+			}
+		
+		int bottomOffs = gP.getAltoPantalla() - this.pantallaY;
+		if(bottomOffs > gP.altoMundo - this.mundoY) {
+			y = gP.getAltoPantalla() - (gP.altoMundo - mundoY);
+		}
+		
+		
+		
+		g2.drawImage(sprite, x, y, gP.getTamanioTile(), gP.getTamanioTile(),null);
 	}
 	
 	
@@ -315,6 +374,9 @@ public class Jugador extends Entidad
 	}
 	
 	
+	
+	
+	
 	public int getAreaSolidaX() {
 		return this.solidArea.x;
 	}
@@ -335,4 +397,13 @@ public class Jugador extends Entidad
 		return this.direccion;
 	}
 	
+	public void setSolidAreaX(int valor) {
+		this.solidArea.x = valor;
+	}
+	
+	public void setSolidAreaY(int valor) {
+		this.solidArea.y = valor;
+	}
+	
 }
+

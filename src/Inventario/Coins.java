@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class Coins extends Objeto {
     private double valorCoin;
-    private int   cantidadCoin;
+    private int   cantidadCoin; //cuando las recolecta en el inventario
 
     public Coins(double valorCoin, int cantidadCoin, double tiempoVida, boolean haceSonido, double duracion) {
         super("Coins", tiempoVida, haceSonido, duracion);
@@ -21,6 +21,8 @@ public class Coins extends Objeto {
         }catch(IOException e) {
         	e.printStackTrace();
         }
+        
+        
     }
     
     

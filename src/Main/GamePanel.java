@@ -26,6 +26,8 @@ public class GamePanel extends JPanel implements Runnable
 		private final int maxColPantalla = 26;
 		private final int anchoPantalla = tamanioTile * maxColPantalla;
 		private final int altoPantalla = tamanioTile * maxRenPantalla;
+		
+		
 		// Inventario
 		private boolean inventoryOpen = false;
 		private int     inventoryCursor = 0;
@@ -117,13 +119,16 @@ public class GamePanel extends JPanel implements Runnable
 			        // ejecuta acción según tipo
 			        if (!items.isEmpty()) {
 			            Objeto sel = items.get(inventoryCursor);
-			            if (sel instanceof Comida)    
+			            if (sel instanceof Comida) {    
 			            	jugador.usarComida();
-			            else if (sel instanceof Arma)  
+			              items.remove(sel);
+			            }else if (sel instanceof Arma) {  
 			            	jugador.equiparArma();
-			            else if (sel instanceof Coins) {
+			            	items.remove(sel);
+			            }else if (sel instanceof Coins) {
 			                ((Coins)sel).incrementoOro();
 			                System.out.println("Monedas: " + ((Coins)sel).getCoin());
+			                items.remove(sel);
 			            }
 			        }
 			        mT.setTeclaEnter(false);
@@ -200,6 +205,8 @@ public class GamePanel extends JPanel implements Runnable
 		{
 			return this.anchoPantalla;
 		}
+		
+	
 		public int getAltoPantalla()
 		{
 			return this.altoPantalla;
@@ -232,5 +239,24 @@ public class GamePanel extends JPanel implements Runnable
 		public Objeto[] getObjetoInv() {
 			return this.o;
 		}
+
+
+		public int getAnchoMundo() {
+			return anchoMundo;
+		}
+
+
+		public int getAltoMundo() {
+			return altoMundo;
+		}
+	
+	
+		
+		
+		
+	
+	
+	
+	
 	
 }
