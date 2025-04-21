@@ -42,6 +42,7 @@ public class GamePanel extends JPanel implements Runnable
 		//Inventario inv = new Inventario();
 		Objeto o[] = new Objeto[8];
 		AssetSetter asSet = new AssetSetter(this);
+		Ambientacion sonido = new Ambientacion();
 		
 		//world settings
 		public final int maxColMundo = 50; 
@@ -63,6 +64,7 @@ public class GamePanel extends JPanel implements Runnable
 		
 		public void setupGame() {
 			asSet.setObject();
+			playMusic(2);
 		}
 		
 		
@@ -157,6 +159,23 @@ public class GamePanel extends JPanel implements Runnable
 
 		    g2.dispose();
 		}
+		
+		public void playMusic(int i) {
+			sonido.setFile(i);
+			sonido.play();
+			sonido.loop();
+			
+		}
+		
+		public void stopMusic() {
+			sonido.stop();
+		}
+		
+		public void playSE(int i) {
+			sonido.setFile(i);
+			sonido.play();
+		}
+		
 
 		private void drawInventory(Graphics2D g2) {
 		    int x = 50, y = 50, w = 300, h = 200;
@@ -248,6 +267,16 @@ public class GamePanel extends JPanel implements Runnable
 
 		public int getAltoMundo() {
 			return altoMundo;
+		}
+
+
+		public Ambientacion getSonido() {
+			return sonido;
+		}
+
+
+		public void setSonido(Ambientacion sonido) {
+			this.sonido = sonido;
 		}
 	
 	

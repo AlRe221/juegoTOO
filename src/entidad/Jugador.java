@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import Inventario.Arma;
 import Inventario.Comida;
 import Inventario.Inventario;
+import Inventario.ItemVelocidad;
 import Inventario.Objeto;
 import Main.GamePanel;
 import Main.ManejadorTeclas;
@@ -20,6 +21,11 @@ public class Jugador extends Entidad
 	private ManejadorTeclas mT;
 	private final int pantallaX, pantallaY;
 	private Inventario inventario; // Inventario del juagador  
+	
+	private boolean modoRapido = false;
+	private int velocidadBase = 5;
+	private int contadorRapido = 0;
+	private int maxCiclosRapido = 100; 
 	
 	public Jugador(GamePanel gP, ManejadorTeclas mT)
 	{
@@ -119,6 +125,16 @@ public class Jugador extends Entidad
 	
 	public void update() {
 	    boolean moviendo = false;
+	    
+	    if (modoRapido) {
+	        contadorRapido++;
+	        if (contadorRapido >= maxCiclosRapido) {
+	            this.velocidad = velocidadBase;
+	            modoRapido = false;
+	            contadorRapido = 0;
+	        }
+	    }
+	    
 
 	    if (mT.getTeclaArriba()) {
 	        this.direccion = "arriba";
@@ -190,7 +206,7 @@ public class Jugador extends Entidad
 	    		}
 	    	}
 	    }
-
+	    
 	    this.contadorSprites++;
 	    
 	    if (this.contadorSprites > this.cambiaSprite) {
@@ -253,8 +269,29 @@ public class Jugador extends Entidad
 		int contElInv = 0;
 		if(index != 999) { //si es 999, no se ha tocado ningun objeto
 			if(inventario.size() < maxElInv) {
-				inventario.addObjeto(gP.getObjetoInv()[index]);
-				gP.getObjetoInv()[index] = null;
+				if(gP.getObjetoInv()[index] instanceof ItemVelocidad) {
+					gP.playSE(11);
+					gP.getObjetoInv()[index] = null;
+					if(modoRapido == false) {
+						modoRapido = true; 
+						contadorRapido = 0;
+					    this.velocidad = velocidadBase +2;
+					}
+				}else {
+					inventario.addObjeto(gP.getObjetoInv()[index]);
+					switch(gP.getObjetoInv()[index].getTipoObjeto()) {
+					case "Arma":
+						gP.playSE(6);
+						break;
+					case "Coins":
+						gP.playSE(8);
+						break;
+					case "Comida":
+						gP.playSE(6);
+						break;
+					}
+					gP.getObjetoInv()[index] = null;
+				}
 			}	
 		}
 	}
@@ -406,4 +443,3 @@ public class Jugador extends Entidad
 	}
 	
 }
-

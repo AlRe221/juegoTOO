@@ -8,6 +8,15 @@ import Inventario.Comida;
 import Inventario.Objeto;
 import java.util.Random;
 
+import java.util.List;
+
+import Inventario.Arma;
+import Inventario.Coins;
+import Inventario.Comida;
+import Inventario.ItemVelocidad;
+import Inventario.Objeto;
+import java.util.Random;
+
 public class AssetSetter {
 	private GamePanel gP;
 	
@@ -18,7 +27,7 @@ public class AssetSetter {
 	public void setObject() {
 		Random rand = new Random();
 		for (int i = 0; i < gP.o.length; i++) {
-			int tipo = rand.nextInt(3); // 0: Coins, 1: Arma, 2: Comida
+			int tipo = rand.nextInt(4); // 0: Coins, 1: Arma, 2: Comida, 3: itemVelocidad
 
 			switch (tipo) {
 				case 0:
@@ -30,6 +39,8 @@ public class AssetSetter {
 				case 2:
 					gP.o[i] = new Comida(5.0, true, 7.5);
 					break;
+				case 3:
+					gP.o[i] = new ItemVelocidad(5.0, true, 6.0);
 			}
 
 			// posición aleatoria
