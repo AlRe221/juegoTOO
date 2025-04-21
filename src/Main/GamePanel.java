@@ -34,9 +34,15 @@ public class GamePanel extends JPanel implements Runnable
 
 		
 		Thread hebraJuego;
-		Ambientacion sonido = new Ambientacion(this);
+		//hay dos para poder manejarlo como dos objetos diferentes
+		//musica es para la musica de ambientacion
+		//se es para los objetos y el sonido que hacen cuando interactuas con ellos
+		
+		Ambientacion musica = new Ambientacion(this); 
+		Ambientacion se = new Ambientacion(this);
+		
 		ManejadorTeclas mT = new ManejadorTeclas();
-		Jugador jugador = new Jugador(this, mT,sonido);
+		Jugador jugador = new Jugador(this, mT,se);
 		ManejadorTiles mTi =new ManejadorTiles(this);
 		ChecadorColision cC = new ChecadorColision(this);
 		//Inventario inv = new Inventario();
@@ -161,19 +167,19 @@ public class GamePanel extends JPanel implements Runnable
 		}
 		
 		public void playMusic(int i) {
-			sonido.setFile(i);
-			sonido.play();
-			sonido.loop();
+			musica.setFile(i);
+			musica.play();
+			musica.loop();
 			
 		}
 		
 		public void stopMusic() {
-			sonido.stop();
+			musica.stop();
 		}
 		
 		public void playSE(int i) {
-			sonido.setFile(i);
-			sonido.play();
+			se.setFile(i);
+			se.play();
 		}
 		
 
@@ -270,16 +276,7 @@ public class GamePanel extends JPanel implements Runnable
 		}
 
 
-		public Ambientacion getSonido() {
-			return sonido;
-		}
-
-
-		public void setSonido(Ambientacion sonido) {
-			this.sonido = sonido;
-		}
-	
-	
+		
 		
 		
 		
