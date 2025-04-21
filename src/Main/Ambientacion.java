@@ -7,12 +7,15 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 public class Ambientacion {
+	protected GamePanel gP;
 	Clip clip;
 	URL urlSonido [] = new URL[30];
 	protected boolean activa; 
 	protected int limiteVida; 
+	private int contPasos = 0; 
+	private final int intervaloP = 15;
 	
-	public Ambientacion() {
+	public Ambientacion(GamePanel gP) {
 		
 		urlSonido[0] = getClass().getResource("/Ambientacion/caminata.wav");
 		urlSonido[1] = getClass().getResource("/Ambientacion/correr.wav");
@@ -27,7 +30,7 @@ public class Ambientacion {
 		urlSonido[10] = getClass().getResource("/Ambientacion/sonidodehablar.wav");
 		urlSonido[11] = getClass().getResource("/Ambientacion/sonidoVelocidad.wav");
 		
-		
+		this.gP =gP;
 		this.activa = false; 
 		this.limiteVida = 5;
 	}
@@ -56,5 +59,17 @@ public class Ambientacion {
 	public void stop() {
 		clip.stop();
 	}
+	
+	   public void sonidoCamina(boolean moviendo, boolean colisionOn, int sonidoID) {
+	        if (moviendo && !colisionOn) {
+	            contPasos++;
+	            if (contPasos >= intervaloP) {
+	                gP.playSE(sonidoID); // o usa una referencia a GamePanel si es no estático
+	                contPasos = 0;
+	            }
+	        } else {
+	            contPasos = intervaloP;
+	        }
+	    }
 
 }

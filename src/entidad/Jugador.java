@@ -12,6 +12,7 @@ import Inventario.Comida;
 import Inventario.Inventario;
 import Inventario.ItemVelocidad;
 import Inventario.Objeto;
+import Main.Ambientacion;
 import Main.GamePanel;
 import Main.ManejadorTeclas;
 
@@ -21,16 +22,18 @@ public class Jugador extends Entidad
 	private ManejadorTeclas mT;
 	private final int pantallaX, pantallaY;
 	private Inventario inventario; // Inventario del juagador  
+	private Ambientacion am;
 	
 	private boolean modoRapido = false;
 	private int velocidadBase = 5;
 	private int contadorRapido = 0;
 	private int maxCiclosRapido = 100; 
 	
-	public Jugador(GamePanel gP, ManejadorTeclas mT)
+	public Jugador(GamePanel gP, ManejadorTeclas mT, Ambientacion am)
 	{
 		this.gP = gP;
 		this.mT = mT;
+		this.am = am;
 		this.inventario = new Inventario();
 		
 		this.pantallaX = gP.getAnchoPantalla() / 2 - (gP.getTamanioTile()/2);
@@ -125,6 +128,7 @@ public class Jugador extends Entidad
 	
 	public void update() {
 	    boolean moviendo = false;
+	    this.colisionOn = false;
 	    
 	    if (modoRapido) {
 	        contadorRapido++;
@@ -149,6 +153,8 @@ public class Jugador extends Entidad
 	        this.direccion = "derecha";
 	        moviendo = true;
 	    }
+	    
+	    am.sonidoCamina(moviendo, colisionOn, 0);
 
 	    // Si no se está moviendo, aplicar estático dependiendo de la última dirección
 	    if (!moviendo) {
@@ -167,7 +173,7 @@ public class Jugador extends Entidad
 	    
 	    
 	    //revisa coli con tiles
-	    this.colisionOn = false; 
+	     
 	    gP.getchecadorColision().checkTile(this);
 	    
 	    
@@ -217,6 +223,10 @@ public class Jugador extends Entidad
 	        this.contadorSprites = 0;
 	    }
 	}
+	
+	
+	
+	
 
 	
 	/*public void update()
@@ -443,3 +453,4 @@ public class Jugador extends Entidad
 	}
 	
 }
+

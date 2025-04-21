@@ -34,15 +34,15 @@ public class GamePanel extends JPanel implements Runnable
 
 		
 		Thread hebraJuego;
-		
+		Ambientacion sonido = new Ambientacion(this);
 		ManejadorTeclas mT = new ManejadorTeclas();
-		Jugador jugador = new Jugador(this, mT);
+		Jugador jugador = new Jugador(this, mT,sonido);
 		ManejadorTiles mTi =new ManejadorTiles(this);
 		ChecadorColision cC = new ChecadorColision(this);
 		//Inventario inv = new Inventario();
 		Objeto o[] = new Objeto[8];
 		AssetSetter asSet = new AssetSetter(this);
-		Ambientacion sonido = new Ambientacion();
+		
 		
 		//world settings
 		public final int maxColMundo = 50; 
