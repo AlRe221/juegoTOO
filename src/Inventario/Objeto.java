@@ -33,7 +33,7 @@ public abstract class Objeto {
     	int pantallaX = worldX -gP.getJugador().getX() + gP.getJugador().getPantallaX();
 		int pantallaY = worldY - gP.getJugador().getY() + gP.getJugador().getPantallaY();
 		
-		//detener camara para que los objetos no se muevan del lugar cuando llega al limite de la pantalla
+		//detener camara
 		if(gP.getJugador().getX() < gP.getJugador().getPantallaX()) {
 			pantallaX = worldX;
 		}
@@ -69,8 +69,26 @@ public abstract class Objeto {
 		}
     }
     public String getTipoObjeto(){ 
-    	return tipoObjeto; 
+    	String tipO=null;
+    	if(this instanceof Coins) {
+    		tipO = ((Coins)this).tipoObjeto;
+    	}else if(this instanceof Comida) {
+    		tipO = ((Comida)this).tipoObjeto;
+    	}else if(this instanceof Arma) {
+    		if(((Arma)this) instanceof Mochila) {
+    			Mochila m = (Mochila)this;
+    			tipO = m.nombreArma;
+    		}else if(((Arma)this) instanceof Celular) {
+    			Celular c = (Celular)this;
+    			tipO = c.nombreArma;
+    		}else if(((Arma)this) instanceof Laptop) {
+    			Laptop c = (Laptop)this;
+    			tipO = c.nombreArma;
+    		}
+    	}
+    	return tipO; 
 	}
+    
     public double getTiempoVida(){ 
     	return tiempoVida; 
 	}

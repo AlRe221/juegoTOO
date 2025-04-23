@@ -29,26 +29,28 @@ public class GamePanel extends JPanel implements Runnable
 		
 		
 		// Inventario
-		private boolean inventoryOpen = false;
-		private int     inventoryCursor = 0;
+		//private boolean inventoryOpen = false;
+		//private int     inventoryCursor = 0;
 
 		
 		Thread hebraJuego;
-		//hay dos para poder manejarlo como dos objetos diferentes
-		//musica es para la musica de ambientacion
-		//se es para los objetos y el sonido que hacen cuando interactuas con ellos
-		
-		Ambientacion musica = new Ambientacion(this); 
+		Ambientacion musica = new Ambientacion(this);
 		Ambientacion se = new Ambientacion(this);
-		
-		ManejadorTeclas mT = new ManejadorTeclas();
+		ManejadorTeclas mT = new ManejadorTeclas(this);
 		Jugador jugador = new Jugador(this, mT,se);
 		ManejadorTiles mTi =new ManejadorTiles(this);
 		ChecadorColision cC = new ChecadorColision(this);
 		//Inventario inv = new Inventario();
 		Objeto o[] = new Objeto[8];
 		AssetSetter asSet = new AssetSetter(this);
+		UI ui = new UI(this);
 		
+		//GAME STATE, es para las pantallas. 
+		protected int gameState; 
+		protected final int pantallaInicio = 0;
+		protected final int playState = 1;
+		protected final int pauseState = 2;
+		 
 		
 		//world settings
 		public final int maxColMundo = 50; 
@@ -70,7 +72,9 @@ public class GamePanel extends JPanel implements Runnable
 		
 		public void setupGame() {
 			asSet.setObject();
-			playMusic(2);
+			playMusic(4);
+			gameState = pantallaInicio;
+			
 		}
 		
 		
@@ -103,30 +107,39 @@ public class GamePanel extends JPanel implements Runnable
 		}
 		public void update() 
 		{
-			jugador.update();
+			if(gameState == playState) {
+				jugador.update();
+			}
+			
+			if(gameState == pauseState) {
+	
+			}
 			// toggle inventario
 			if (mT.getTeclaInventario()) {
-			    inventoryOpen = !inventoryOpen;
+			    //inventoryOpen = !inventoryOpen;
+				ui.setInventorOpen(!ui.inventoryOpen);
 			    mT.setTeclaInventario(false);
 			}
 
 			// si está abierto, navegar con flechas y seleccionar con Enter
-			if (inventoryOpen) {
+			if (ui.inventoryOpen) {
 			    List<Objeto> items = jugador.getInventario().getObjetos();
 			    int size = Math.max(1, items.size());
 
 			    if (mT.getTeclaArribaInv()) {
-			        inventoryCursor = (inventoryCursor - 1 + size) % size;
+			        //inventoryCursor = (inventoryCursor - 1 + size) % size;
+			    	ui.setInventorCursor((ui.getInventorCursor() - 1 + size) % size) ;
 			        mT.setTeclaArribaInv(false);
 			    }
 			    if (mT.getTeclaAbajoInv()) {
-			        inventoryCursor = (inventoryCursor + 1) % size;
+			        //inventoryCursor = (inventoryCursor + 1) % size;
+			    	ui.setInventorCursor((ui.getInventorCursor() - 1 + size) % size) ;
 			        mT.setTeclaAbajoInv(false);
 			    }
 			    if (mT.getTeclaEnter()) {
 			        // ejecuta acción según tipo
 			        if (!items.isEmpty()) {
-			            Objeto sel = items.get(inventoryCursor);
+			            Objeto sel = items.get(ui.getInventorCursor());
 			            if (sel instanceof Comida) {    
 			            	jugador.usarComida();
 			              items.remove(sel);
@@ -135,7 +148,7 @@ public class GamePanel extends JPanel implements Runnable
 			            	items.remove(sel);
 			            }else if (sel instanceof Coins) {
 			                ((Coins)sel).incrementoOro();
-			                System.out.println("Monedas: " + ((Coins)sel).getCoin());
+			                System.out.println("Monedas: " + ((Coins)sel).getValorCoin());
 			                items.remove(sel);
 			            }
 			        }
@@ -147,22 +160,31 @@ public class GamePanel extends JPanel implements Runnable
 		public void paintComponent(Graphics g) {
 		    super.paintComponent(g);
 		    Graphics2D g2 = (Graphics2D) g;
-
-		    // 1) Mundo + jugador + objetos
-		    mTi.draw(g2);
-		    for(int i= 0; i < o.length; i++) {
-		    	if(o[i] != null) {
-		    		o[i].draw(g2,this);
+		    
+		    //pantalla de inicio 
+		    if(gameState == pantallaInicio) {
+		    	ui.draw(g2);
+		    }else {
+		    	// 1) Mundo + jugador + objetos
+		    	mTi.draw(g2);
+		    	for(int i= 0; i < o.length; i++) {
+		    		if(o[i] != null) {
+		    			o[i].draw(g2,this);
+		    		}
 		    	}
-		    }
-		    jugador.draw(g2);
+		    	jugador.draw(g2);
 		    
-		    // 2) Inventario encima, si está abierto
-		    if (inventoryOpen) {
-		        drawInventory(g2);
+		    	// 2) Inventario encima, si está abierto
+		    	if (ui.getInventorOpen()) {
+		    		ui.drawInventory(g2);
+		    	}
+		    	ui.draw(g2);
 		    }
-		    
 
+		    
+		    //ui.mostrarTiempo(g2);
+
+		    
 		    g2.dispose();
 		}
 		
@@ -182,8 +204,10 @@ public class GamePanel extends JPanel implements Runnable
 			se.play();
 		}
 		
-
-		private void drawInventory(Graphics2D g2) {
+  //se movio lo del inventario para la clase de UI, todo lo gráfico 
+		/*private void drawInventory(Graphics2D g2) {
+			
+			
 		    int x = 50, y = 50, w = 300, h = 200;
 		    g2.setColor(new Color(0, 0, 0, 180));
 		    g2.fillRect(x, y, w, h);
@@ -205,7 +229,8 @@ public class GamePanel extends JPanel implements Runnable
 		        g2.drawString((i + 1) + ". " + objs.get(i).getTipoObjeto(),
 		                      x + 20, y + offsetY + i * 20);
 		    }
-		}
+		}*/
+		
 		public int getTamanioOriginalTile()
 		{
 			return this.tamanioOriginalTile;
@@ -275,12 +300,43 @@ public class GamePanel extends JPanel implements Runnable
 			return altoMundo;
 		}
 
+		
 
+		public int getGameState() {
+			return gameState;
+		}
+
+
+		public void setGameState(int gameState) {
+			this.gameState = gameState;
+		}
+
+
+		public int getPlayState() {
+			return playState;
+		}
+
+
+		public int getPauseState() {
+			return this.pauseState;
+		}
 		
-		
-		
+		public int getPantallaInicio() {
+			return this.pantallaInicio;
+		}
+
+
+		public UI getUi() {
+			return ui;
+		}
+
+
+		public void setUi(UI ui) {
+			this.ui = ui;
+		}
 		
 	
+		
 	
 	
 	

@@ -1,5 +1,6 @@
 package entidad;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -8,9 +9,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import Inventario.Arma;
+import Inventario.Celular;
 import Inventario.Comida;
 import Inventario.Inventario;
 import Inventario.ItemVelocidad;
+import Inventario.Laptop;
+import Inventario.Mochila;
 import Inventario.Objeto;
 import Main.Ambientacion;
 import Main.GamePanel;
@@ -88,6 +92,7 @@ public class Jugador extends Entidad
 	 // Recoge un objeto y lo mete en el inventario
     public void pickUpObjeto(Objeto obj) {
         inventario.addObjeto(obj);
+        
         System.out.println(">> Recogido: " + obj.getTipoObjeto());
     }
 
@@ -110,11 +115,18 @@ public class Jugador extends Entidad
         for (Objeto o : inventario.getObjetos()) {
             if (o instanceof Arma) {
                 Arma a = (Arma)o;
-                System.out.println(
-                  ">> Arma equipada: " +
-                  a.getTipoArma() +
-                  " (Daño=" + a.getCantidadDanio() + ")"
-                );
+                System.out.print(
+                  ">> Arma equipada: ");
+                if(((Arma)o) instanceof Mochila) {
+                	Mochila m = (Mochila)o;
+                	System.out.println(m.getNombreArma());
+                }else if(((Arma)o) instanceof Laptop) {
+                	Laptop l = (Laptop)o;
+                	System.out.println(l.getNombreArma());
+                }else if(((Arma)o) instanceof Celular) {
+                	Celular c = (Celular)o;
+                	System.out.println(c.getNombreArma());
+                }
                 return;
             }
         }
@@ -290,9 +302,15 @@ public class Jugador extends Entidad
 				}else {
 					inventario.addObjeto(gP.getObjetoInv()[index]);
 					switch(gP.getObjetoInv()[index].getTipoObjeto()) {
-					case "Arma":
+					case "Mochila":
 						gP.playSE(6);
 						break;
+					case "Laptop":
+						gP.playSE(6);
+						break;
+					case "Celular":
+						gP.playSE(6);
+						break;	
 					case "Coins":
 						gP.playSE(8);
 						break;
@@ -385,8 +403,7 @@ public class Jugador extends Entidad
 			y = gP.getAltoPantalla() - (gP.altoMundo - mundoY);
 		}
 		
-		
-		
+	
 		g2.drawImage(sprite, x, y, gP.getTamanioTile(), gP.getTamanioTile(),null);
 	}
 	

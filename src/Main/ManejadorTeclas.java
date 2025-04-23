@@ -5,9 +5,14 @@ import java.awt.event.KeyListener;
 
 public class ManejadorTeclas implements KeyListener
 {
+	private GamePanel gP;
 	private boolean teclaArriba, teclaAbajo, teclaIzquierda, teclaDerecha;
 	 private boolean teclaInventario, teclaArribaInv, teclaAbajoInv, teclaEnter;
 
+	 public ManejadorTeclas(GamePanel gP) {
+		 this.gP = gP;
+	 }
+	 
 	@Override
 	public void keyTyped(KeyEvent e)
 	{
@@ -16,6 +21,79 @@ public class ManejadorTeclas implements KeyListener
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
+		//pantalla inicio
+				if(gP.getGameState() == gP.getPantallaInicio()) {
+					switch(e.getKeyCode()) 
+					{
+					case KeyEvent.VK_W : {
+						gP.getUi().setNUmCom(gP.getUi().getNumCom() -1);
+						if(gP.getUi().getNumCom() < 0) {
+							gP.getUi().setNUmCom(3);
+						}
+						break;
+					}
+					case KeyEvent.VK_S :{
+						gP.getUi().setNUmCom(gP.getUi().getNumCom() +1);
+						if(gP.getUi().getNumCom() > 3) {
+							gP.getUi().setNUmCom(0);
+						}
+						break;
+					}
+					 case KeyEvent.VK_ENTER:{
+						 if(gP.getUi().getNumCom() == 0) {
+							 gP.stopMusic();
+							 gP.setGameState(gP.getPlayState());
+							 gP.playMusic(2);
+							 
+						 }
+						 
+						 if(gP.getUi().getNumCom() == 1) {
+							//settings, pantalla de controles
+						 }
+						 
+						 if(gP.getUi().getNumCom() == 2) {
+							 //info de los creadores del juego, otra pantalla
+						 }
+						 if(gP.getUi().getNumCom() == 3) {
+							 System.exit(0);
+							 
+						 }
+						 break;
+					 }
+				}	
+	}
+		
+				//pantalla de pausa
+				if(gP.getGameState() == gP.getPauseState()) {
+					switch(e.getKeyCode()) {
+					case KeyEvent.VK_W :{
+						gP.getUi().setNUmCom(gP.getUi().getNumCom() -1);
+						if(gP.getUi().getNumCom() < 0) {
+							gP.getUi().setNUmCom(1);
+						}
+						break;
+					}
+					case KeyEvent.VK_S : {
+						gP.getUi().setNUmCom(gP.getUi().getNumCom() +1);
+						if(gP.getUi().getNumCom() > 3) {
+							gP.getUi().setNUmCom(0);
+						}
+						break;
+					}
+					case KeyEvent.VK_ENTER:{
+						if(gP.getUi().getNumCom() == 0) {
+							 gP.stopMusic();
+							 gP.setGameState(gP.getPantallaInicio());
+							 gP.playMusic(4); 
+						 }
+						if(gP.getUi().getNumCom() == 1) {
+							 gP.setGameState(gP.getPlayState());		 
+						 }
+					}
+					}
+				}
+		
+				//pantalla de juego
 		switch(e.getKeyCode()) 
 		{
 		case KeyEvent.VK_W : teclaArriba = true;
@@ -34,11 +112,20 @@ public class ManejadorTeclas implements KeyListener
         break;
         case KeyEvent.VK_ENTER: teclaEnter    = true; 
         break;
+        case KeyEvent.VK_ESCAPE :{
+        	if(gP.getGameState() == gP.getPlayState()) {
+        		gP.setGameState(gP.getPauseState());
+        	}else if(gP.getGameState() == gP.getPauseState()) {
+        		gP.setGameState(gP.getPlayState());
+        	}
+        	break;
+        	}
 		}
 	}
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
+		
 		switch(e.getKeyCode()) 
 		{
 		case KeyEvent.VK_W : teclaArriba = false;

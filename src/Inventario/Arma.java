@@ -5,12 +5,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Arma extends Objeto {
-    private String tipoArma;
-    private int    cantidadDanio;
+    private int  cantidadDanio;
 
-    public Arma(String tipoArma, int cantidadDanio, double tiempoVida, boolean haceSonido, double duracion) {
+    public Arma(int cantidadDanio, double tiempoVida, boolean haceSonido, double duracion) {
         super("Arma", tiempoVida, haceSonido, duracion);
-        this.tipoArma      = tipoArma;
         this.cantidadDanio = cantidadDanio;
         
   try {
@@ -25,12 +23,7 @@ public class Arma extends Objeto {
     
     
 
-    public String getTipoArma(){ 
-    	return tipoArma; 
-	}
-    public void setTipoArma(String t){
-    	this.tipoArma = t; 
-    }
+   
 
     public int  getCantidadDanio() { 
     	return cantidadDanio; 
