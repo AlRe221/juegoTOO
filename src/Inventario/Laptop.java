@@ -13,7 +13,7 @@ public class Laptop extends Arma{
 		
 		try {
 		       
-        	this.image = ImageIO.read(getClass().getResourceAsStream("/objetos/shield_blue.png"));
+        	this.image = ImageIO.read(getClass().getResourceAsStream("/objetosV/laptop1.png"));
         	
         }catch(IOException e) {
         	e.printStackTrace();

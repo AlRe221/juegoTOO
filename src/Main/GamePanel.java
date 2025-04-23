@@ -41,7 +41,7 @@ public class GamePanel extends JPanel implements Runnable
 		ManejadorTiles mTi =new ManejadorTiles(this);
 		ChecadorColision cC = new ChecadorColision(this);
 		//Inventario inv = new Inventario();
-		Objeto o[] = new Objeto[8];
+		Objeto o[] = new Objeto[12];
 		AssetSetter asSet = new AssetSetter(this);
 		UI ui = new UI(this);
 		

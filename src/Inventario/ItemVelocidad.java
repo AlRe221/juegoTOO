@@ -15,7 +15,7 @@ public class ItemVelocidad extends Objeto{
 		this.tiempoMaxItem = 6;
 		 try {
 	        	
-	        	this.image = ImageIO.read(getClass().getResourceAsStream("/objetos/manacrystal_full.png"));
+	        	this.image = ImageIO.read(getClass().getResourceAsStream("/objetosV/itemVelocidad1.png"));
 	        	
 	        }catch(IOException e) {
 	        	e.printStackTrace();

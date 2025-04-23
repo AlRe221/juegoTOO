@@ -12,7 +12,7 @@ public class Celular extends Arma{
 		
 		try {
 		       
-        	this.image = ImageIO.read(getClass().getResourceAsStream("/objetos/sword_normal.png"));
+        	this.image = ImageIO.read(getClass().getResourceAsStream("/objetosV/celular1.png"));
         	
         }catch(IOException e) {
         	e.printStackTrace();
