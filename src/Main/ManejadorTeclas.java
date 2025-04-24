@@ -8,6 +8,7 @@ public class ManejadorTeclas implements KeyListener
 	private GamePanel gP;
 	private boolean teclaArriba, teclaAbajo, teclaIzquierda, teclaDerecha;
 	 private boolean teclaInventario, teclaArribaInv, teclaAbajoInv, teclaEnter;
+	 private boolean teclaCorrer;
 
 	 public ManejadorTeclas(GamePanel gP) {
 		 this.gP = gP;
@@ -60,10 +61,10 @@ public class ManejadorTeclas implements KeyListener
 						 }
 						 break;
 					 }
-				}	
-	}
+					}	
+				}
 		
-				//pantalla de pausa
+				//pnatalla pausa
 				if(gP.getGameState() == gP.getPauseState()) {
 					switch(e.getKeyCode()) {
 					case KeyEvent.VK_W :{
@@ -93,7 +94,7 @@ public class ManejadorTeclas implements KeyListener
 					}
 				}
 		
-				//pantalla de juego
+		//pantalla juego		
 		switch(e.getKeyCode()) 
 		{
 		case KeyEvent.VK_W : teclaArriba = true;
@@ -120,6 +121,7 @@ public class ManejadorTeclas implements KeyListener
         	}
         	break;
         	}
+        case KeyEvent.VK_Q: teclaCorrer =true;
 		}
 	}
 	@Override
@@ -143,6 +145,8 @@ public class ManejadorTeclas implements KeyListener
         case KeyEvent.VK_DOWN:  teclaAbajoInv  = false; 
         break;
         case KeyEvent.VK_ENTER: teclaEnter     = false;
+        break;
+        case KeyEvent.VK_Q : teclaCorrer = false;
         break;
 		}
 		
@@ -188,4 +192,13 @@ public class ManejadorTeclas implements KeyListener
     public void setTeclaEnter(boolean b){
     	this.teclaEnter = b; 
 	}
+
+	public boolean isTeclaCorrer() {
+		return teclaCorrer;
+	}
+
+	public void setTeclaCorrer(boolean teclaCorrer) {
+		this.teclaCorrer = teclaCorrer;
+	}
+    
 }

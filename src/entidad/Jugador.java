@@ -31,7 +31,11 @@ public class Jugador extends Entidad
 	private boolean modoRapido = false;
 	private int velocidadBase = 5;
 	private int contadorRapido = 0;
-	private int maxCiclosRapido = 100; 
+	private int maxCiclosRapido = 150; 
+	
+	private int vidaMaxima = 100; 
+	private int vida = vidaMaxima;
+	protected int contPixel = 0;
 	
 	public Jugador(GamePanel gP, ManejadorTeclas mT, Ambientacion am)
 	{
@@ -54,7 +58,7 @@ public class Jugador extends Entidad
 	{
 		this.mundoX = gP.getTamanioTile() * 23;
 		this.mundoY = gP.getTamanioTile() * 21;
-		this.velocidad = 4;
+		this.velocidad = velocidadBase;
 		this.direccion = "abajo";
 	}
 	public void getSpritesJugador()
@@ -166,6 +170,20 @@ public class Jugador extends Entidad
 	        moviendo = true;
 	    }
 	    
+	    if(mT.isTeclaCorrer()) {
+	    	
+	    	if(moviendo) {
+	    		if(!modoRapido) {
+	    			this.velocidad = velocidadBase +5;
+	    		}
+	    	}	
+	    }
+	    
+	    
+	    if (!mT.isTeclaCorrer() && !modoRapido) {
+	        this.velocidad = velocidadBase;
+	    }
+	    
 	    am.sonidoCamina(moviendo, colisionOn, 0);
 
 	    // Si no se está moviendo, aplicar estático dependiendo de la última dirección
@@ -199,6 +217,8 @@ public class Jugador extends Entidad
 	    	case "arriba":{
 	    		if(getY() - getVelocidad() >= 0) {
 	    			setY(getY() - getVelocidad());
+	    		 }else {
+	    			 setY(0);
 	    		 }
 	    		break;
 	    		} 
@@ -213,12 +233,16 @@ public class Jugador extends Entidad
 	    	case "izquierda" :{
 	    		if(getX() - getVelocidad() >= 0) {
 	    			setX(getX() - getVelocidad());
+	    		}else {
+	    			setX(0);
 	    		}
 	    		break;
 	    		} 
 	    	case "derecha" :{
 	    		if(getX() + getVelocidad() + gP.getTamanioTile() <= gP.anchoMundo) {
 	    			setX(getX() + getVelocidad()); 
+	    		}else {
+	    			setX(gP.anchoMundo - gP.getTamanioTile());
 	    		}
 	    		break; 
 	    		}
@@ -234,6 +258,14 @@ public class Jugador extends Entidad
 	            this.numeroSprite = 1;
 	        this.contadorSprites = 0;
 	    }
+	    
+	    this.contPixel	+= this.velocidad;
+	    if(this.contPixel == 48) {
+	    	moviendo = false; 
+	    	this.contPixel = 0;
+	    }
+	    
+	    
 	}
 	
 	
@@ -297,7 +329,9 @@ public class Jugador extends Entidad
 					if(modoRapido == false) {
 						modoRapido = true; 
 						contadorRapido = 0;
-					    this.velocidad = velocidadBase +2;
+					    this.velocidad = velocidadBase +9;
+					}else {
+						this.velocidad +=2;
 					}
 				}else {
 					inventario.addObjeto(gP.getObjetoInv()[index]);
@@ -403,10 +437,33 @@ public class Jugador extends Entidad
 			y = gP.getAltoPantalla() - (gP.altoMundo - mundoY);
 		}
 		
+		if(mundoX + gP.getTamanioTile() > this.mundoX - pantallaX  &&
+				   mundoX - gP.getTamanioTile() < this.mundoX + pantallaX &&
+				   mundoY + gP.getTamanioTile() > this.mundoY - pantallaY &&
+				   mundoY - gP.getTamanioTile() < this.mundoY + pantallaY) {
+					
+					g2.drawImage(sprite, x, y, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
+					
+				}else {
+					if(pantallaY > this.mundoX ||
+							pantallaY > this.mundoY ||
+							rOffs > gP.anchoMundo - this.mundoX||
+							bottomOffs > gP.altoMundo - this.mundoY) {
+						
+						g2.drawImage(sprite, x, y, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
+						}
+					}
 	
-		g2.drawImage(sprite, x, y, gP.getTamanioTile(), gP.getTamanioTile(),null);
+		//g2.drawImage(sprite, x, y, gP.getTamanioTile(), gP.getTamanioTile(),null);
 	}
 	
+	
+	public void dañoInfeccion(int infeccion) {
+		this.vida -= infeccion;
+		if(this.vida <0) {
+			this.vida = 0;
+		}
+	}
 	
 	public int getX()
 	{
@@ -438,9 +495,6 @@ public class Jugador extends Entidad
 	}
 	
 	
-	
-	
-	
 	public int getAreaSolidaX() {
 		return this.solidArea.x;
 	}
@@ -467,6 +521,18 @@ public class Jugador extends Entidad
 	
 	public void setSolidAreaY(int valor) {
 		this.solidArea.y = valor;
+	}
+	
+	public int getVida() {
+		return this.vida;
+	}
+	
+	public void setVida(int val) {
+		this.vida = val;
+	}
+	
+	public int getVidaMax() {
+		return this.vidaMaxima;
 	}
 	
 }

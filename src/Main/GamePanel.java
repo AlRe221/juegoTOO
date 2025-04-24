@@ -41,11 +41,11 @@ public class GamePanel extends JPanel implements Runnable
 		ManejadorTiles mTi =new ManejadorTiles(this);
 		ChecadorColision cC = new ChecadorColision(this);
 		//Inventario inv = new Inventario();
-		Objeto o[] = new Objeto[12];
+		Objeto o[] = new Objeto[8];
 		AssetSetter asSet = new AssetSetter(this);
 		UI ui = new UI(this);
 		
-		//GAME STATE, es para las pantallas. 
+		//GAME STATE
 		protected int gameState; 
 		protected final int pantallaInicio = 0;
 		protected final int playState = 1;
@@ -67,6 +67,11 @@ public class GamePanel extends JPanel implements Runnable
 			this.setDoubleBuffered(true);
 			this.addKeyListener(mT);
 			this.setFocusable(true);
+			
+			new javax.swing.Timer(1000, e -> {
+				jugador.dañoInfeccion(1);
+				repaint();
+			}).start();
 		}
 		
 		
@@ -185,7 +190,7 @@ public class GamePanel extends JPanel implements Runnable
 		    //ui.mostrarTiempo(g2);
 
 		    
-		    g2.dispose();
+		  //  g2.dispose();
 		}
 		
 		public void playMusic(int i) {
@@ -204,7 +209,7 @@ public class GamePanel extends JPanel implements Runnable
 			se.play();
 		}
 		
-  //se movio lo del inventario para la clase de UI, todo lo gráfico 
+
 		/*private void drawInventory(Graphics2D g2) {
 			
 			

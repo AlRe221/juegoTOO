@@ -21,11 +21,13 @@ public class UI {
    DecimalFormat dFormat = new DecimalFormat("#0.00");
    private boolean tiempoActivo = true;  // variable de control
    protected int numCommand = 0;
+   
+   
 
    
    public UI(GamePanel gP) {
 	   this.gP = gP;
-	   arial_30 = new Font("Arial",Font.PLAIN,30);
+	   arial_30 = Tipografia.cargaFuente(20f);
 	    
    }
    
@@ -39,13 +41,13 @@ public class UI {
 		   mostrarPantallaInicio(g2);
 	   }
 	   
-	   //pantalla juego
+	   
 	   if(gP.getGameState() == gP.getPlayState()) {
 		   activarTiempo();
 		   mostrarTiempo(g2);
+		   mostrarBarraVida(g2);
 	   }
 	   
-	   //pantalla pausa
 	   if(gP.getGameState() == gP.getPauseState()) {
 		   detenerTiempo();
 		   mostrarTiempo(g2);
@@ -58,25 +60,25 @@ public class UI {
    public void mostrarPantallaInicio(Graphics2D g2) {
 	   //esto solo es de prueba, voy a hacer un dibujo para el fondo y lo voy a poner como 
 	   //background
-	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,90F));
-	   String text = "Juego sup"; 
+	   g2.setFont(Tipografia.cargaFuente(60F));
+	   String text = "JUEGO SUPERVIVIENCIA"; 
 	   int x = getXparaCentro(text); 
 	   int y = gP.getTamanioTile() * 3;
 	   g2.setColor(Color.white);
 	   g2.drawString(text, x, y);
 	   
 	   //menu
-	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,60F));
+	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,30F));
 	   text = "START";
 	   x = getXparaCentro(text); 
 	   y += gP.getTamanioTile() * 4;
 	   g2.drawString(text, x, y);
 	   
 	   if(numCommand == 0) {
-		   g2.drawString(">", x - gP.getTamanioTile(), y);
+		   g2.drawString("-", x - gP.getTamanioTile(), y);
 	   }
 	   
-	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,60F));
+	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,30F));
 	   text = "SETTINGS";
 	   x = getXparaCentro(text); 
 	   y += gP.getTamanioTile() *2;
@@ -84,10 +86,10 @@ public class UI {
 	   
 	   
 	   if(numCommand == 1) {
-		   g2.drawString(">", x - gP.getTamanioTile(), y);
+		   g2.drawString("-", x - gP.getTamanioTile(), y);
 	   }
 	   
-	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,60F));
+	   g2.setFont(Tipografia.cargaFuente(30F));
 	   text = "INFO";
 	   x = getXparaCentro(text); 
 	   y += gP.getTamanioTile()*2;
@@ -95,11 +97,11 @@ public class UI {
 	   
 	   
 	   if(numCommand == 2) {
-		   g2.drawString(">", x - gP.getTamanioTile(), y);
+		   g2.drawString("-", x - gP.getTamanioTile(), y);
 	   }
 	   
 	   
-	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,45F));
+	   g2.setFont(Tipografia.cargaFuente(20F));
 	   text = "EXIT";
 	   x = gP.getTamanioTile() ; 
 	   y += gP.getTamanioTile() * 3;
@@ -107,7 +109,7 @@ public class UI {
 	   
 	   
 	   if(numCommand == 3) {
-		   g2.drawString(">", x - gP.getTamanioTile(), y);
+		   g2.drawString("  -", x - gP.getTamanioTile(), y);
 	   }
 	   
 	  
@@ -119,23 +121,23 @@ public class UI {
 	    g2.fillRect(x, y, w, h);
 	    g2.setColor(Color.WHITE);
 	    g2.drawRect(x, y, w, h);
-	   g2.setFont(g2.getFont().deriveFont(Font.PLAIN,90));
+	   g2.setFont(Tipografia.cargaFuente(80f));
 	   String text ="PAUSED"; 
 	   int x2 = getXparaCentro(text) ;
 	   int y2 = gP.getTamanioTile() * 5;  
 	   g2.drawString(text, x2, y2);
 	   
-	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,60F));
+	   g2.setFont(Tipografia.cargaFuente(40f));
 	   text = "EXIT";
 	   x2 = getXparaCentro(text); 
 	   y2 += gP.getTamanioTile() * 4;
 	   g2.drawString(text, x2, y2);
 	   
 	   if(numCommand == 0) {
-		   g2.drawString(">", x2 - gP.getTamanioTile(), y2);
+		   g2.drawString("-", x2 - gP.getTamanioTile(), y2);
 	   }
 	   
-	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,60F));
+	   g2.setFont(Tipografia.cargaFuente(40f));
 	   text = "CONTINUE";
 	   x2 = getXparaCentro(text); 
 	   y2 += gP.getTamanioTile() *2;
@@ -143,7 +145,7 @@ public class UI {
 	   
 	   
 	   if(numCommand == 1) {
-		   g2.drawString(">", x2 - gP.getTamanioTile(), y2);
+		   g2.drawString("-", x2 - gP.getTamanioTile(), y2);
 	   }
 	   
    }
@@ -163,7 +165,7 @@ public class UI {
 	   playTime += (double)1/60;
 	   }
 	   
-	   g2.drawString("Tiempo: " + dFormat.format(playTime), gP.getTamanioTile()*21,66);
+	   g2.drawString("TIME: " + dFormat.format(playTime), gP.getTamanioTile()*21,66);
    }
    
    public void detenerTiempo() {
@@ -175,10 +177,32 @@ public class UI {
    }
    
    
+   public void mostrarBarraVida(Graphics2D g2) {
+	   g2.setFont(Tipografia.cargaFuente(15f));
+	   g2.setColor(Color.WHITE);
+	   g2.drawString("LIFE ",20,38);
+	   
+	   int x = 80, y = 20, width = 300, heigth = 20;
+	   
+	   int vidaActual = gP.getJugador().getVida();
+	   int vidM = gP.getJugador().getVidaMax(); 
+	   int fillWi =(int)((double)vidaActual / vidM * width);
+	   
+	   g2.setColor(Color.GRAY); 
+	   g2.fillRect(x, y, width, heigth);
+	   
+	   g2.setColor(Color.RED);
+	   g2.fillRect(x, y, fillWi, heigth);
+	   
+	   g2.setColor(Color.BLACK);
+	   g2.drawRect(x, y, width, heigth);
+   }
+   
   
-   //inventario
+   
 	public void drawInventory(Graphics2D g2) {
 	    int x = 50, y = 50, w = 300, h = 200;
+	    g2.setFont(Tipografia.cargaFuente(10f));
 	    g2.setColor(new Color(0, 0, 0, 180));
 	    g2.fillRect(x, y, w, h);
 	    g2.setColor(Color.WHITE);
@@ -195,7 +219,7 @@ public class UI {
 	    }
 	    for (int i = 0; i < objs.size(); i++) {
 	        if (i == inventoryCursor) {
-	            g2.drawString(">", x + 5, y + offsetY + i * 20);
+	            g2.drawString("-", x + 5, y + offsetY + i * 20);
 	        }
 	        g2.drawString((i+1) + ". " + objs.get(i).getTipoObjeto(), x + 20, y + offsetY + i * 20);
 	    }

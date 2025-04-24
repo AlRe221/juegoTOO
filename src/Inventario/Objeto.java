@@ -55,7 +55,7 @@ public abstract class Objeto {
 		
 		if(worldX + gP.getTamanioTile() > gP.getJugador().getX() - gP.getJugador().getPantallaX() &&
 		   worldX - gP.getTamanioTile() < gP.getJugador().getX() + gP.getJugador().getPantallaX() &&
-		   worldY + gP.getTamanioTile() > gP.getJugador().getY() - gP.getJugador().getPantallaX() &&
+		   worldY + gP.getTamanioTile() > gP.getJugador().getY() - gP.getJugador().getPantallaY() &&
 		   worldY - gP.getTamanioTile() < gP.getJugador().getY() + gP.getJugador().getPantallaY()) {
 			
 			g2.drawImage(image, pantallaX, pantallaY, gP.getTamanioTile(), gP.getTamanioTile(), null);
@@ -68,6 +68,8 @@ public abstract class Objeto {
 			}
 		}
     }
+    
+    
     public String getTipoObjeto(){ 
     	String tipO=null;
     	if(this instanceof Coins) {
@@ -166,3 +168,4 @@ public abstract class Objeto {
     	this.colision = val;
     }
 }
+
