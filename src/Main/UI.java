@@ -60,8 +60,8 @@ public class UI {
    public void mostrarPantallaInicio(Graphics2D g2) {
 	   //esto solo es de prueba, voy a hacer un dibujo para el fondo y lo voy a poner como 
 	   //background
-	   g2.setFont(Tipografia.cargaFuente(60F));
-	   String text = "JUEGO SUPERVIVIENCIA"; 
+	   g2.setFont(Tipografia.cargaFuente(50F));
+	   String text = "UASLP APOCALYPSIS- PART 1"; 
 	   int x = getXparaCentro(text); 
 	   int y = gP.getTamanioTile() * 3;
 	   g2.setColor(Color.white);

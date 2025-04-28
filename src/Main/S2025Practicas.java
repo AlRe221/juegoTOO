@@ -1,3 +1,4 @@
+
 package Main;
 
 import javax.swing.JFrame;
@@ -8,7 +9,7 @@ public class S2025Practicas {
 		JFrame ventana = new JFrame();
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ventana.setResizable(false);
-		ventana.setTitle("TOO - juego supervivencia*");
+		ventana.setTitle("UASLP APOCALYPSIS- part 1");
 		
 		GamePanel panelJuego=new GamePanel();
 		ventana.add(panelJuego);
