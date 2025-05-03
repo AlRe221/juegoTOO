@@ -44,8 +44,7 @@ public class ManejadorTeclas implements KeyListener
 						 if(gP.getUi().getNumCom() == 0) {
 							 gP.stopMusic();
 							 gP.setGameState(gP.getPlayState());
-							 gP.playMusic(4); //agregar de nuevo el archivo de musica ambientación, estaba muy pesado.
-							 
+							 gP.playMusic(2); 
 						 }
 						 
 						 if(gP.getUi().getNumCom() == 1) {
