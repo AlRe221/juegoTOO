@@ -8,7 +8,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import Inventario.Alimento;
 import Inventario.Arma;
+import Inventario.Bebida;
 import Inventario.Celular;
 import Inventario.Comida;
 import Inventario.Inventario;
@@ -32,17 +34,19 @@ public class Jugador extends Entidad
 	private int velocidadBase = 5;
 	private int contadorRapido = 0;
 	private int maxCiclosRapido = 150; 
+	private String tS;
 	
 	private int vidaMaxima = 100; 
 	private int vida = vidaMaxima;
 	protected int contPixel = 0;
 	
-	public Jugador(GamePanel gP, ManejadorTeclas mT, Ambientacion am)
+	public Jugador(GamePanel gP, ManejadorTeclas mT, Ambientacion am, String tipoSprite)
 	{
 		this.gP = gP;
 		this.mT = mT;
 		this.am = am;
 		this.inventario = new Inventario();
+		this.tS = tipoSprite;
 		
 		this.pantallaX = gP.getAnchoPantalla() / 2 - (gP.getTamanioTile()/2);
 		this.pantallaY = gP.getAltoPantalla() / 2 - (gP.getTamanioTile()/2);
@@ -52,7 +56,7 @@ public class Jugador extends Entidad
 		this.solidAreaDefaultY = this.solidArea.y;
 		
 		configuracionInicial();
-		getSpritesJugador();
+		getSpritesJugador(this.tS);
 	}
 	public void configuracionInicial()
 	{
@@ -61,32 +65,33 @@ public class Jugador extends Entidad
 		this.velocidad = velocidadBase;
 		this.direccion = "abajo";
 	}
-	public void getSpritesJugador()
+	public void getSpritesJugador(String o)
 	{
 		try {
 			
-			
-			this.arriba1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoArriba1.png"));
-			this.arriba2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoArriba2.png"));
-			this.estaticoA1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoA1.png"));
-			this.estaticoA2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoA2.png"));
-			
-			
-			this.estatico1 =ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico1.png"));
-			this.estatico2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico2.png"));
-			this.abajo1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoAbajo1.png"));
-			this.abajo2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoAbajo2.png"));
-			
-			
-			this.estaticoI1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoiz1.png"));
-			this.estaticoI2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoiz2.png"));		
-			this.izquierda1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoCamI1.png"));
-			this.izquierda2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoiz1.png"));
-			
-			this.estaticoD1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoD1.png"));
-			this.estaticoD2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoD2.png"));		
-			this.derecha1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoCamD1.png"));
-			this.derecha2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoD1.png"));
+			if(o.equals("normal")) {
+				this.arriba1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoArriba1.png"));
+				this.arriba2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoArriba2.png"));
+				this.estaticoA1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoA1.png"));
+				this.estaticoA2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoA2.png"));
+				
+				
+				this.estatico1 =ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico1.png"));
+				this.estatico2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico2.png"));
+				this.abajo1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoAbajo1.png"));
+				this.abajo2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoAbajo2.png"));
+				
+				
+				this.estaticoI1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoiz1.png"));
+				this.estaticoI2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoiz2.png"));		
+				this.izquierda1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoCamI1.png"));
+				this.izquierda2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoiz1.png"));
+				
+				this.estaticoD1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoD1.png"));
+				this.estaticoD2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoD2.png"));		
+				this.derecha1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoCamD1.png"));
+				this.derecha2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoD1.png"));
+				}
 		}catch(IOException e)
 		{
 			System.out.println(e);
@@ -106,8 +111,21 @@ public class Jugador extends Entidad
             if (o instanceof Comida) {
                 Comida c = (Comida)o;
                 c.mostrarComida();
+                if(c instanceof Alimento) {
+                gP.playSE(9);
+                }else if(c instanceof Bebida) {
+                	gP.playSE(12);
+                }
                 inventario.removeObjeto(c);
+                if(c instanceof Alimento) {
+                	this.vida +=3;
+                }else if(c instanceof Bebida) {
+                	this.vida +=6;
+                }
+                
                 System.out.println(">> Comida usada y retirada del inventario.");
+               
+                
                 return;
             }
         }
@@ -334,7 +352,9 @@ public class Jugador extends Entidad
 						this.velocidad +=2;
 					}
 				}else {
+					this.tS = gP.getObjetoInv()[index].getTipoObjeto();
 					inventario.addObjeto(gP.getObjetoInv()[index]);
+					getSpritesJugador(tS);
 					switch(gP.getObjetoInv()[index].getTipoObjeto()) {
 					case "Mochila":
 						gP.playSE(6);
@@ -348,9 +368,15 @@ public class Jugador extends Entidad
 					case "Coins":
 						gP.playSE(8);
 						break;
-					case "Comida":
+					case "Torta Chilaquil":
 						gP.playSE(6);
 						break;
+					case "Aguita":
+						gP.playSE(6);
+						break;
+					case "Extintor":
+						gP.playSE(6);
+						break;	
 					}
 					gP.getObjetoInv()[index] = null;
 				}

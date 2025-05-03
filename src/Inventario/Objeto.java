@@ -75,7 +75,13 @@ public abstract class Objeto {
     	if(this instanceof Coins) {
     		tipO = ((Coins)this).tipoObjeto;
     	}else if(this instanceof Comida) {
-    		tipO = ((Comida)this).tipoObjeto;
+    		if(((Comida)this) instanceof Alimento) {
+    			Alimento a = (Alimento)this;
+    			tipO = a.nombreComida;
+    		}else if(((Comida)this) instanceof Bebida) {
+    			Bebida b = (Bebida)this; 
+    			tipO = b.bebida;
+    		}
     	}else if(this instanceof Arma) {
     		if(((Arma)this) instanceof Mochila) {
     			Mochila m = (Mochila)this;
@@ -86,6 +92,9 @@ public abstract class Objeto {
     		}else if(((Arma)this) instanceof Laptop) {
     			Laptop c = (Laptop)this;
     			tipO = c.nombreArma;
+    		}else if(((Arma)this) instanceof Extintor) {
+    			Extintor e = (Extintor)this;
+    			tipO = e.nombreArma;
     		}
     	}
     	return tipO; 

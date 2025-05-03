@@ -29,6 +29,7 @@ public class Ambientacion {
 		urlSonido[9] = getClass().getResource("/Ambientacion/sonidodecomer.wav");
 		urlSonido[10] = getClass().getResource("/Ambientacion/sonidodehablar.wav");
 		urlSonido[11] = getClass().getResource("/Ambientacion/sonidoVelocidad.wav");
+		urlSonido[12] = getClass().getResource("/Ambientacion/tomaragua.wav");
 		
 		this.gP =gP;
 		this.activa = false; 

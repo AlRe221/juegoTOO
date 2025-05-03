@@ -69,10 +69,14 @@ public class ChecadorColision {
 		{
 			entidadDerCol = (derMundoXentidad + ((Jugador)entidad).getVelocidad()) / this.gP.getTamanioTile();
 			
+			if(entidadDerCol <50) {
 			tileN1 = gP.mTi.getCodigoMapaTiles(entidadTopRen, entidadDerCol);
 			tileN2 = gP.mTi.getCodigoMapaTiles(entidadBotRen, entidadDerCol);
 			
 			if(gP.mTi.getColisionDeTile(tileN1) || gP.mTi.getColisionDeTile(tileN2)) {
+				((Jugador)entidad).setColisionOn(true);
+			}
+			}else {
 				((Jugador)entidad).setColisionOn(true);
 			}
 		break;
