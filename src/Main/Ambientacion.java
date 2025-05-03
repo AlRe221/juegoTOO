@@ -19,7 +19,7 @@ public class Ambientacion {
 		
 		urlSonido[0] = getClass().getResource("/Ambientacion/caminata.wav");
 		urlSonido[1] = getClass().getResource("/Ambientacion/correr.wav");
-		urlSonido[2] = getClass().getResource("/Ambientacion/musicaambientacionexploracion.wav");
+		//urlSonido[2] = getClass().getResource("/Ambientacion/musicaambientacionexploracion.wav");
 		urlSonido[3] = getClass().getResource("/Ambientacion/musicacombate.wav");
 		urlSonido[4] = getClass().getResource("/Ambientacion/musicapantallainicio.wav");
 		urlSonido[5] = getClass().getResource("/Ambientacion/recievedamage.wav");

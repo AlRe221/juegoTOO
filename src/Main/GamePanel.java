@@ -68,7 +68,7 @@ public class GamePanel extends JPanel implements Runnable
 			this.addKeyListener(mT);
 			this.setFocusable(true);
 			
-			new javax.swing.Timer(1000, e -> {
+			new javax.swing.Timer(12000000, e -> {
 				jugador.dañoInfeccion(1);
 				repaint();
 			}).start();
