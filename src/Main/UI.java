@@ -23,6 +23,8 @@ public class UI {
    private boolean tiempoActivo = true;  // variable de control
    protected int numCommand = 0;
    public int espacioCol = 0;
+   public int espacioRen = 0;
+   
    
    
 
@@ -220,7 +222,7 @@ public class UI {
 	    int casillaY = casillaYInicio;
 
 	    int cursorX = casillaXInicio + (gP.getTamanioTile() * espacioCol);
-	    int cursorY = casillaYInicio + (gP.getTamanioTile() * espacioCol);
+	    int cursorY = casillaYInicio + (gP.getTamanioTile() * espacioRen);
 	    int cursorAncho = gP.getTamanioTile();
 	    int cursorAlto = gP.getTamanioTile();
 
