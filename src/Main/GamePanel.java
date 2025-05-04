@@ -18,14 +18,14 @@ import tile.ManejadorTiles;
 
 public class GamePanel extends JPanel implements Runnable
 {
-	//Configuracion de pantalla
-		private final int tamanioOriginalTile = 16;
-		private final int escala = 3;
-		private final int tamanioTile = tamanioOriginalTile * escala;
-		private final int maxRenPantalla = 15;
-		private final int maxColPantalla = 26;
-		private final int anchoPantalla = tamanioTile * maxColPantalla;
-		private final int altoPantalla = tamanioTile * maxRenPantalla;
+	// CONFIGURACIÓN PANTALLA
+	private final int tamanioOriginalTile = 16;
+	private final int escala = 3;
+	private final int tamanioTile = tamanioOriginalTile * escala;
+	private final int maxRenPantalla = 15;
+	private final int maxColPantalla = 26;
+	private final int anchoPantalla = tamanioTile * maxColPantalla;
+	private final int altoPantalla = tamanioTile * maxRenPantalla;
 		
 		
 		// Inventario
@@ -33,32 +33,32 @@ public class GamePanel extends JPanel implements Runnable
 		//private int     inventoryCursor = 0;
 
 		
-		Thread hebraJuego;
-		Ambientacion musica = new Ambientacion(this);
-		Ambientacion se = new Ambientacion(this);
-		ManejadorTeclas mT = new ManejadorTeclas(this);
-		Jugador jugador = new Jugador(this, mT,se,"normal");
-		ManejadorTiles mTi =new ManejadorTiles(this);
-		ChecadorColision cC = new ChecadorColision(this);
-		//Inventario inv = new Inventario();
-		Objeto o[] = new Objeto[15];
-		AssetSetter asSet = new AssetSetter(this);
-		UI ui = new UI(this);
+	Thread hebraJuego;
+	Ambientacion musica = new Ambientacion(this);
+	Ambientacion se = new Ambientacion(this);
+	ManejadorTeclas mT = new ManejadorTeclas(this);
+	Jugador jugador = new Jugador(this, mT,se,"normal");
+	ManejadorTiles mTi =new ManejadorTiles(this);
+	ChecadorColision cC = new ChecadorColision(this);
+	//Inventario inv = new Inventario();
+	Objeto o[] = new Objeto[15];
+	AssetSetter asSet = new AssetSetter(this);
+	UI ui = new UI(this);
 		
-		//GAME STATE
-		protected int gameState; 
-		protected final int pantallaInicio = 0;
-		protected final int playState = 1;
-		protected final int pauseState = 2;
+	//GAME STATE
+	protected int gameState; 
+	protected final int pantallaInicio = 0;
+	protected final int playState = 1;
+	protected final int pauseState = 2;
 		 
 		
-		//world settings
-		public final int maxColMundo = 50; 
-		public final int maxRenMundo = 50; 
-		public final int anchoMundo = tamanioTile * maxColMundo;
-		public final int altoMundo = tamanioTile * maxRenMundo;
-		
-		int FPS = 60;
+	//WORLD SETTINGS
+	public final int maxColMundo = 50; 
+	public final int maxRenMundo = 50; 
+	public final int anchoMundo = tamanioTile * maxColMundo;
+	public final int altoMundo = tamanioTile * maxRenMundo;
+	
+	int FPS = 60;
 		
 		public GamePanel()
 		{
