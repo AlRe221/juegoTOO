@@ -44,15 +44,18 @@ public class ManejadorTeclas implements KeyListener
 						 if(gP.getUi().getNumCom() == 0) {
 							 gP.stopMusic();
 							 gP.setGameState(gP.getPlayState());
-							 gP.playMusic(2); 
+							 gP.playMusic(2);
+							 
 						 }
 						 
 						 if(gP.getUi().getNumCom() == 1) {
 							//settings, pantalla de controles
+							 gP.setGameState(gP.getPantalaSetting());
 						 }
 						 
 						 if(gP.getUi().getNumCom() == 2) {
 							 //info de los creadores del juego, otra pantalla
+							 gP.setGameState(gP.getPantallaInfo());
 						 }
 						 if(gP.getUi().getNumCom() == 3) {
 							 System.exit(0);
@@ -92,6 +95,31 @@ public class ManejadorTeclas implements KeyListener
 					}
 					}
 				}
+				
+				
+				//Settings
+				if(gP.getGameState() == gP.getPantalaSetting()) {
+					 switch(e.getKeyCode()) {
+				        case KeyEvent.VK_ENTER: {
+				        	if(gP.getUi().getNumCom() == 0) {
+				            gP.setGameState(gP.getPantallaInicio());
+				            break;
+				        }
+				    }  
+					}
+				}
+				
+				//Settings
+				if(gP.getGameState() == gP.getPantallaInfo()) {
+					 switch(e.getKeyCode()) {
+				        case KeyEvent.VK_ENTER: {
+				        	if(gP.getUi().getNumCom() == 0) {
+				            gP.setGameState(gP.getPantallaInicio());
+				            break;
+				        }
+				    }
+					 }
+					 }
 		
 		//pantalla juego		
 		switch(e.getKeyCode()) 
@@ -199,5 +227,7 @@ public class ManejadorTeclas implements KeyListener
 	public void setTeclaCorrer(boolean teclaCorrer) {
 		this.teclaCorrer = teclaCorrer;
 	}
+	
+	
     
 }

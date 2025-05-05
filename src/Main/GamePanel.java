@@ -41,7 +41,7 @@ public class GamePanel extends JPanel implements Runnable
 		ManejadorTiles mTi =new ManejadorTiles(this);
 		ChecadorColision cC = new ChecadorColision(this);
 		//Inventario inv = new Inventario();
-		Objeto o[] = new Objeto[15];
+		Objeto o[] = new Objeto[10];
 		AssetSetter asSet = new AssetSetter(this);
 		UI ui = new UI(this);
 		
@@ -50,7 +50,8 @@ public class GamePanel extends JPanel implements Runnable
 		protected final int pantallaInicio = 0;
 		protected final int playState = 1;
 		protected final int pauseState = 2;
-		 
+		protected final int pantallaSetting = 3;
+		protected final int pantallaInfo = 4; 
 		
 		//world settings
 		public final int maxColMundo = 50; 
@@ -68,8 +69,8 @@ public class GamePanel extends JPanel implements Runnable
 			this.addKeyListener(mT);
 			this.setFocusable(true);
 			
-			new javax.swing.Timer(12000000, e -> {
-				jugador.dañoInfeccion(1);
+			new javax.swing.Timer(12000000, e -> { //esto disminuye cada 20 min la vida
+				jugador.dañoInfeccion(0.5);
 				repaint();
 			}).start();
 		}
@@ -128,39 +129,83 @@ public class GamePanel extends JPanel implements Runnable
 
 			// si está abierto, navegar con flechas y seleccionar con Enter
 			if (ui.inventoryOpen) {
-			    List<Objeto> items = jugador.getInventario().getObjetos();
+				usarInventario();
+			}
+		}
+		
+		//checar como hacer que, si saca x objeto, el sprite csmbie al siguente y así susecivamente hasta que quede vacio con tS = "normal"
+		
+		public void usarInventario() {
+			 List<Objeto> items = jugador.getInventario().getObjetos();
 			    int size = Math.max(1, items.size());
 
 			    if (mT.getTeclaArribaInv()) {
-			        //inventoryCursor = (inventoryCursor - 1 + size) % size;
 			    	ui.setInventorCursor((ui.getInventorCursor() - 1 + size) % size) ;
 			        mT.setTeclaArribaInv(false);
 			    }
 			    if (mT.getTeclaAbajoInv()) {
-			        //inventoryCursor = (inventoryCursor + 1) % size;
-			    	ui.setInventorCursor((ui.getInventorCursor() - 1 + size) % size) ;
+			    	ui.setInventorCursor((ui.getInventorCursor() + 1 + size) % size) ;
 			        mT.setTeclaAbajoInv(false);
 			    }
+			    
+			//   cambiarIteminventario(items);
+			    
 			    if (mT.getTeclaEnter()) {
 			        // ejecuta acción según tipo
 			        if (!items.isEmpty()) {
 			            Objeto sel = items.get(ui.getInventorCursor());
-			            if (sel instanceof Comida) {    
+			            if (sel instanceof Comida) {
 			            	jugador.usarComida();
-			              items.remove(sel);
+			              items.remove(sel);  
 			            }else if (sel instanceof Arma) {  
 			            	jugador.equiparArma();
-			            	items.remove(sel);
 			            }else if (sel instanceof Coins) {
 			                ((Coins)sel).incrementoOro();
 			                System.out.println("Monedas: " + ((Coins)sel).getValorCoin());
-			                items.remove(sel);
 			            }
+			            items.remove(sel);
+			            
+			            size = Math.max(1, items.size()); 
+			            if (ui.getInventorCursor() >= size) {
+			                ui.setInventorCursor(size - 1);
+			            }
+
+			           // cambiarIteminventario(items);
+			            
 			        }
 			        mT.setTeclaEnter(false);
+			       
 			    }
-			}
 		}
+		
+		
+		/*public void cambiarIteminventario(List<Objeto> items) {
+		    int cursor = ui.getInventorCursor();
+
+		    if (!items.isEmpty() && cursor >= 0 && cursor < items.size()) {
+		        jugador.settS(items.get(cursor).getTipoObjeto());
+		    } else {
+		        jugador.settS("normal");
+		    }
+
+		    jugador.getSpritesJugador(jugador.gettS());
+		}*/
+
+		
+		
+		
+		/*public void cambiarIteminventario(List<Objeto> items) {
+			if(!items.isEmpty()) {
+		    	jugador.settS(items.get(ui.getInventorCursor()).getTipoObjeto());
+		    	jugador.getSpritesJugador(jugador.gettS());
+		    }else {
+		    	jugador.settS("normal");
+		    	jugador.getSpritesJugador(jugador.gettS());
+		    }
+		}*/
+		
+		
+		
 		@Override
 		public void paintComponent(Graphics g) {
 		    super.paintComponent(g);
@@ -183,9 +228,13 @@ public class GamePanel extends JPanel implements Runnable
 		    	if (ui.getInventorOpen()) {
 		    		ui.drawInventory(g2);
 		    	}
+		    	
+		    	if(gameState == pantallaSetting) {
+		    	ui.draw(g2);
+		    	}
 		    	ui.draw(g2);
 		    }
-
+		  
 		    
 		    //ui.mostrarTiempo(g2);
 
@@ -330,7 +379,14 @@ public class GamePanel extends JPanel implements Runnable
 			return this.pantallaInicio;
 		}
 
-
+		public int getPantalaSetting() {
+			return this.pantallaSetting;
+		}
+		
+		
+		public int getPantallaInfo() {
+			return this.pantallaInfo;
+		}
 		public UI getUi() {
 			return ui;
 		}
@@ -339,7 +395,7 @@ public class GamePanel extends JPanel implements Runnable
 		public void setUi(UI ui) {
 			this.ui = ui;
 		}
-		
+		 
 	
 		
 	

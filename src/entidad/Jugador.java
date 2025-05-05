@@ -484,7 +484,7 @@ public class Jugador extends Entidad
 	}
 	
 	
-	public void dañoInfeccion(int infeccion) {
+	public void dañoInfeccion(double infeccion) {
 		this.vida -= infeccion;
 		if(this.vida <0) {
 			this.vida = 0;

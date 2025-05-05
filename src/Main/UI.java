@@ -2,10 +2,15 @@ package Main;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import Inventario.Coins;
 import Inventario.Objeto;
@@ -21,9 +26,7 @@ public class UI {
    DecimalFormat dFormat = new DecimalFormat("#0.00");
    private boolean tiempoActivo = true;  // variable de control
    protected int numCommand = 0;
-   
-   
-
+  
    
    public UI(GamePanel gP) {
 	   this.gP = gP;
@@ -41,27 +44,45 @@ public class UI {
 		   mostrarPantallaInicio(g2);
 	   }
 	   
+	   //settings
+	   if(gP.getGameState() == gP.getPantalaSetting()) {
+		   mostrarPantallaSettings(g2);
+	   }
 	   
+	   //info
+	   if(gP.getGameState() == gP.getPantallaInfo()) {
+		   mostrarPantallaInfo(g2);
+	   }
+	   
+	   //pantalla de juego
 	   if(gP.getGameState() == gP.getPlayState()) {
 		   activarTiempo();
 		   mostrarTiempo(g2);
 		   mostrarBarraVida(g2);
 	   }
 	   
+	   //pantalla de pausa
 	   if(gP.getGameState() == gP.getPauseState()) {
 		   detenerTiempo();
 		   mostrarTiempo(g2);
-		   mostrarPantallaPausa();
-		   
+		   mostrarPantallaPausa();   
 	   }
+	   
+	   
 	   
    }
    
-   public void mostrarPantallaInicio(Graphics2D g2) {
+   public void mostrarPantallaInicio(Graphics2D g2){
 	   //esto solo es de prueba, voy a hacer un dibujo para el fondo y lo voy a poner como 
 	   //background
-	   g2.setFont(Tipografia.cargaFuente(50F));
-	   String text = "UASLP APOCALYPSIS- PART 1"; 
+	   try {
+		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/fondodepantallaprueba.png"));
+		   g2.drawImage(image, 0, 0, gP.getAnchoPantalla(), gP.getAltoPantalla(), null);
+	   }catch(Exception e) {   
+	   }
+	   
+	   g2.setFont(Tipografia.cargaFuente(60F));
+	   String text = "JUEGO SUPERVIVIENCIA"; 
 	   int x = getXparaCentro(text); 
 	   int y = gP.getTamanioTile() * 3;
 	   g2.setColor(Color.white);
@@ -115,12 +136,52 @@ public class UI {
 	  
    }
    
+   public void mostrarPantallaSettings(Graphics2D g2) {
+	   
+	   try {
+		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/imagenSettingsprueba2.png"));
+		   g2.drawImage(image, 0, 0, gP.getAnchoPantalla(), gP.getAltoPantalla(), null);
+	   }catch(Exception e) {   
+	   }
+	  
+	   
+	   g2.setFont(Tipografia.cargaFuente(20F));
+	  String text = "EXIT";
+	 int x = gP.getTamanioTile()*3 ; 
+	   int y = gP.getTamanioTile() *13;
+	   g2.drawString(text, x, y);
+	   
+	   setNUmCom(0);
+	
+	   if(numCommand == 0) {
+		   g2.drawString("  -", x - gP.getTamanioTile(), y);
+	   } 
+   }
+   
+  
+   public void mostrarPantallaInfo(Graphics2D g2) {
+	   try {
+		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/imagenInfoprueba.png"));
+		   g2.drawImage(image, 0, 0, gP.getAnchoPantalla(), gP.getAltoPantalla(), null);
+	   }catch(Exception e) {   
+	   }
+	  
+	   
+	   g2.setFont(Tipografia.cargaFuente(20F));
+	  String text = "EXIT";
+	 int x = gP.getTamanioTile()*3 ; 
+	   int y = gP.getTamanioTile() *14;
+	   g2.drawString(text, x, y);
+	   
+	   setNUmCom(0);
+	
+	   if(numCommand == 0) {
+		   g2.drawString("  -", x - gP.getTamanioTile(), y);
+	   } 
+   }
+   
    public void mostrarPantallaPausa() {
-	   int x = 120, y = 100, w =1000, h = 500;
-	    g2.setColor(new Color(0, 0, 0, 180));
-	    g2.fillRect(x, y, w, h);
-	    g2.setColor(Color.WHITE);
-	    g2.drawRect(x, y, w, h);
+	   cuadroCentro();
 	   g2.setFont(Tipografia.cargaFuente(80f));
 	   String text ="PAUSED"; 
 	   int x2 = getXparaCentro(text) ;
@@ -150,6 +211,16 @@ public class UI {
 	   
    }
    
+   
+   
+   
+   public void cuadroCentro() {
+	   int x = 120, y = 100, w =1000, h = 500;
+	    g2.setColor(new Color(0, 0, 0, 180));
+	    g2.fillRect(x, y, w, h);
+	    g2.setColor(Color.WHITE);
+	    g2.drawRect(x, y, w, h);
+   }
    
    public int getXparaCentro(String text) {
 	   int tam = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
@@ -186,6 +257,10 @@ public class UI {
 	   
 	   int vidaActual = gP.getJugador().getVida();
 	   int vidM = gP.getJugador().getVidaMax(); 
+	   if(vidaActual > vidM) {
+		   vidaActual = vidM;
+	   }
+	   
 	   int fillWi =(int)((double)vidaActual / vidM * width);
 	   
 	   g2.setColor(Color.GRAY); 
