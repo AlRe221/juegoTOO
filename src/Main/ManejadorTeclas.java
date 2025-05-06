@@ -27,6 +27,7 @@ public class ManejadorTeclas implements KeyListener
 					switch(e.getKeyCode()) 
 					{
 					case KeyEvent.VK_W : {
+						gP.playSE(13);
 						gP.getUi().setNUmCom(gP.getUi().getNumCom() -1);
 						if(gP.getUi().getNumCom() < 0) {
 							gP.getUi().setNUmCom(3);
@@ -34,6 +35,7 @@ public class ManejadorTeclas implements KeyListener
 						break;
 					}
 					case KeyEvent.VK_S :{
+						gP.playSE(13);
 						gP.getUi().setNUmCom(gP.getUi().getNumCom() +1);
 						if(gP.getUi().getNumCom() > 3) {
 							gP.getUi().setNUmCom(0);
@@ -70,6 +72,7 @@ public class ManejadorTeclas implements KeyListener
 				if(gP.getGameState() == gP.getPauseState()) {
 					switch(e.getKeyCode()) {
 					case KeyEvent.VK_W :{
+						gP.playSE(13);
 						gP.getUi().setNUmCom(gP.getUi().getNumCom() -1);
 						if(gP.getUi().getNumCom() < 0) {
 							gP.getUi().setNUmCom(1);
@@ -77,6 +80,7 @@ public class ManejadorTeclas implements KeyListener
 						break;
 					}
 					case KeyEvent.VK_S : {
+						gP.playSE(13);
 						gP.getUi().setNUmCom(gP.getUi().getNumCom() +1);
 						if(gP.getUi().getNumCom() > 3) {
 							gP.getUi().setNUmCom(0);
@@ -101,6 +105,7 @@ public class ManejadorTeclas implements KeyListener
 				if(gP.getGameState() == gP.getPantalaSetting()) {
 					 switch(e.getKeyCode()) {
 				        case KeyEvent.VK_ENTER: {
+				        	gP.playSE(13);
 				        	if(gP.getUi().getNumCom() == 0) {
 				            gP.setGameState(gP.getPantallaInicio());
 				            break;
@@ -113,6 +118,7 @@ public class ManejadorTeclas implements KeyListener
 				if(gP.getGameState() == gP.getPantallaInfo()) {
 					 switch(e.getKeyCode()) {
 				        case KeyEvent.VK_ENTER: {
+				        	gP.playSE(13);
 				        	if(gP.getUi().getNumCom() == 0) {
 				            gP.setGameState(gP.getPantallaInicio());
 				            break;

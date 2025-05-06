@@ -22,38 +22,37 @@ public class AssetSetter {
 		this.gP = gP;
 	}
 	
-	public void setObject() {
+	public Objeto objetoUnico() {
 		Random rand = new Random();
-		for (int i = 0; i < gP.o.length; i++) {
 			int tipo = rand.nextInt(8); // 0: Coins, 1: Alimento (comida), 2. Bebida (comida), 3: itemVelocidad, 4. Mochila (arma), 5. Laptop(arma), 6.Celular(arma), 7.Extintor(arma).
+			Objeto o =null;
 
 			switch (tipo) {
 				case 0:
-					gP.o[i] = new Coins(10.0, 5, 6.0, true, 6.0);
+					o = new Coins(10.0, 5, 6.0, true, 6.0);
 					break;
 				case 1:
-					gP.o[i] = new Alimento(5.0, true, 7.5, "Torta Chilaquil");
+					o = new Alimento(5.0, true, 7.5, "Torta Chilaquil");
 					break;
 				case 2 :
-					gP.o[i] = new Bebida(10.0, true, 6.0, "Aguita");
+					o = new Bebida(10.0, true, 6.0, "Aguita");
 					break;	
 				case 3:
-					gP.o[i] = new ItemVelocidad(5.0, true, 6.0);
+					o = new ItemVelocidad(5.0, true, 6.0);
 					break;
 				case 4:
-					gP.o[i] = new Mochila(3, "Mochila", 3.0, true, 6.0);
+					o = new Mochila(3, "Mochila", 3.0, true, 6.0);
 					break;
 				case 5: 
-					gP.o[i] = new Laptop(4,"Laptop",10.0,true,12.5);
+					o = new Laptop(4,"Laptop",10.0,true,12.5);
 					break;
 				case 6 :
-					gP.o[i] = new Celular(4,"Celular",8.5,true,10.0);
+					o = new Celular(4,"Celular",8.5,true,10.0);
 					break;
 				case 7 :
-					gP.o[i] = new Extintor(5, "Extintor", 7.0, true, 8.0);
+					o = new Extintor(5, "Extintor", 7.0, true, 8.0);
 					break;
-					
-			}
+			}	
 
 			// posición aleatoria
 			int x,y,tilen;
@@ -65,11 +64,21 @@ public class AssetSetter {
 			
 			}while(gP.mTi.getColisionDeTile(tilen) == true);
 			
-			gP.o[i].setWorldX(x * gP.getTamanioTile());
-			gP.o[i].setWorldY(y * gP.getTamanioTile());
+			o.setWorldX(x * gP.getTamanioTile());
+			o.setWorldY(y * gP.getTamanioTile());
+			
+			return o;
 		}
+		  
+	public void setObject(){
+		for (int i = 0; i < gP.o.length; i++) {
+			gP.o[i] = objetoUnico();
+		}
+		
 	}
 
+	
+	
 
 
 }

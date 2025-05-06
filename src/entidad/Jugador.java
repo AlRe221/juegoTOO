@@ -379,6 +379,13 @@ public class Jugador extends Entidad
 						break;	
 					}
 					gP.getObjetoInv()[index] = null;
+					javax.swing.Timer timer = new javax.swing.Timer(12000, e -> { //esto disminuye cada 20 min la vida
+						gP.getObjetoInv()[index] = gP.getAssS().objetoUnico();
+					});
+					
+					timer.setRepeats(false);
+					timer.start();
+					
 				}
 			}	
 		}

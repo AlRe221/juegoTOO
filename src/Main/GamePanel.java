@@ -396,7 +396,10 @@ public class GamePanel extends JPanel implements Runnable
 			this.ui = ui;
 		}
 		 
-	
+		public AssetSetter getAssS() {
+			return this.asSet;
+		}
+		
 		
 	
 	
