@@ -9,11 +9,15 @@ public class ManejadorTeclas extends KeyAdapter {
 
     // MOVIMIENTO Y ACCIONES
     private boolean teclaArriba, teclaAbajo, teclaIzquierda, teclaDerecha;
-    private boolean teclaInventario, teclaArribaInv, teclaAbajoInv, teclaEnter;
+    private boolean teclaInventario, teclaArribaInv, teclaAbajoInv, teclaEnter, teclaIzqInvCol, teclaDerInvCol;
     private boolean teclaCorrer;
+ 
 
     private static final int OPCIONES_MENU_INICIO = 4;
     private static final int OPCIONES_MENU_PAUSA  = 2;
+    
+    private static final int INV_MAX_FILAS = 3;
+	private static final int INV_MAX_COLUMNAS = 5;
 
     public ManejadorTeclas(GamePanel gP) {
         this.gP = gP;
@@ -44,6 +48,8 @@ public class ManejadorTeclas extends KeyAdapter {
             case KeyEvent.VK_I     -> teclaInventario = false;
             case KeyEvent.VK_UP    -> teclaArribaInv  = false;
             case KeyEvent.VK_DOWN  -> teclaAbajoInv   = false;
+            case KeyEvent.VK_LEFT  -> teclaIzqInvCol  = false;          
+            case KeyEvent.VK_RIGHT -> teclaDerInvCol  = false;
             case KeyEvent.VK_ENTER -> teclaEnter      = false;
             case KeyEvent.VK_Q     -> teclaCorrer     = false;
         }
@@ -123,6 +129,8 @@ public class ManejadorTeclas extends KeyAdapter {
             case KeyEvent.VK_I      -> teclaInventario = true;
             case KeyEvent.VK_UP     -> teclaArribaInv  = true;
             case KeyEvent.VK_DOWN   -> teclaAbajoInv   = true;
+            case KeyEvent.VK_LEFT   -> teclaIzqInvCol  = true;          
+            case KeyEvent.VK_RIGHT  -> teclaDerInvCol  = true;
             case KeyEvent.VK_ENTER  -> teclaEnter      = true;
             case KeyEvent.VK_ESCAPE -> alternarPausa();
             case KeyEvent.VK_Q      -> teclaCorrer     = true;
@@ -145,12 +153,16 @@ public class ManejadorTeclas extends KeyAdapter {
     public boolean getTeclaInventario(){ return teclaInventario; }
     public boolean getTeclaArribaInv() { return teclaArribaInv; }
     public boolean getTeclaAbajoInv()  { return teclaAbajoInv; }
+    public boolean getTeclaIzqInvCol() { return teclaIzqInvCol;  }   
+    public boolean getTeclaDerInvCol() { return teclaDerInvCol;  }
     public boolean getTeclaEnter()     { return teclaEnter; }
     public boolean isTeclaCorrer()     { return teclaCorrer; }
 
     public void setTeclaInventario(boolean b) { this.teclaInventario = b; }
     public void setTeclaArribaInv(boolean b)  { this.teclaArribaInv  = b; }
     public void setTeclaAbajoInv(boolean b)   { this.teclaAbajoInv   = b; }
+    public void setTeclaIzqInvCol(boolean b)  { teclaIzqInvCol       = b; }    
+    public void setTeclaDerInvCol(boolean b)  { teclaDerInvCol       = b; }
     public void setTeclaEnter(boolean b)      { this.teclaEnter      = b; }
     public void setTeclaCorrer(boolean b)     { this.teclaCorrer     = b; }
 }

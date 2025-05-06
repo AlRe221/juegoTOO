@@ -27,7 +27,6 @@ public class Jugador extends Entidad
 	private GamePanel gP;
 	private ManejadorTeclas mT;
 	private final int pantallaX, pantallaY;
-	private Inventario inventario; // Inventario del juagador  
 	private Ambientacion am;
 	
 	private boolean modoRapido = false;
@@ -45,7 +44,6 @@ public class Jugador extends Entidad
 		this.gP = gP;
 		this.mT = mT;
 		this.am = am;
-		this.inventario = new Inventario();
 		this.tS = tipoSprite;
 		
 		this.pantallaX = gP.getAnchoPantalla() / 2 - (gP.getTamanioTile()/2);
@@ -97,68 +95,6 @@ public class Jugador extends Entidad
 			System.out.println(e);
 		}
 	}
-	
-	 // Recoge un objeto y lo mete en el inventario
-    public void pickUpObjeto(Objeto obj) {
-        inventario.addObjeto(obj);
-        
-        System.out.println(">> Recogido: " + obj.getTipoObjeto());
-    }
-
-    // Usa la primera Comida que encuentre: la muestra y la retira 
-    public void usarComida() {
-        for (Objeto o : inventario.getObjetos()) {
-            if (o instanceof Comida) {
-                Comida c = (Comida)o;
-                c.mostrarComida();
-                if(c instanceof Alimento) {
-                gP.playSE(9);
-                }else if(c instanceof Bebida) {
-                	gP.playSE(12);
-                }
-                inventario.removeObjeto(c);
-                if(c instanceof Alimento) {
-                	this.vida +=3;
-                }else if(c instanceof Bebida) {
-                	this.vida +=6;
-                }
-                
-                System.out.println(">> Comida usada y retirada del inventario.");
-               
-                
-                return;
-            }
-        }
-        System.out.println(">> No hay comida en el inventario.");
-    }
-
-    // Equipa (muestra) la primera Arma que encuentre 
-    public void equiparArma() {
-        for (Objeto o : inventario.getObjetos()) {
-            if (o instanceof Arma) {
-                Arma a = (Arma)o;
-                System.out.print(
-                  ">> Arma equipada: ");
-                if(((Arma)o) instanceof Mochila) {
-                	Mochila m = (Mochila)o;
-                	System.out.println(m.getNombreArma());
-                }else if(((Arma)o) instanceof Laptop) {
-                	Laptop l = (Laptop)o;
-                	System.out.println(l.getNombreArma());
-                }else if(((Arma)o) instanceof Celular) {
-                	Celular c = (Celular)o;
-                	System.out.println(c.getNombreArma());
-                }
-                return;
-            }
-        }
-        System.out.println(">> No tienes armas para equipar.");
-    }
-
-    // Getter para acceder al inventario desde fuera 
-    public Inventario getInventario() {
-        return inventario;
-    }
 	
 	public void update() {
 	    boolean moviendo = false;
@@ -225,10 +161,11 @@ public class Jugador extends Entidad
 	    gP.getchecadorColision().checkTile(this);
 	    
 	    
-	    //checar colision contra objeto
+	    /*
+	   checar colision contra objeto
 	   int obind = gP.getchecadorColision().checkObjeto(this, true);
 	    meterInventario(obind);
-	   
+	   */
 	    //si no hubo colisión
 	    if(colisionOn == false) {
 	    	switch(direccion) {
@@ -336,6 +273,9 @@ public class Jugador extends Entidad
 				}
 		}*/		
 	
+	
+	
+	/* Meter inventario
 	public void meterInventario(int index) {
 		int maxElInv = 6; 
 		int contElInv = 0;
@@ -383,7 +323,7 @@ public class Jugador extends Entidad
 			}	
 		}
 	}
-	
+	*/
 	
 	
 	public void draw(Graphics2D g2)

@@ -27,10 +27,7 @@ public class GamePanel extends JPanel implements Runnable
 	private final int anchoPantalla = tamanioTile * maxColPantalla;
 	private final int altoPantalla = tamanioTile * maxRenPantalla;
 		
-		
-		// Inventario
-		//private boolean inventoryOpen = false;
-		//private int     inventoryCursor = 0;
+	
 
 		
 	Thread hebraJuego;
@@ -127,39 +124,6 @@ public class GamePanel extends JPanel implements Runnable
 			}
 
 			// si está abierto, navegar con flechas y seleccionar con Enter
-			if (ui.inventoryOpen) {
-			    List<Objeto> items = jugador.getInventario().getObjetos();
-			    int size = Math.max(1, items.size());
-
-			    if (mT.getTeclaArribaInv()) {
-			        //inventoryCursor = (inventoryCursor - 1 + size) % size;
-			    	ui.setInventorCursor((ui.getInventorCursor() - 1 + size) % size) ;
-			        mT.setTeclaArribaInv(false);
-			    }
-			    if (mT.getTeclaAbajoInv()) {
-			        //inventoryCursor = (inventoryCursor + 1) % size;
-			    	ui.setInventorCursor((ui.getInventorCursor() - 1 + size) % size) ;
-			        mT.setTeclaAbajoInv(false);
-			    }
-			    if (mT.getTeclaEnter()) {
-			        // ejecuta acción según tipo
-			        if (!items.isEmpty()) {
-			            Objeto sel = items.get(ui.getInventorCursor());
-			            if (sel instanceof Comida) {    
-			            	jugador.usarComida();
-			              items.remove(sel);
-			            }else if (sel instanceof Arma) {  
-			            	jugador.equiparArma();
-			            	items.remove(sel);
-			            }else if (sel instanceof Coins) {
-			                ((Coins)sel).incrementoOro();
-			                System.out.println("Monedas: " + ((Coins)sel).getValorCoin());
-			                items.remove(sel);
-			            }
-			        }
-			        mT.setTeclaEnter(false);
-			    }
-			}
 		}
 		@Override
 		public void paintComponent(Graphics g) {
@@ -207,34 +171,7 @@ public class GamePanel extends JPanel implements Runnable
 		public void playSE(int i) {
 			se.setFile(i);
 			se.play();
-		}
-		
-
-		/*private void drawInventory(Graphics2D g2) {
-			
-			
-		    int x = 50, y = 50, w = 300, h = 200;
-		    g2.setColor(new Color(0, 0, 0, 180));
-		    g2.fillRect(x, y, w, h);
-		    g2.setColor(Color.WHITE);
-		    g2.drawRect(x, y, w, h);
-		    g2.drawString("INVENTARIO", x + 10, y + 20);
-
-		    List<Objeto> objs = jugador.getInventario().getObjetos();
-		    int offsetY = 40;
-
-		    if (objs.isEmpty()) {
-		        g2.drawString("   (vacío)", x + 10, y + offsetY);
-		        return;
-		    }
-		    for (int i = 0; i < objs.size(); i++) {
-		        if (i == inventoryCursor) {
-		            g2.drawString(">", x + 5, y + offsetY + i * 20);
-		        }
-		        g2.drawString((i + 1) + ". " + objs.get(i).getTipoObjeto(),
-		                      x + 20, y + offsetY + i * 20);
-		    }
-		}*/
+		}	
 		
 		public int getTamanioOriginalTile()
 		{
