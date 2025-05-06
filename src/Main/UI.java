@@ -22,8 +22,12 @@ public class UI {
    DecimalFormat dFormat = new DecimalFormat("#0.00");
    private boolean tiempoActivo = true;  // variable de control
    protected int numCommand = 0;
+   
+   // ESPACIOS INVENTARIO
    public int espacioCol = 0;
    public int espacioRen = 0;
+   public static final int MAX_REN = 4; // Ejemplo: 4 filas
+   public static final int MAX_COL = 6; // Ejemplo: 6 columnas
    
    
    
@@ -204,7 +208,7 @@ public class UI {
    
   
    
-   public void drawInventory(Graphics2D g2) {
+   public void dibujarInventario(Graphics2D g2) {
 
 	    // CUADRADO
 	    int x = gP.getTamanioTile() * 14; // empieza 14 tiles desde la izquierda

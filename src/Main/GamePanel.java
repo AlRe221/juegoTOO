@@ -118,10 +118,9 @@ public class GamePanel extends JPanel implements Runnable
 			}
 			// toggle inventario
 			if (mT.getTeclaInventario()) {
-			    //inventoryOpen = !inventoryOpen;
-				ui.setInventorOpen(!ui.inventoryOpen);
-			    mT.setTeclaInventario(false);
-			}
+		        ui.setInventorOpen(!ui.inventoryOpen);
+		        mT.setTeclaInventario(false);
+		    }
 
 			// si está abierto, navegar con flechas y seleccionar con Enter
 		}
@@ -145,7 +144,7 @@ public class GamePanel extends JPanel implements Runnable
 		    
 		    	// 2) Inventario encima, si está abierto
 		    	if (ui.getInventorOpen()) {
-		    		ui.drawInventory(g2);
+		    		ui.dibujarInventario(g2);
 		    	}
 		    	ui.draw(g2);
 		    }

@@ -16,8 +16,7 @@ public class ManejadorTeclas extends KeyAdapter {
     private static final int OPCIONES_MENU_INICIO = 4;
     private static final int OPCIONES_MENU_PAUSA  = 2;
     
-    private static final int INV_MAX_FILAS = 3;
-	private static final int INV_MAX_COLUMNAS = 5;
+    
 
     public ManejadorTeclas(GamePanel gP) {
         this.gP = gP;
@@ -25,6 +24,7 @@ public class ManejadorTeclas extends KeyAdapter {
 
     @Override
     public void keyPressed(KeyEvent e) {
+    	UI ui = gP.getUi();
         int estado = gP.getGameState();
 
         if (estado == gP.getPantallaInicio()) {
@@ -35,6 +35,13 @@ public class ManejadorTeclas extends KeyAdapter {
         } 
         else if (estado == gP.getPlayState()) {
             manejarJuego(e);
+            
+            if (ui.getInventorOpen()) {
+                manejarInventario(e);
+            }            
+            else {
+                manejarJuego(e);
+            }
         }
     }
 
@@ -118,6 +125,21 @@ public class ManejadorTeclas extends KeyAdapter {
             }
         }
     }
+    
+    private void manejarInventario(KeyEvent e) {
+    	
+    	UI ui = gP.getUi();
+    	switch (e.getKeyCode()) {
+        case KeyEvent.VK_UP    -> ui.espacioRen--;
+        case KeyEvent.VK_DOWN  -> ui.espacioRen++;
+        case KeyEvent.VK_LEFT  -> ui.espacioCol--;
+        case KeyEvent.VK_RIGHT -> ui.espacioCol++;
+    }
+    // Asegurar que los índices están dentro de los límites
+    ui.espacioRen = Math.max(0, Math.min(ui.espacioRen, UI.MAX_REN - 1));
+    ui.espacioCol = Math.max(0, Math.min(ui.espacioCol, UI.MAX_COL - 1));
+}
+
 
     // CONTROLES JUEGO
     private void manejarJuego(KeyEvent e) {
@@ -151,18 +173,10 @@ public class ManejadorTeclas extends KeyAdapter {
     public boolean getTeclaIzquierda() { return teclaIzquierda; }
     public boolean getTeclaDerecha()   { return teclaDerecha; }
     public boolean getTeclaInventario(){ return teclaInventario; }
-    public boolean getTeclaArribaInv() { return teclaArribaInv; }
-    public boolean getTeclaAbajoInv()  { return teclaAbajoInv; }
-    public boolean getTeclaIzqInvCol() { return teclaIzqInvCol;  }   
-    public boolean getTeclaDerInvCol() { return teclaDerInvCol;  }
     public boolean getTeclaEnter()     { return teclaEnter; }
     public boolean isTeclaCorrer()     { return teclaCorrer; }
 
     public void setTeclaInventario(boolean b) { this.teclaInventario = b; }
-    public void setTeclaArribaInv(boolean b)  { this.teclaArribaInv  = b; }
-    public void setTeclaAbajoInv(boolean b)   { this.teclaAbajoInv   = b; }
-    public void setTeclaIzqInvCol(boolean b)  { teclaIzqInvCol       = b; }    
-    public void setTeclaDerInvCol(boolean b)  { teclaDerInvCol       = b; }
     public void setTeclaEnter(boolean b)      { this.teclaEnter      = b; }
     public void setTeclaCorrer(boolean b)     { this.teclaCorrer     = b; }
 }
