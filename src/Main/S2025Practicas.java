@@ -17,7 +17,7 @@ public class S2025Practicas {
 		
 		ventana.setLocationRelativeTo(null);
 		ventana.setVisible(true);
-		
+		//test
 		
 		panelJuego.setupGame();
 		panelJuego.iniciaHebraJuego();
