@@ -13,6 +13,7 @@ import Inventario.Arma;
 import Inventario.Bebida;
 import Inventario.Celular;
 import Inventario.Comida;
+import Inventario.Extintor;
 import Inventario.Inventario;
 import Inventario.ItemVelocidad;
 import Inventario.Laptop;
@@ -133,12 +134,16 @@ public class Jugador extends Entidad
     }
 
     // Equipa (muestra) la primera Arma que encuentre 
+    //aquí puedo poner los sprites para que el jugador tenga los elementos en la mano, y 
+    //pueda usarlos para pegar.
     public void equiparArma() {
         for (Objeto o : inventario.getObjetos()) {
             if (o instanceof Arma) {
                 Arma a = (Arma)o;
                 System.out.print(
                   ">> Arma equipada: ");
+                gP.playSE(14);
+               
                 if(((Arma)o) instanceof Mochila) {
                 	Mochila m = (Mochila)o;
                 	System.out.println(m.getNombreArma());
@@ -285,56 +290,7 @@ public class Jugador extends Entidad
 	    
 	    
 	}
-	
-	
-	
-	
-
-	
-	/*public void update()
-	{
-	   //aquí se hizo la modicación para que se mueva estando estatico, si no les gusta, pueden: 
-		//borrar las variables de estatico (tanto en getSprite como aqui como en draw y de la clase entidad)
-		//implementar el if que esta en comentarios 
-		//meter todo el codigo restante dentro de este if. 
-		/*if(mT.getTeclaArriba() == true || mT.getTeclaAbajo() == true ||
-			mT.getTeclaIzquierda() == true || mT.getTeclaDerecha() == true) {
-			this.contadorSprites++;
-			}
 		
-		this.direccion = "estatico";
-		if(mT.getTeclaArriba())
-		{
-			setY(getY() - getVelocidad());
-			this.direccion = "arriba";
-		} else 
-			if(mT.getTeclaAbajo())
-			{
-				setY(getY() + getVelocidad());
-				this.direccion = "abajo";
-			}else 
-				if(mT.getTeclaIzquierda())
-				{
-					setX(getX() - getVelocidad());
-					this.direccion = "izquierda";
-				}else 
-					if(mT.getTeclaDerecha())
-					{
-						setX(getX() + getVelocidad());
-						this.direccion = "derecha";
-					}
-			
-			this.contadorSprites++;
-		 
-				if(this.contadorSprites > this.cambiaSprite)
-				{
-					if(this.numeroSprite == 1)
-						this.numeroSprite = 2;
-					else
-						this.numeroSprite = 1;
-					this.contadorSprites = 0;
-				}
-		}*/		
 	
 	public void meterInventario(int index) {
 		int maxElInv = 6; 
@@ -379,7 +335,9 @@ public class Jugador extends Entidad
 						break;	
 					}
 					gP.getObjetoInv()[index] = null;
-					javax.swing.Timer timer = new javax.swing.Timer(12000, e -> { //esto disminuye cada 20 min la vida
+					//esto hace que aparezcan y desaparezcan los items durante un tiempo
+					//cuando el jugador lo toque.
+					javax.swing.Timer timer = new javax.swing.Timer(12000, e -> { 
 						gP.getObjetoInv()[index] = gP.getAssS().objetoUnico();
 					});
 					
