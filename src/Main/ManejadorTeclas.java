@@ -45,7 +45,18 @@ public class ManejadorTeclas extends KeyAdapter {
             }
         }
     }
+    
+ // Alterna entre estado de juego y pausa 
+    private void alternarPausa() {
+        if (gP.getGameState() == gP.getPlayState()) {
+            gP.setGameState(gP.getPauseState());
+        } else if (gP.getGameState() == gP.getPauseState()) {
+            gP.setGameState(gP.getPlayState());
+        }
+    }
 
+    
+    //se agrego aca lo de alternar pausa, ya funciona
     @Override
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) {
@@ -60,6 +71,7 @@ public class ManejadorTeclas extends KeyAdapter {
             case KeyEvent.VK_RIGHT -> teclaDerInvCol  = false;
             case KeyEvent.VK_ENTER -> teclaEnter      = false;
             case KeyEvent.VK_Q     -> teclaCorrer     = false;
+            case KeyEvent.VK_ESCAPE -> alternarPausa();  
         }
     }
 
@@ -143,6 +155,7 @@ public class ManejadorTeclas extends KeyAdapter {
 
 
     // CONTROLES JUEGO
+    //se movio el alternar pausa a la principal de teclas, para que funcionara
     private void manejarJuego(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W      -> teclaArriba     = true;
@@ -155,19 +168,18 @@ public class ManejadorTeclas extends KeyAdapter {
             case KeyEvent.VK_LEFT   -> teclaIzqInvCol  = true;          
             case KeyEvent.VK_RIGHT  -> teclaDerInvCol  = true;
             case KeyEvent.VK_ENTER  -> teclaEnter      = true;
-            case KeyEvent.VK_ESCAPE -> alternarPausa();
             case KeyEvent.VK_Q      -> teclaCorrer     = true;
         }
     }
 
     // Alterna entre estado de juego y pausa 
-    private void alternarPausa() {
+    /*private void alternarPausa() {
         if (gP.getGameState() == gP.getPlayState()) {
             gP.setGameState(gP.getPauseState());
         } else if (gP.getGameState() == gP.getPauseState()) {
             gP.setGameState(gP.getPlayState());
         }
-    }
+    }*/
 
     public boolean getTeclaArriba()    { return teclaArriba; }
     public boolean getTeclaAbajo()     { return teclaAbajo; }
