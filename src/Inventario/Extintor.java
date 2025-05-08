@@ -13,7 +13,7 @@ public class Extintor extends Arma{
 		
 		try {
 		       
-        	this.image = ImageIO.read(getClass().getResourceAsStream("/objetosV/extintor1.png"));
+        	this.setImage(ImageIO.read(getClass().getResourceAsStream("/objetosV/extintor1.png")));
         	
         }catch(IOException e) {
         	e.printStackTrace();

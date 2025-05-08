@@ -38,6 +38,7 @@ public class Jugador extends Entidad
 	private int vidaMaxima = 100; 
 	private int vida = vidaMaxima;
 	protected int contPixel = 0;
+	private Inventario inventario;
 	
 	public Jugador(GamePanel gP, ManejadorTeclas mT, Ambientacion am, String tipoSprite)
 	{
@@ -52,6 +53,7 @@ public class Jugador extends Entidad
 		this.solidArea = new Rectangle(8,16,32,32); 
 		this.solidAreaDefaultX = this.solidArea.x;
 		this.solidAreaDefaultY = this.solidArea.y;
+		this.inventario = new Inventario();
 		
 		configuracionInicial();
 		getSpritesJugador(this.tS);
@@ -95,7 +97,6 @@ public class Jugador extends Entidad
 			System.out.println(e);
 		}
 	}
-	
 	public void update() {
 	    boolean moviendo = false;
 	    this.colisionOn = false;
@@ -160,12 +161,9 @@ public class Jugador extends Entidad
 	     
 	    gP.getchecadorColision().checkTile(this);
 	    
-	    
-	    /*
-	   checar colision contra objeto
-	   int obind = gP.getchecadorColision().checkObjeto(this, true);
+	    int obind = gP.getchecadorColision().checkObjeto(this, true);
 	    meterInventario(obind);
-	   */
+	  
 	    //si no hubo colisión
 	    if(colisionOn == false) {
 	    	switch(direccion) {
@@ -223,60 +221,20 @@ public class Jugador extends Entidad
 	    
 	}
 	
-	
-	
-	
-
-	
-	/*public void update()
-	{
-	   //aquí se hizo la modicación para que se mueva estando estatico, si no les gusta, pueden: 
-		//borrar las variables de estatico (tanto en getSprite como aqui como en draw y de la clase entidad)
-		//implementar el if que esta en comentarios 
-		//meter todo el codigo restante dentro de este if. 
-		/*if(mT.getTeclaArriba() == true || mT.getTeclaAbajo() == true ||
-			mT.getTeclaIzquierda() == true || mT.getTeclaDerecha() == true) {
-			this.contadorSprites++;
-			}
-		
-		this.direccion = "estatico";
-		if(mT.getTeclaArriba())
-		{
-			setY(getY() - getVelocidad());
-			this.direccion = "arriba";
-		} else 
-			if(mT.getTeclaAbajo())
-			{
-				setY(getY() + getVelocidad());
-				this.direccion = "abajo";
-			}else 
-				if(mT.getTeclaIzquierda())
-				{
-					setX(getX() - getVelocidad());
-					this.direccion = "izquierda";
-				}else 
-					if(mT.getTeclaDerecha())
-					{
-						setX(getX() + getVelocidad());
-						this.direccion = "derecha";
-					}
-			
-			this.contadorSprites++;
-		 
-				if(this.contadorSprites > this.cambiaSprite)
-				{
-					if(this.numeroSprite == 1)
-						this.numeroSprite = 2;
-					else
-						this.numeroSprite = 1;
-					this.contadorSprites = 0;
-				}
-		}*/		
-	
-	
-	
-	/* Meter inventario
+	// Meter inventario
 	public void meterInventario(int index) {
+		int objIndex = gP.getchecadorColision().checkObjeto(this, true);
+		if (objIndex != 999) {
+		    Objeto encontrado = gP.getObjetoInv()[objIndex];
+		    if (encontrado != null) {
+		    	if (inventario.addObjeto(encontrado)) {
+	                gP.getObjetoInv()[objIndex] = null;
+	                gP.playSE(6);
+		    	}
+		    }
+		}
+		    	
+		/* 
 		int maxElInv = 6; 
 		int contElInv = 0;
 		if(index != 999) { //si es 999, no se ha tocado ningun objeto
@@ -321,11 +279,8 @@ public class Jugador extends Entidad
 					gP.getObjetoInv()[index] = null;
 				}
 			}	
-		}
+		}*/
 	}
-	*/
-	
-	
 	public void draw(Graphics2D g2)
 	{
 		BufferedImage sprite = null;
@@ -422,15 +377,12 @@ public class Jugador extends Entidad
 	
 		//g2.drawImage(sprite, x, y, gP.getTamanioTile(), gP.getTamanioTile(),null);
 	}
-	
-	
 	public void dañoInfeccion(int infeccion) {
 		this.vida -= infeccion;
 		if(this.vida <0) {
 			this.vida = 0;
 		}
 	}
-	
 	public int getX()
 	{
 		return this.mundoX;
@@ -499,6 +451,10 @@ public class Jugador extends Entidad
 	
 	public int getVidaMax() {
 		return this.vidaMaxima;
+	}
+	
+	public Inventario getInventario() {
+	    return this.inventario;
 	}
 	
 }

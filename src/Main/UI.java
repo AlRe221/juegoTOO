@@ -217,14 +217,34 @@ public class UI {
 	    int alto = gP.getTamanioTile() * 5;
 	    
 	    dibujarVentana(g2, x, y, ancho, alto);
+	    
+	    // CURSOR
+	    
+	    List<Objeto> lista = gP.getJugador().getInventario().getObjetos();
 
-	    // ESPACIOS
+	    // 2) Posición inicial de la primera casilla
 	    final int casillaXInicio = x + 20;
 	    final int casillaYInicio = y + 20;
+	    int slotX = casillaXInicio;
+	    int slotY = casillaYInicio;
 
-	    int casillaX = casillaXInicio;
-	    int casillaY = casillaYInicio;
+	    // 3) Recorremos y dibujamos
+	    for (int i = 0; i < lista.size(); i++) {
+	        Objeto obj = lista.get(i);
+	        BufferedImage icon = obj.getImage();              // o obj.getImage() si lo tienes getter
+	        g2.drawImage(icon, slotX, slotY, 
+	                     gP.getTamanioTile(), gP.getTamanioTile(), null);
 
+	        // avanzamos columna
+	        slotX += gP.getTamanioTile();
+	        // si llegamos al final de la fila, saltamos a la siguiente
+	        if ((i + 1) % MAX_COL == 0) {
+	            slotX = casillaXInicio;
+	            slotY += gP.getTamanioTile();
+	        }
+	    }
+
+	    // ESPACIOS
 	    int cursorX = casillaXInicio + (gP.getTamanioTile() * espacioCol);
 	    int cursorY = casillaYInicio + (gP.getTamanioTile() * espacioRen);
 	    int cursorAncho = gP.getTamanioTile();

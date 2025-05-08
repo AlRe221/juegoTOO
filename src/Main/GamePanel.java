@@ -37,7 +37,6 @@ public class GamePanel extends JPanel implements Runnable
 	Jugador jugador = new Jugador(this, mT,se,"normal");
 	ManejadorTiles mTi =new ManejadorTiles(this);
 	ChecadorColision cC = new ChecadorColision(this);
-	//Inventario inv = new Inventario();
 	Objeto o[] = new Objeto[15];
 	AssetSetter asSet = new AssetSetter(this);
 	UI ui = new UI(this);
