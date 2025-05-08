@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
 
 import Main.GamePanel;
+import Main.ImagenesEscaladas;
 
 public class ManejadorTiles {
 	
@@ -34,7 +35,6 @@ public class ManejadorTiles {
 			
 			while(ren < gP.maxRenMundo && col < gP.maxColMundo) {
 				String renglonDatos = br.readLine();
-				
 				while(col < gP.maxColMundo) {
 					
 					String[] codigos = renglonDatos.split(" ");
@@ -55,30 +55,26 @@ public class ManejadorTiles {
 			e.printStackTrace();
 		}
 	}
+	
 	public void getImagenesTile() {
+		
+		setup(0,"agua",true);
+		setup(1,"arbol",true);
+		setup(2,"arena",false);
+		setup(3,"muro",true);
+		setup(4,"pasto",false);
+		setup(5,"suelo",false);
+	}
+	
+	public void setup(int index, String nombreImagen, boolean colision) {
+		ImagenesEscaladas iE = new ImagenesEscaladas();
 		try {
-			arregloTiles[0] = new Tile();
-			arregloTiles[0].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/agua.png")));
-			arregloTiles[0].setColision(true);
-			
-			arregloTiles[1] = new Tile();
-			arregloTiles[1].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/arbol.png")));
-			arregloTiles[1].setColision(true);
-			
-			arregloTiles[2] = new Tile();
-			arregloTiles[2].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/arena.png")));
-			
-			arregloTiles[3] = new Tile();
-			arregloTiles[3].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/muro.png")));
-			arregloTiles[3].setColision(true);
-			
-			arregloTiles[4] = new Tile();
-			arregloTiles[4].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/pasto.png")));
-			
-			arregloTiles[5] = new Tile();
-			arregloTiles[5].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/suelo.png")));
+			arregloTiles[index] = new Tile(); 
+			arregloTiles[index].setImagen(ImageIO.read(getClass().getResourceAsStream("/tiles/" + nombreImagen + ".png")));
+			arregloTiles[index].setImagen(iE.scaleImage(arregloTiles[index].getImagen(), gP.getTamanioTile(), gP.getTamanioTile()));
+			arregloTiles[index].setColision(colision);
 		}catch(IOException e) {
-			e.printStackTrace();
+			
 		}
 	}
 	
@@ -92,7 +88,7 @@ public class ManejadorTiles {
 			int mundoX = colMundo * gP.getTamanioTile();
 			int mundoY = renMundo * gP.getTamanioTile();
 			
-			int pantallaX = mundoX -gP.getJugador().getX() + gP.getJugador().getPantallaX();
+			int pantallaX = mundoX - gP.getJugador().getX() + gP.getJugador().getPantallaX();
 			int pantallaY = mundoY - gP.getJugador().getY() + gP.getJugador().getPantallaY();
 			
 			
@@ -119,12 +115,13 @@ public class ManejadorTiles {
 			}
 			
 			
+			
 			if(mundoX + gP.getTamanioTile() > gP.getJugador().getX() - gP.getJugador().getPantallaX() &&
 			   mundoX - gP.getTamanioTile() < gP.getJugador().getX() + gP.getJugador().getPantallaX() &&
 			   mundoY + gP.getTamanioTile() > gP.getJugador().getY() - gP.getJugador().getPantallaY() &&
 			   mundoY - gP.getTamanioTile() < gP.getJugador().getY() + gP.getJugador().getPantallaY()) {
 				
-				g2.drawImage(this.arregloTiles[numTile].getImagen(), pantallaX, pantallaY, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
+				g2.drawImage(this.arregloTiles[numTile].getImagen(), pantallaX, pantallaY, null);
 				
 			}else {
 				if(gP.getJugador().getPantallaX() > gP.getJugador().getX() ||
@@ -132,7 +129,7 @@ public class ManejadorTiles {
 						rOffs > gP.anchoMundo - gP.getJugador().getX() ||
 						bottomOffs > gP.altoMundo - gP.getJugador().getY()) {
 					
-					g2.drawImage(this.arregloTiles[numTile].getImagen(), pantallaX, pantallaY, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
+					g2.drawImage(this.arregloTiles[numTile].getImagen(), pantallaX, pantallaY, null);
 					}
 				}
 			
@@ -146,9 +143,79 @@ public class ManejadorTiles {
 		}
 	}
 	
+	
+	//este no pone las lineas, pero se come el mapa.
+	/*public void draw(Graphics2D g2) {
+		int tileSize = gP.getTamanioTile();
+		int pantallaAncho = gP.getAnchoPantalla();
+		int pantallaAlto = gP.getAltoPantalla();
+		int jugadorX = gP.getJugador().getX();
+		int jugadorY = gP.getJugador().getY();
+		int pantallaJugadorX = gP.getJugador().getPantallaX();
+		int pantallaJugadorY = gP.getJugador().getPantallaY();
+
+		int mundoX=0;
+		int mundoY=0;
+		int pantallaX=0;
+		int pantallaY=0;
+		int rOffs=0; 
+		int bOffs=0;
+		int numTile=0;
+		
+		for (int ren = 0; ren < gP.maxRenMundo; ren++) {
+			for (int col = 0; col < gP.maxColMundo; col++) {
+				
+				 mundoX = col * tileSize;
+				 mundoY = ren * tileSize;
+
+				// Solo dibujar si está dentro de la zona visible
+				if (
+					mundoX + tileSize > jugadorX - pantallaJugadorX &&
+					mundoX - tileSize < jugadorX + pantallaJugadorX &&
+					mundoY + tileSize > jugadorY - pantallaJugadorY &&
+					mundoY - tileSize < jugadorY + pantallaJugadorY
+				) {
+					// Calculamos la posición en pantalla
+					pantallaX = mundoX - jugadorX + pantallaJugadorX;
+					pantallaY = mundoY - jugadorY + pantallaJugadorY;
+
+					// Correcciones de bordes
+					if (pantallaJugadorX > jugadorX) pantallaX = mundoX;
+					if (pantallaJugadorY > jugadorY) pantallaY = mundoY;
+
+					rOffs = pantallaAncho - pantallaJugadorX;
+					if (rOffs > gP.anchoMundo - jugadorX) {
+						pantallaX = pantallaAncho - (gP.anchoMundo - mundoX);
+					}
+
+					bOffs = pantallaAlto - pantallaJugadorY;
+					if (bOffs > gP.altoMundo - jugadorY) {
+						pantallaY = pantallaAlto - (gP.altoMundo - mundoY);
+					}
+
+					numTile = codigosMapaTiles[ren][col];
+					g2.drawImage(arregloTiles[numTile].getImagen(), pantallaX, pantallaY, tileSize, tileSize, null);
+				}else {
+					if(gP.getJugador().getPantallaX() > gP.getJugador().getX() ||
+						gP.getJugador().getPantallaY() > gP.getJugador().getY() ||
+						rOffs > gP.anchoMundo - gP.getJugador().getX() ||
+						bOffs > gP.altoMundo - gP.getJugador().getY()) {
+					
+					g2.drawImage(this.arregloTiles[numTile].getImagen(), pantallaX, pantallaY, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
+					}
+				} 
+			}
+		}
+	}*/
+
+	
+	
+	
+	
 	public int getCodigoMapaTiles(int ren, int col) {
 		return this.codigosMapaTiles[ren][col];
 		}
+	
 	
 	public boolean getColisionDeTile(int index) {
 		return this.arregloTiles[index].getColision();
@@ -156,5 +223,7 @@ public class ManejadorTiles {
 	public int getMaxFilas() {
 		return this.codigosMapaTiles.length;
 	}
+	
+	
 	
 }

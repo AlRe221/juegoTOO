@@ -2,9 +2,16 @@ package entidad;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import Main.GamePanel;
+import Main.ImagenesEscaladas;
 
 public class Entidad 
 {
+	GamePanel gP;
 	protected int mundoX, mundoY;
 	protected int velocidad;
 	
@@ -21,6 +28,30 @@ public class Entidad
 	protected Rectangle solidArea;
 	protected int solidAreaDefaultX, solidAreaDefaultY;
 	protected boolean colisionOn = false;
+	
+	
+	protected int vidaMaxima = 100; 
+	protected int vida = vidaMaxima;
+	
+	public Entidad(GamePanel gp) {
+		this.gP = gp;
+	}
+	
+	
+	public BufferedImage setup1(String imageName) {
+		ImagenesEscaladas iE = new ImagenesEscaladas(); 
+		BufferedImage image = null; 
+		
+		try {
+			image = ImageIO.read(getClass().getResourceAsStream(imageName + ".png"));
+            image = iE.scaleImage(image, gP.getTamanioTile(), gP.getTamanioTile());		
+		}catch(IOException e)
+		{
+			System.out.println(e);
+		}
+		
+		return image;
+	}
 	
 	
 	public boolean isColisionOn() {
@@ -51,7 +82,10 @@ public class Entidad
 	}
 	public void setSolidAreaDefaultY(int solidAreaDefaultY) {
 		this.solidAreaDefaultY = solidAreaDefaultY;
-	}	
+	}
+	
+	
+
 	
 	
 }

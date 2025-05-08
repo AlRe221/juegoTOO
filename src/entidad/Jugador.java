@@ -25,7 +25,7 @@ import Main.ManejadorTeclas;
 
 public class Jugador extends Entidad
 {
-	private GamePanel gP;
+	
 	private ManejadorTeclas mT;
 	private final int pantallaX, pantallaY;
 	private Inventario inventario; // Inventario del juagador  
@@ -43,7 +43,7 @@ public class Jugador extends Entidad
 	
 	public Jugador(GamePanel gP, ManejadorTeclas mT, Ambientacion am, String tipoSprite)
 	{
-		this.gP = gP;
+		super(gP);
 		this.mT = mT;
 		this.am = am;
 		this.inventario = new Inventario();
@@ -68,34 +68,28 @@ public class Jugador extends Entidad
 	}
 	public void getSpritesJugador(String o)
 	{
-		try {
+		if(o.equals("normal")) {
 			
-			if(o.equals("normal")) {
-				this.arriba1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoArriba1.png"));
-				this.arriba2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoArriba2.png"));
-				this.estaticoA1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoA1.png"));
-				this.estaticoA2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoA2.png"));
-				
-				
-				this.estatico1 =ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico1.png"));
-				this.estatico2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstatico2.png"));
-				this.abajo1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoAbajo1.png"));
-				this.abajo2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoAbajo2.png"));
-				
-				
-				this.estaticoI1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoiz1.png"));
-				this.estaticoI2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoiz2.png"));		
-				this.izquierda1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoCamI1.png"));
-				this.izquierda2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoiz1.png"));
-				
-				this.estaticoD1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoD1.png"));
-				this.estaticoD2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoD2.png"));		
-				this.derecha1 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoCamD1.png"));
-				this.derecha2 = ImageIO.read(getClass().getResourceAsStream("/spritesjugador/pacoEstaticoD1.png"));
-				}
-		}catch(IOException e)
-		{
-			System.out.println(e);
+			arriba1 = setup1("/spritesjugador/pacoArriba1");
+			arriba2 = setup1("/spritesjugador/pacoArriba2");
+			estaticoA1 = setup1("/spritesjugador/pacoEstaticoA1");
+			estaticoA2 = setup1("/spritesjugador/pacoEstaticoA2");
+			
+			abajo1 = setup1("/spritesjugador/pacoAbajo1");
+			abajo2 = setup1("/spritesjugador/pacoAbajo2");
+			estatico1 = setup1("/spritesjugador/pacoEstatico1");
+			estatico2 = setup1("/spritesjugador/pacoEstatico2");
+			
+			estaticoI1 = setup1("/spritesjugador/pacoEstaticoiz1");
+			estaticoI2 = setup1("/spritesjugador/pacoEstaticoiz2");
+			izquierda1 = setup1("/spritesjugador/pacoCamI1");
+			izquierda2 = setup1("/spritesjugador/pacoEstaticoiz1");
+			
+			estaticoD1 = setup1("/spritesjugador/pacoEstaticoD1");
+			estaticoD2 = setup1("/spritesjugador/pacoEstaticoD2");
+			derecha1 = setup1("/spritesjugador/pacoCamD1");
+			derecha2 = setup1("/spritesjugador/pacoEstaticoD1");
+	
 		}
 	}
 	
@@ -303,7 +297,7 @@ public class Jugador extends Entidad
 					if(modoRapido == false) {
 						modoRapido = true; 
 						contadorRapido = 0;
-					    this.velocidad = velocidadBase +9;
+					    this.velocidad = velocidadBase +7;
 					}else {
 						this.velocidad +=2;
 					}
