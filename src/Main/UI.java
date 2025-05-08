@@ -1,5 +1,6 @@
 package Main;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -26,8 +27,12 @@ public class UI {
    DecimalFormat dFormat = new DecimalFormat("#0.00");
    private boolean tiempoActivo = true;  // variable de control
    protected int numCommand = 0;
-  
-   
+
+   public int espacioCol = 0;
+   public int espacioRen = 0;
+   public static final int MAX_REN = 4; // Ejemplo: 4 filas
+   public static final int MAX_COL = 6; // Ejemplo: 6 columnas
+       
    public UI(GamePanel gP) {
 	   this.gP = gP;
 	   arial_30 = Tipografia.cargaFuente(20f);
@@ -255,7 +260,7 @@ public class UI {
 	   
 	   int x = 80, y = 20, width = 300, heigth = 20;
 	   
-	   int vidaActual = gP.getJugador().getVida();
+	   double vidaActual = gP.getJugador().getVida();
 	   int vidM = gP.getJugador().getVidaMax(); 
 	   if(vidaActual > vidM) {
 		   vidaActual = vidM;
@@ -275,8 +280,54 @@ public class UI {
    
   
    
-	public void drawInventory(Graphics2D g2) {
-	    int x = 50, y = 50, w = 300, h = 200;
+   public void dibujarInventario(Graphics2D g2) {
+
+	    // CUADRADO
+	    int x = gP.getTamanioTile() * 14; // empieza 14 tiles desde la izquierda
+	    int y = gP.getTamanioTile() * 2;  // un poquito más abajo (ajústalo a tu gusto)
+	    int ancho = gP.getAnchoPantalla() - (gP.getTamanioTile() * 19); // ancho de pantalla menos 19 tiles
+	    int alto = gP.getTamanioTile() * 5;
+	    
+	    dibujarVentana(g2, x, y, ancho, alto);
+	    
+	    // CURSOR
+	    
+	    List<Objeto> lista = gP.getJugador().getInventario().getObjetos();
+
+	    // 2) Posición inicial de la primera casilla
+	    final int casillaXInicio = x + 20;
+	    final int casillaYInicio = y + 20;
+	    int slotX = casillaXInicio;
+	    int slotY = casillaYInicio;
+
+	    // 3) Recorremos y dibujamos
+	    for (int i = 0; i < lista.size(); i++) {
+	        Objeto obj = lista.get(i);
+	        BufferedImage icon = obj.getImage();              // o obj.getImage() si lo tienes getter
+	        g2.drawImage(icon, slotX, slotY, 
+	                     gP.getTamanioTile(), gP.getTamanioTile(), null);
+
+	        // avanzamos columna
+	        slotX += gP.getTamanioTile();
+	        // si llegamos al final de la fila, saltamos a la siguiente
+	        if ((i + 1) % MAX_COL == 0) {
+	            slotX = casillaXInicio;
+	            slotY += gP.getTamanioTile();
+	        }
+	    }
+
+	    // ESPACIOS
+	    int cursorX = casillaXInicio + (gP.getTamanioTile() * espacioCol);
+	    int cursorY = casillaYInicio + (gP.getTamanioTile() * espacioRen);
+	    int cursorAncho = gP.getTamanioTile();
+	    int cursorAlto = gP.getTamanioTile();
+
+	    g2.setColor(Color.white);
+	    g2.setStroke(new BasicStroke(3));
+	    g2.drawRoundRect(cursorX, cursorY, cursorAncho, cursorAlto, 10, 10);
+	}
+
+	    /*int x = 50, y = 50, w = 300, h = 200;
 	    g2.setFont(Tipografia.cargaFuente(10f));
 	    g2.setColor(new Color(0, 0, 0, 180));
 	    g2.fillRect(x, y, w, h);
@@ -298,8 +349,18 @@ public class UI {
 	        }
 	        g2.drawString((i+1) + ". " + objs.get(i).getTipoObjeto(), x + 20, y + offsetY + i * 20);
 	    }
-	}
+	}*/
 	
+   private void dibujarVentana(Graphics2D g2, int x, int y, int ancho, int alto) {
+	    Color bg = new Color(0, 0, 0, 210);
+	    g2.setColor(bg);
+	    g2.fillRoundRect(x, y, ancho, alto, 35, 35);
+
+	    g2.setStroke(new BasicStroke(5));
+	    g2.setColor(Color.white);
+	    g2.drawRoundRect(x + 5, y + 5, ancho - 10, alto - 10, 25, 25);
+	}
+
 	public void setInventorOpen(boolean valor) {
 		this.inventoryOpen = valor;
 	}

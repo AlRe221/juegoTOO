@@ -16,7 +16,7 @@ public class Coins extends Objeto {
 	        
 	        try {
 	        	
-	        	this.image = ImageIO.read(getClass().getResourceAsStream("/objetosV/dinero1.png"));
+	        	this.setImage(ImageIO.read(getClass().getResourceAsStream("/objetosV/dinero1.png")));
 	        	
 	        }catch(IOException e) {
 	        	e.printStackTrace();
@@ -39,10 +39,6 @@ public class Coins extends Objeto {
 	    public void  setValorCoin(float v){
 	    	this.valorCoin = v;
 		}
-	    
-	    public BufferedImage getImage() {
-	    	return this.image;
-	    }
 
 }
 

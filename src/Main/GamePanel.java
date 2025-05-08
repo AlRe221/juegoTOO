@@ -18,20 +18,14 @@ import tile.ManejadorTiles;
 
 public class GamePanel extends JPanel implements Runnable
 {
-	//Configuracion de pantalla
-		private final int tamanioOriginalTile = 16;
-		private final int escala = 3;
-		private final int tamanioTile = tamanioOriginalTile * escala;
-		private final int maxRenPantalla = 15;
-		private final int maxColPantalla = 26;
-		private final int anchoPantalla = tamanioTile * maxColPantalla;
-		private final int altoPantalla = tamanioTile * maxRenPantalla;
-		
-		
-		// Inventario
-		//private boolean inventoryOpen = false;
-		//private int     inventoryCursor = 0;
-
+	// CONFIGURACIÓN PANTALLA
+	private final int tamanioOriginalTile = 16;
+	private final int escala = 3;
+	private final int tamanioTile = tamanioOriginalTile * escala;
+	private final int maxRenPantalla = 15;
+	private final int maxColPantalla = 26;
+	private final int anchoPantalla = tamanioTile * maxColPantalla;
+	private final int altoPantalla = tamanioTile * maxRenPantalla;
 		
 		Thread hebraJuego;
 		Ambientacion musica = new Ambientacion(this);
@@ -41,7 +35,7 @@ public class GamePanel extends JPanel implements Runnable
 		ManejadorTiles mTi =new ManejadorTiles(this);
 		ChecadorColision cC = new ChecadorColision(this);
 		//Inventario inv = new Inventario();
-		Objeto o[] = new Objeto[10];
+		Objeto o[] = new Objeto[15];
 		AssetSetter asSet = new AssetSetter(this);
 		UI ui = new UI(this);
 		
@@ -53,13 +47,13 @@ public class GamePanel extends JPanel implements Runnable
 		protected final int pantallaSetting = 3;
 		protected final int pantallaInfo = 4; 
 		
-		//world settings
-		public final int maxColMundo = 50; 
-		public final int maxRenMundo = 50; 
-		public final int anchoMundo = tamanioTile * maxColMundo;
-		public final int altoMundo = tamanioTile * maxRenMundo;
-		
-		int FPS = 60;
+	//WORLD SETTINGS
+	public final int maxColMundo = 50; 
+	public final int maxRenMundo = 50; 
+	public final int anchoMundo = tamanioTile * maxColMundo;
+	public final int altoMundo = tamanioTile * maxRenMundo;
+	
+	int FPS = 60;
 		
 		public GamePanel()
 		{
@@ -122,90 +116,16 @@ public class GamePanel extends JPanel implements Runnable
 			}
 			// toggle inventario
 			if (mT.getTeclaInventario()) {
-			    //inventoryOpen = !inventoryOpen;
-				ui.setInventorOpen(!ui.inventoryOpen);
-			    mT.setTeclaInventario(false);
-			}
-
-			// si está abierto, navegar con flechas y seleccionar con Enter
-			if (ui.inventoryOpen) {
-				usarInventario();
+		        ui.setInventorOpen(!ui.inventoryOpen);
+		        mT.setTeclaInventario(false);
 			}
 		}
 		
 		//checar como hacer que, si saca x objeto, el sprite csmbie al siguente y así susecivamente hasta que quede vacio con tS = "normal"
 		
-		public void usarInventario() {
-			 List<Objeto> items = jugador.getInventario().getObjetos();
-			    int size = Math.max(1, items.size());
+		
 
-			    if (mT.getTeclaArribaInv()) {
-			    	ui.setInventorCursor((ui.getInventorCursor() - 1 + size) % size) ;
-			        mT.setTeclaArribaInv(false);
-			    }
-			    if (mT.getTeclaAbajoInv()) {
-			    	ui.setInventorCursor((ui.getInventorCursor() + 1 + size) % size) ;
-			        mT.setTeclaAbajoInv(false);
-			    }
-			    
-			//   cambiarIteminventario(items);
-			    
-			    if (mT.getTeclaEnter()) {
-			        // ejecuta acción según tipo
-			        if (!items.isEmpty()) {
-			            Objeto sel = items.get(ui.getInventorCursor());
-			            if (sel instanceof Comida) {
-			            	jugador.usarComida();
-			              items.remove(sel);  
-			            }else if (sel instanceof Arma) {  
-			            	jugador.equiparArma();
-			            }else if (sel instanceof Coins) {
-			                ((Coins)sel).incrementoOro();
-			                System.out.println("Monedas: " + ((Coins)sel).getValorCoin());
-			            }
-			            items.remove(sel);
-			            
-			            size = Math.max(1, items.size()); 
-			            if (ui.getInventorCursor() >= size) {
-			                ui.setInventorCursor(size - 1);
-			            }
 
-			           // cambiarIteminventario(items);
-			            
-			        }
-			        mT.setTeclaEnter(false);
-			       
-			    }
-		}
-		
-		
-		/*public void cambiarIteminventario(List<Objeto> items) {
-		    int cursor = ui.getInventorCursor();
-
-		    if (!items.isEmpty() && cursor >= 0 && cursor < items.size()) {
-		        jugador.settS(items.get(cursor).getTipoObjeto());
-		    } else {
-		        jugador.settS("normal");
-		    }
-
-		    jugador.getSpritesJugador(jugador.gettS());
-		}*/
-
-		
-		
-		
-		/*public void cambiarIteminventario(List<Objeto> items) {
-			if(!items.isEmpty()) {
-		    	jugador.settS(items.get(ui.getInventorCursor()).getTipoObjeto());
-		    	jugador.getSpritesJugador(jugador.gettS());
-		    }else {
-		    	jugador.settS("normal");
-		    	jugador.getSpritesJugador(jugador.gettS());
-		    }
-		}*/
-		
-		
-		
 		@Override
 		public void paintComponent(Graphics g) {
 		    super.paintComponent(g);
@@ -226,7 +146,7 @@ public class GamePanel extends JPanel implements Runnable
 		    
 		    	// 2) Inventario encima, si está abierto
 		    	if (ui.getInventorOpen()) {
-		    		ui.drawInventory(g2);
+		    		ui.dibujarInventario(g2);
 		    	}
 		    	
 		    	if(gameState == pantallaSetting) {
@@ -256,34 +176,7 @@ public class GamePanel extends JPanel implements Runnable
 		public void playSE(int i) {
 			se.setFile(i);
 			se.play();
-		}
-		
-
-		/*private void drawInventory(Graphics2D g2) {
-			
-			
-		    int x = 50, y = 50, w = 300, h = 200;
-		    g2.setColor(new Color(0, 0, 0, 180));
-		    g2.fillRect(x, y, w, h);
-		    g2.setColor(Color.WHITE);
-		    g2.drawRect(x, y, w, h);
-		    g2.drawString("INVENTARIO", x + 10, y + 20);
-
-		    List<Objeto> objs = jugador.getInventario().getObjetos();
-		    int offsetY = 40;
-
-		    if (objs.isEmpty()) {
-		        g2.drawString("   (vacío)", x + 10, y + offsetY);
-		        return;
-		    }
-		    for (int i = 0; i < objs.size(); i++) {
-		        if (i == inventoryCursor) {
-		            g2.drawString(">", x + 5, y + offsetY + i * 20);
-		        }
-		        g2.drawString((i + 1) + ". " + objs.get(i).getTipoObjeto(),
-		                      x + 20, y + offsetY + i * 20);
-		    }
-		}*/
+		}	
 		
 		public int getTamanioOriginalTile()
 		{

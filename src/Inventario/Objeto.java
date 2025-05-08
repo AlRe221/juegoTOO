@@ -11,7 +11,7 @@ public abstract class Objeto {
     protected double tiempoVida;
     protected boolean haceSonido;
     protected double duracion;
-    protected BufferedImage image; 
+    private BufferedImage image; 
     protected boolean colision; 
     protected int worldX, worldY;
     protected Rectangle solidArea = new Rectangle(0,0,48,48);
@@ -58,13 +58,13 @@ public abstract class Objeto {
 		   worldY + gP.getTamanioTile() > gP.getJugador().getY() - gP.getJugador().getPantallaY() &&
 		   worldY - gP.getTamanioTile() < gP.getJugador().getY() + gP.getJugador().getPantallaY()) {
 			
-			g2.drawImage(image, pantallaX, pantallaY, gP.getTamanioTile(), gP.getTamanioTile(), null);
+			g2.drawImage(getImage(), pantallaX, pantallaY, gP.getTamanioTile(), gP.getTamanioTile(), null);
 		}else {
 			if(gP.getJugador().getX() < gP.getJugador().getPantallaX() ||
 				gP.getJugador().getY() < gP.getJugador().getPantallaY() ||
 				rOffs > gP.getAnchoMundo() - gP.getJugador().getX() ||
 				bOffs > gP.getAltoMundo() - gP.getJugador().getY()) {
-				g2.drawImage(image, pantallaX, pantallaY, gP.getTamanioTile(), gP.getTamanioTile(), null);
+				g2.drawImage(getImage(), pantallaX, pantallaY, gP.getTamanioTile(), gP.getTamanioTile(), null);
 			}
 		}
     }
@@ -176,5 +176,19 @@ public abstract class Objeto {
     public void setColsionO(boolean val) {
     	this.colision = val;
     }
+
+
+
+
+	public BufferedImage getImage() {
+		return image;
+	}
+
+
+
+
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
 }
 

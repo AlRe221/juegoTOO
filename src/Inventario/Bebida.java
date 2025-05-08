@@ -12,7 +12,7 @@ public class Bebida extends Comida{
 		this.bebida = bebe;
 		try {
         	
-        	this.image = ImageIO.read(getClass().getResourceAsStream("/objetosV/agua1.png"));
+        	this.setImage(ImageIO.read(getClass().getResourceAsStream("/objetosV/agua1.png")));
         	
         }catch(IOException e) {
         	e.printStackTrace();

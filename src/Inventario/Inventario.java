@@ -5,14 +5,20 @@ import java.util.List;
 
 public class Inventario {
     private List<Objeto> objetos;
+    private final int capacidad;
 
     public Inventario() {
         this.objetos = new ArrayList<>();
+        this.capacidad = 2;
     }
-
-    // Añade un objeto al inventario 
-    public void addObjeto(Objeto o) {
-        objetos.add(o);
+    
+    public boolean addObjeto(Objeto o) {
+        if (objetos.size() < capacidad) {
+            objetos.add(o);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // Elimina un objeto del inventario 
@@ -32,6 +38,10 @@ public class Inventario {
     
     public int size() {
         return objetos.size();
+    }
+
+    public int getCapacidad() {
+        return capacidad;
     }
 
 }

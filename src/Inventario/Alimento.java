@@ -12,7 +12,7 @@ public class Alimento extends Comida{
 		this.nombreComida = nomC;
 		try {
         	
-        		this.image = ImageIO.read(getClass().getResourceAsStream("/objetosV/torta1.png"));
+        		this.setImage(ImageIO.read(getClass().getResourceAsStream("/objetosV/torta1.png")));
         	
         }catch(IOException e) {
         	e.printStackTrace();

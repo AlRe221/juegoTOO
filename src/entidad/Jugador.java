@@ -28,7 +28,6 @@ public class Jugador extends Entidad
 	
 	private ManejadorTeclas mT;
 	private final int pantallaX, pantallaY;
-	private Inventario inventario; // Inventario del juagador  
 	private Ambientacion am;
 	
 	private boolean modoRapido = false;
@@ -38,15 +37,15 @@ public class Jugador extends Entidad
 	private String tS;
 	
 	private int vidaMaxima = 100; 
-	private int vida = vidaMaxima;
+	private double vida = vidaMaxima;
 	protected int contPixel = 0;
+	private Inventario inventario;
 	
 	public Jugador(GamePanel gP, ManejadorTeclas mT, Ambientacion am, String tipoSprite)
 	{
 		super(gP);
 		this.mT = mT;
 		this.am = am;
-		this.inventario = new Inventario();
 		this.tS = tipoSprite;
 		
 		this.pantallaX = gP.getAnchoPantalla() / 2 - (gP.getTamanioTile()/2);
@@ -55,6 +54,7 @@ public class Jugador extends Entidad
 		this.solidArea = new Rectangle(8,16,32,32); 
 		this.solidAreaDefaultX = this.solidArea.x;
 		this.solidAreaDefaultY = this.solidArea.y;
+		this.inventario = new Inventario();
 		
 		configuracionInicial();
 		getSpritesJugador(this.tS);
@@ -92,16 +92,9 @@ public class Jugador extends Entidad
 	
 		}
 	}
-	
-	 // Recoge un objeto y lo mete en el inventario
-    public void pickUpObjeto(Objeto obj) {
-        inventario.addObjeto(obj);
-        
-        System.out.println(">> Recogido: " + obj.getTipoObjeto());
-    }
 
     // Usa la primera Comida que encuentre: la muestra y la retira 
-    public void usarComida() {
+    /*public void usarComida() {
         for (Objeto o : inventario.getObjetos()) {
             if (o instanceof Comida) {
                 Comida c = (Comida)o;
@@ -125,12 +118,9 @@ public class Jugador extends Entidad
             }
         }
         System.out.println(">> No hay comida en el inventario.");
-    }
-
-    // Equipa (muestra) la primera Arma que encuentre 
-    //aquí puedo poner los sprites para que el jugador tenga los elementos en la mano, y 
-    //pueda usarlos para pegar.
-    public void equiparArma() {
+    }*/
+	/*
+	public void equiparArma() {
         for (Objeto o : inventario.getObjetos()) {
             if (o instanceof Arma) {
                 Arma a = (Arma)o;
@@ -152,12 +142,7 @@ public class Jugador extends Entidad
             }
         }
         System.out.println(">> No tienes armas para equipar.");
-    }
-
-    // Getter para acceder al inventario desde fuera 
-    public Inventario getInventario() {
-        return inventario;
-    }
+    } */
 	
 	public void update() {
 	    boolean moviendo = false;
@@ -223,11 +208,9 @@ public class Jugador extends Entidad
 	     
 	    gP.getchecadorColision().checkTile(this);
 	    
-	    
-	    //checar colision contra objeto
-	   int obind = gP.getchecadorColision().checkObjeto(this, true);
+	    int obind = gP.getchecadorColision().checkObjeto(this, true);
 	    meterInventario(obind);
-	   
+	  
 	    //si no hubo colisión
 	    if(colisionOn == false) {
 	    	switch(direccion) {
@@ -284,9 +267,20 @@ public class Jugador extends Entidad
 	    
 	    
 	}
-		
-	
+
 	public void meterInventario(int index) {
+		int objIndex = gP.getchecadorColision().checkObjeto(this, true);
+		if (objIndex != 999) {
+		    Objeto encontrado = gP.getObjetoInv()[objIndex];
+		    if (encontrado != null) {
+		    	if (inventario.addObjeto(encontrado)) {
+	                gP.getObjetoInv()[objIndex] = null;
+	                gP.playSE(6);
+		    	}
+		    }
+		}
+		    	
+		/* 
 		int maxElInv = 6; 
 		int contElInv = 0;
 		if(index != 999) { //si es 999, no se ha tocado ningun objeto
@@ -340,11 +334,8 @@ public class Jugador extends Entidad
 					
 				}
 			}	
-		}
+		}*/
 	}
-	
-	
-	
 	public void draw(Graphics2D g2)
 	{
 		BufferedImage sprite = null;
@@ -441,15 +432,12 @@ public class Jugador extends Entidad
 	
 		//g2.drawImage(sprite, x, y, gP.getTamanioTile(), gP.getTamanioTile(),null);
 	}
-	
-	
-	public void dañoInfeccion(double infeccion) {
-		this.vida -= infeccion;
+	public void dañoInfeccion(double d) {
+		this.vida -= d;
 		if(this.vida <0) {
 			this.vida = 0;
 		}
 	}
-	
 	public int getX()
 	{
 		return this.mundoX;
@@ -508,7 +496,7 @@ public class Jugador extends Entidad
 		this.solidArea.y = valor;
 	}
 	
-	public int getVida() {
+	public double getVida() {
 		return this.vida;
 	}
 	
@@ -519,6 +507,8 @@ public class Jugador extends Entidad
 	public int getVidaMax() {
 		return this.vidaMaxima;
 	}
-	
+	public Inventario getInventario() {
+		return inventario;
+	}
 }
 
