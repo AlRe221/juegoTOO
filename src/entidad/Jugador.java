@@ -224,7 +224,7 @@ public class Jugador extends Entidad
 	    		break;
 	    		} 
 	    	case "abajo" :{ 
-	    		if(this.mundoY + this.velocidad <= gP.altoMundo - gP.getTamanioTile()) {
+	    		if(this.mundoY + this.velocidad -  gP.getTamanioTile() <= gP.altoMundo ) {
 	    			this.setMundoY(this.mundoY + this.velocidad);
 	    			
 	    		}else {
@@ -394,6 +394,14 @@ public class Jugador extends Entidad
 		int x = this.pantallaX; 
 		int y = this.pantallaY; 
 		
+		bordesPantalla(x,y,sprite,g2);
+	
+		//g2.drawImage(sprite, x, y, gP.getTamanioTile(), gP.getTamanioTile(),null);
+	}
+	
+	
+	public void bordesPantalla(int x, int y, BufferedImage sprite,Graphics2D g2) {
+		
 		if(pantallaX > this.mundoX) {
 			x = this.mundoX;
 		}
@@ -429,15 +437,15 @@ public class Jugador extends Entidad
 						g2.drawImage(sprite, x, y, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
 						}
 					}
-	
-		//g2.drawImage(sprite, x, y, gP.getTamanioTile(), gP.getTamanioTile(),null);
 	}
-	public void dañoInfeccion(double d) {
-		this.vida -= d;
+	
+	public void dañoInfeccion(double infeccion) {
+		this.vida -= infeccion;
 		if(this.vida <0) {
 			this.vida = 0;
 		}
 	}
+	
 	//colision
 	public boolean isColisionOn() {
 		return colisionOn;
@@ -455,6 +463,7 @@ public class Jugador extends Entidad
 		return pantallaY;
 	}
 	
+	
 	//vida
 	public double getVida() {
 		return this.vida;
@@ -468,10 +477,6 @@ public class Jugador extends Entidad
 		return this.vidaMaxima;
 	}
 	
-	  public Inventario getInventario() {
-	        return inventario;
-	    }
-	
 	//tipoSprite
 	public void settS(String v) {
 		this.tS = v;
@@ -479,5 +484,10 @@ public class Jugador extends Entidad
 	public String gettS() {
 		return this.tS;
 	}
+	
+	  // Getter para acceder al inventario desde fuera 
+    public Inventario getInventario() {
+        return inventario;
+    }
+	
 }
-

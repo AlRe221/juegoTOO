@@ -56,7 +56,7 @@ public class ChecadorColision {
 		case "izquierda" :{
 			entidadIzqCol = (izqMundoXentidad - entidad.getVelocidad()) / this.gP.getTamanioTile();
 			
-			if(entidadIzqCol < 50 && entidadBotRen < 50) {
+			if(entidadIzqCol < 109 && entidadBotRen < 109) {
 			tileN1 = gP.mTi.getCodigoMapaTiles(entidadTopRen, entidadIzqCol);
 			tileN2 = gP.mTi.getCodigoMapaTiles(entidadBotRen, entidadIzqCol);
 			
@@ -72,7 +72,7 @@ public class ChecadorColision {
 		{
 			entidadDerCol = (derMundoXentidad + entidad.getVelocidad()) / this.gP.getTamanioTile();
 			
-			if(entidadDerCol < 50 && entidadBotRen < 50) {
+			if(entidadDerCol < 109 && entidadBotRen < 109) {
 				tileN1 = gP.mTi.getCodigoMapaTiles(entidadTopRen, entidadDerCol);
 				tileN2 = gP.mTi.getCodigoMapaTiles(entidadBotRen, entidadDerCol);
 				
