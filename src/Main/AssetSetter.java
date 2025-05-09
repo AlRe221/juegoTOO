@@ -1,5 +1,6 @@
 package Main;
 
+import java.awt.Graphics2D;
 import java.util.List;
 
 import Inventario.Alimento;
@@ -13,10 +14,16 @@ import Inventario.ItemVelocidad;
 import Inventario.Laptop;
 import Inventario.Mochila;
 import Inventario.Objeto;
+import entidad.Zombie;
+import entidad.Zombie1;
+import entidad.Zombie2;
+import entidad.Zombie3;
+
 import java.util.Random;
 
 public class AssetSetter {
 	private GamePanel gP;
+	private Graphics2D g2;
 	
 	public AssetSetter(GamePanel gP) {
 		this.gP = gP;
@@ -77,8 +84,46 @@ public class AssetSetter {
 		
 	}
 
+	public Zombie zombieUnico() {
+		Random rand = new Random();
+		int tipo = rand.nextInt(3); //1.z1, 2.z2, 3.z3 
+		Zombie z =null;
+
+		switch (tipo) {
+			case 0:
+				z = new Zombie1("inf1", gP);
+				break;
+			case 1:
+				z = new Zombie2("inf2", gP);
+				break;
+			case 2 :
+				z = new Zombie3("inf3", gP);
+				break;	
+			
+		}	
+
+		// posición aleatoria
+		int x,y,tilen;
+		do { //esto es para que los objetos no salgan en espacios donde el perosnaje no puede pasar por colisión
+		x = rand.nextInt(50); // suponiendo 50 tiles en X
+		y = rand.nextInt(30); // suponiendo 30 tiles en Y
+		
+		tilen = gP.mTi.getCodigoMapaTiles(y,x);
+		
+		}while(gP.mTi.getColisionDeTile(tilen) == true);
+		
+		z.setMundoX(x * gP.getTamanioTile());
+		z.setMundoY(y * gP.getTamanioTile());
+		
+		return z;
+	}
 	
-	
+	public void setObjectZ(){
+		for (int i = 0; i < gP.z.length; i++) {
+			gP.z[i] = zombieUnico();
+		}
+		
+	}
 
 
 }

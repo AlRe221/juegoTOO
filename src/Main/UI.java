@@ -261,7 +261,7 @@ public class UI {
 	   int x = 80, y = 20, width = 300, heigth = 20;
 	   
 	   double vidaActual = gP.getJugador().getVida();
-	   int vidM = gP.getJugador().getVidaMax(); 
+	   double vidM = gP.getJugador().getVidaMax(); 
 	   if(vidaActual > vidM) {
 		   vidaActual = vidM;
 	   }

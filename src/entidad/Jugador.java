@@ -36,9 +36,6 @@ public class Jugador extends Entidad
 	private int maxCiclosRapido = 150; 
 	private String tS;
 	
-	private int vidaMaxima = 100; 
-	private double vida = vidaMaxima;
-	protected int contPixel = 0;
 	private Inventario inventario;
 	
 	public Jugador(GamePanel gP, ManejadorTeclas mT, Ambientacion am, String tipoSprite)
@@ -47,6 +44,7 @@ public class Jugador extends Entidad
 		this.mT = mT;
 		this.am = am;
 		this.tS = tipoSprite;
+		this.tipoE = 0;
 		
 		this.pantallaX = gP.getAnchoPantalla() / 2 - (gP.getTamanioTile()/2);
 		this.pantallaY = gP.getAltoPantalla() / 2 - (gP.getTamanioTile()/2);
@@ -211,38 +209,42 @@ public class Jugador extends Entidad
 	    int obind = gP.getchecadorColision().checkObjeto(this, true);
 	    meterInventario(obind);
 	  
+	    //chechar colision contra zombie
+	    int zomind = gP.getchecadorColision().checarEntidad(this,gP.getZombie());
+	   
 	    //si no hubo colisión
 	    if(colisionOn == false) {
 	    	switch(direccion) {
 	    	case "arriba":{
-	    		if(getY() - getVelocidad() >= 0) {
-	    			setY(getY() - getVelocidad());
+	    		if(this.mundoY - this.velocidad >= 0) {
+	    			this.setMundoY(this.mundoY - this.velocidad);
 	    		 }else {
-	    			 setY(0);
+	    			 this.setMundoY(0);
 	    		 }
 	    		break;
 	    		} 
 	    	case "abajo" :{ 
-	    		if(getY() + getVelocidad() <= gP.altoMundo - gP.getTamanioTile()) {
-	    			setY(getY() + getVelocidad());
+	    		if(this.mundoY + this.velocidad <= gP.altoMundo - gP.getTamanioTile()) {
+	    			this.setMundoY(this.mundoY + this.velocidad);
+	    			
 	    		}else {
-	    			setY(gP.altoMundo - gP.getTamanioTile());
+	    			this.setMundoY(gP.altoMundo - gP.getTamanioTile());
 	    		}
 	    		break;
 	    		}
 	    	case "izquierda" :{
-	    		if(getX() - getVelocidad() >= 0) {
-	    			setX(getX() - getVelocidad());
+	    		if(this.mundoX - velocidad >= 0) {
+	    			this.setMundoX(this.mundoX - velocidad);
 	    		}else {
-	    			setX(0);
+	    			this.setMundoX(0);
 	    		}
 	    		break;
 	    		} 
 	    	case "derecha" :{
-	    		if(getX() + getVelocidad() + gP.getTamanioTile() <= gP.anchoMundo) {
-	    			setX(getX() + getVelocidad()); 
+	    		if(this.mundoX + velocidad + gP.getTamanioTile() <= gP.anchoMundo) {
+	    			this.setMundoX(this.mundoX + this.velocidad); 
 	    		}else {
-	    			setX(gP.anchoMundo - gP.getTamanioTile());
+	    			this.setMundoX(gP.anchoMundo - gP.getTamanioTile());
 	    		}
 	    		break; 
 	    		}
@@ -259,14 +261,12 @@ public class Jugador extends Entidad
 	        this.contadorSprites = 0;
 	    }
 	    
-	    this.contPixel	+= this.velocidad;
-	    if(this.contPixel == 48) {
-	    	moviendo = false; 
-	    	this.contPixel = 0;
-	    }
+	   
 	    
 	    
 	}
+	    
+	    
 
 	public void meterInventario(int index) {
 		int objIndex = gP.getchecadorColision().checkObjeto(this, true);
@@ -438,28 +438,16 @@ public class Jugador extends Entidad
 			this.vida = 0;
 		}
 	}
-	public int getX()
-	{
-		return this.mundoX;
+	//colision
+	public boolean isColisionOn() {
+		return colisionOn;
 	}
-	public int getY()
-	{
-		return this.mundoY;
-	}
-	public int getVelocidad()
-	{
-		return this.velocidad;
-	}
-	public void setX(int valor)
-	{
-		this.mundoX = valor;
-	}
-	public void setY(int valor)
-	{
-		this.mundoY = valor;
+	@Override
+	public void setColisionOn(boolean colisionOn) {
+		this.colisionOn = colisionOn;
 	}
 	
-	
+	//pantalla
 	public int getPantallaX() {
 		return pantallaX;
 	}
@@ -467,48 +455,29 @@ public class Jugador extends Entidad
 		return pantallaY;
 	}
 	
-	
-	public int getAreaSolidaX() {
-		return this.solidArea.x;
-	}
-	
-	public int getAreaSolidaY() {
-		return this.solidArea.y;
-	}
-	
-	public int getAreaSolidaWidth() {
-		return this.solidArea.width;
-	}
-	
-	public int getAreaSolidaHeigth() {
-		return this.solidArea.height;
-	}
-	
-	public String getDireccion() {
-		return this.direccion;
-	}
-	
-	public void setSolidAreaX(int valor) {
-		this.solidArea.x = valor;
-	}
-	
-	public void setSolidAreaY(int valor) {
-		this.solidArea.y = valor;
-	}
-	
+	//vida
 	public double getVida() {
 		return this.vida;
 	}
 	
-	public void setVida(int val) {
+	public void setVida(double val) {
 		this.vida = val;
 	}
 	
-	public int getVidaMax() {
+	public double getVidaMax() {
 		return this.vidaMaxima;
 	}
-	public Inventario getInventario() {
-		return inventario;
+	
+	  public Inventario getInventario() {
+	        return inventario;
+	    }
+	
+	//tipoSprite
+	public void settS(String v) {
+		this.tS = v;
+	}
+	public String gettS() {
+		return this.tS;
 	}
 }
 

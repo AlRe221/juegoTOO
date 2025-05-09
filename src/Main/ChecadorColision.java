@@ -2,6 +2,7 @@ package Main;
 
 import entidad.Entidad;
 import entidad.Jugador;
+import entidad.Zombie;
 
 public class ChecadorColision {
 	
@@ -11,13 +12,11 @@ public class ChecadorColision {
 	}
 	
 	public void checkTile(Entidad entidad) {
-		
-		if(entidad instanceof Jugador) {
 			
-		int izqMundoXentidad = ((Jugador)entidad).getX() + ((Jugador)entidad).getAreaSolidaX();
-		int derMundoXentidad = ((Jugador)entidad).getX() + ((Jugador)entidad).getAreaSolidaX() + ((Jugador)entidad).getAreaSolidaWidth();
-		int topMundoYentidad = ((Jugador)entidad).getY() + ((Jugador)entidad).getAreaSolidaY();
-		int bottomMundoYentidad = ((Jugador)entidad).getY() + ((Jugador)entidad).getAreaSolidaY() + ((Jugador)entidad).getAreaSolidaHeigth();
+		int izqMundoXentidad = entidad.getMundoX() + entidad.getAreaSolidaX();
+		int derMundoXentidad = entidad.getMundoX() + entidad.getAreaSolidaX() + entidad.getAreaSolidaWidth();
+		int topMundoYentidad = entidad.getMundoY() + entidad.getAreaSolidaY();
+		int bottomMundoYentidad = entidad.getMundoY() + entidad.getAreaSolidaY() + entidad.getAreaSolidaHeigth();
 		
 		int entidadIzqCol = izqMundoXentidad / gP.getTamanioTile();
 		int entidadDerCol = derMundoXentidad / gP.getTamanioTile(); 
@@ -27,20 +26,20 @@ public class ChecadorColision {
 		int tileN1,tileN2;
 		
 		
-		switch(((Jugador)entidad).getDireccion()) {
+		switch(entidad.getDireccion()) {
 		case "arriba" :{
-			entidadTopRen = (topMundoYentidad - ((Jugador)entidad).getVelocidad()) /this.gP.getTamanioTile();
+			entidadTopRen = (topMundoYentidad - entidad.getVelocidad()) /this.gP.getTamanioTile();
 			
 			tileN1 = gP.mTi.getCodigoMapaTiles(entidadTopRen, entidadIzqCol);
 			tileN2 = gP.mTi.getCodigoMapaTiles(entidadTopRen, entidadDerCol);
 			
 			if(gP.mTi.getColisionDeTile(tileN1) || gP.mTi.getColisionDeTile(tileN2)) {
-				((Jugador)entidad).setColisionOn(true);
+				entidad.setColisionOn(true);
 			}
 		break;
 		}
 		case "abajo" :{
-			entidadBotRen = (bottomMundoYentidad + ((Jugador)entidad).getVelocidad()) / this.gP.getTamanioTile();
+			entidadBotRen = (bottomMundoYentidad + entidad.getVelocidad()) / this.gP.getTamanioTile();
 			
 			int maxFilas = gP.mTi.getMaxFilas(); 
 			
@@ -50,41 +49,44 @@ public class ChecadorColision {
 			tileN2 = gP.mTi.getCodigoMapaTiles(entidadBotRen, entidadDerCol);
 			
 			if(gP.mTi.getColisionDeTile(tileN1) || gP.mTi.getColisionDeTile(tileN2)) {
-				((Jugador)entidad).setColisionOn(true);
+				entidad.setColisionOn(true);
 			}
 		break;
 		}
 		case "izquierda" :{
-			entidadIzqCol = (izqMundoXentidad - ((Jugador)entidad).getVelocidad()) / this.gP.getTamanioTile();
+			entidadIzqCol = (izqMundoXentidad - entidad.getVelocidad()) / this.gP.getTamanioTile();
 			
+			if(entidadIzqCol < 50 && entidadBotRen < 50) {
 			tileN1 = gP.mTi.getCodigoMapaTiles(entidadTopRen, entidadIzqCol);
 			tileN2 = gP.mTi.getCodigoMapaTiles(entidadBotRen, entidadIzqCol);
 			
 			if(gP.mTi.getColisionDeTile(tileN1) || gP.mTi.getColisionDeTile(tileN2)) {
-				((Jugador)entidad).setColisionOn(true);
+				entidad.setColisionOn(true);
+			}
+			}else {
+				entidad.setColisionOn(true);
 			}
 		break;
 		}
 		case "derecha" :
 		{
-			entidadDerCol = (derMundoXentidad + ((Jugador)entidad).getVelocidad()) / this.gP.getTamanioTile();
+			entidadDerCol = (derMundoXentidad + entidad.getVelocidad()) / this.gP.getTamanioTile();
 			
-			if(entidadDerCol <50) {
-			tileN1 = gP.mTi.getCodigoMapaTiles(entidadTopRen, entidadDerCol);
-			tileN2 = gP.mTi.getCodigoMapaTiles(entidadBotRen, entidadDerCol);
-			
-			if(gP.mTi.getColisionDeTile(tileN1) || gP.mTi.getColisionDeTile(tileN2)) {
-				((Jugador)entidad).setColisionOn(true);
-			}
-			}else {
-				((Jugador)entidad).setColisionOn(true);
-			}
+			if(entidadDerCol < 50 && entidadBotRen < 50) {
+				tileN1 = gP.mTi.getCodigoMapaTiles(entidadTopRen, entidadDerCol);
+				tileN2 = gP.mTi.getCodigoMapaTiles(entidadBotRen, entidadDerCol);
+				
+				if(gP.mTi.getColisionDeTile(tileN1) || gP.mTi.getColisionDeTile(tileN2)) {
+					entidad.setColisionOn(true);
+				}
+				}else {
+					entidad.setColisionOn(true);
+				}
 		break;
 		}
 		default : break;
 		}
 		
-		}
 		
 	}
 	
@@ -95,8 +97,8 @@ public class ChecadorColision {
 			if(gP.getObjetoInv()[i] != null) {
 				if(entity instanceof Jugador) {
 					//obtener la posicion del area solida de la entidad (con la que choca pue)
-					((Jugador)entity).setSolidAreaX(((Jugador)entity).getX() + ((Jugador)entity).getAreaSolidaX());
-					((Jugador)entity).setSolidAreaY(((Jugador)entity).getY() + ((Jugador)entity).getAreaSolidaY());
+					((Jugador)entity).setSolidAreaX(((Jugador)entity).getMundoX() + ((Jugador)entity).getAreaSolidaX());
+					((Jugador)entity).setSolidAreaY(((Jugador)entity).getMundoY() + ((Jugador)entity).getAreaSolidaY());
 				}
 				
 				//obtener la posicion del area solida del objeto (con la que chocará pue)
@@ -159,5 +161,98 @@ public class ChecadorColision {
 		}
 		return index;
 	}
-}
+	
+	//genenar colisión entre los jugador-zombie
+	public int checarEntidad(Entidad e, Entidad[] objetivo) {
+	int index = 999; 
+		
+		for(int i = 0; i < objetivo.length; i++) {
+			if(objetivo[i] != null) {
+					//obtener la posicion del area solida de la entidad (con la que choca pue)
+					e.setSolidAreaX(e.getMundoX() + (e.getAreaSolidaX()));
+					e.setSolidAreaY(e.getMundoY() + (e.getAreaSolidaY()));
+
+				//obtener la posicion del area solida del objeto (con la que chocará pue)
+				objetivo[i].setSolidAreaX(objetivo[i].getMundoX() + objetivo[i].getAreaSolidaX());
+				objetivo[i].setSolidAreaY(objetivo[i].getMundoY() + objetivo[i].getAreaSolidaY());
+				
+				switch(e.getDireccion()) {
+				case "arriba":
+					e.setSolidAreaY(e.getAreaSolidaY() - e.getVelocidad());
+					break;
+				case "abajo": 
+					e.setSolidAreaY(e.getAreaSolidaY() + e.getVelocidad());
+					break;
+				case "derecha": 
+					e.setSolidAreaX(e.getAreaSolidaX() + e.getVelocidad());
+					break;
+				case "izquierda": 
+					e.setSolidAreaX(e.getAreaSolidaX() - e.getVelocidad());
+					break;
+				}
+				
+				
+				if(e.getSolidArea().intersects(objetivo[i].getSolidArea())) { //aquí checamos si ambos rectangulos se estan tocando
+					if(objetivo[i] != e) {
+						e.setSolidAreaX(e.getAreaSolidaX() - e.getVelocidad());
+						e.setSolidAreaY(e.getAreaSolidaY() - e.getVelocidad());
+						e.setColisionOn(true);
+						index = i;	
+					}
+				}
+				
+				e.setSolidAreaX(e.getSolidAreaDefaultX());
+				e.setSolidAreaY(e.getSolidAreaDefaultY());
+				
+				objetivo[i].setSolidAreaX(objetivo[i].getSolidAreaDefaultX());
+				objetivo[i].setSolidAreaY(objetivo[i].getSolidAreaDefaultY());
+			
+			
+			}
+		}
+		return index;
+	}
+	
+	public boolean checkJugador(Entidad e) {
+		boolean areaContacto = false;
+		e.setSolidAreaX(e.getMundoX() + e.getAreaSolidaX());
+		e.setSolidAreaY(e.getMundoY() + e.getAreaSolidaY());
+
+	//obtener la posicion del area solida del objeto (con la que chocará pue)
+		gP.getJugador().setSolidAreaX(gP.getJugador().getMundoX() + gP.getJugador().getAreaSolidaX());
+		gP.getJugador().setSolidAreaY(gP.getJugador().getMundoY() + gP.getJugador().getAreaSolidaY());
+	
+	
+		switch(e.getDireccion()) {
+		case "arriba":
+			e.setSolidAreaY(e.getAreaSolidaY() - e.getVelocidad());
+		break;
+		case "abajo": 
+			e.setSolidAreaY(e.getAreaSolidaY() + e.getVelocidad());
+			
+		break;
+		case "derecha": 
+			e.setSolidAreaX(e.getAreaSolidaX() + e.getVelocidad());
+			
+		break;
+		case "izquierda": 
+			e.setSolidAreaX(e.getAreaSolidaX() - e.getVelocidad());	
+		break;
+		}
+		
+		if(e.getSolidArea().intersects(gP.getJugador().getSolidArea())) { //aquí checamos si ambos rectangulos se estan tocando
+			e.setColisionOn(true);
+			areaContacto =true;
+		}
+			
+		e.setSolidAreaX(e.getSolidAreaDefaultX());
+		e.setSolidAreaY(e.getSolidAreaDefaultY());
+	
+		gP.getJugador().setSolidAreaX(gP.getJugador().getSolidAreaDefaultX());
+		gP.getJugador().setSolidAreaY(gP.getJugador().getSolidAreaDefaultY());
+
+		return areaContacto;
+	}
+		
+	}
 

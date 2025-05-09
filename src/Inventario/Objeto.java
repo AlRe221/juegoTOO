@@ -28,43 +28,48 @@ public abstract class Objeto {
     
     
     
-    public void draw(Graphics2D g2, GamePanel gP) {
+ public void draw(Graphics2D g2, GamePanel gP) {
     	
-    	int pantallaX = worldX -gP.getJugador().getX() + gP.getJugador().getPantallaX();
-		int pantallaY = worldY - gP.getJugador().getY() + gP.getJugador().getPantallaY();
+    	int pantallaX = worldX -gP.getJugador().getMundoX() + gP.getJugador().getPantallaX();
+		int pantallaY = worldY - gP.getJugador().getMundoY() + gP.getJugador().getPantallaY();
 		
 		//detener camara
-		if(gP.getJugador().getX() < gP.getJugador().getPantallaX()) {
-			pantallaX = worldX;
+	     colocarObjeto(pantallaX,pantallaY,image,g2,gP);
+	
+    }
+    
+    
+    
+    public void colocarObjeto(int x,int y, BufferedImage image, Graphics2D g2, GamePanel gP) {
+    	if(gP.getJugador().getMundoX() < gP.getJugador().getPantallaX()) {
+			x = worldX;
 		}
-		if(gP.getJugador().getY() < gP.getJugador().getPantallaY()) {
-			pantallaY = worldY;
+		if(gP.getJugador().getMundoY() < gP.getJugador().getPantallaY()) {
+			y = worldY;
 		}
 		
 		int rOffs = gP.getAnchoPantalla() - gP.getJugador().getPantallaX(); 
-		if(rOffs > gP.getAnchoMundo() - gP.getJugador().getX()) {
-			pantallaX = gP.getAnchoPantalla() - (gP.anchoMundo - worldX); 	
+		if(rOffs > gP.getAnchoMundo() - gP.getJugador().getMundoX()) {
+			x = gP.getAnchoPantalla() - (gP.anchoMundo - worldX); 	
 		}
 		
 		int bOffs = gP.getAltoPantalla() - gP.getJugador().getPantallaY(); 
-		if(bOffs > gP.getAltoMundo() - gP.getJugador().getY()) {
-			pantallaY = gP.getAltoPantalla() - (gP.altoMundo - worldY); 	
+		if(bOffs > gP.getAltoMundo() - gP.getJugador().getMundoY()) {
+			y = gP.getAltoPantalla() - (gP.altoMundo - worldY); 	
 		}
 		
-		
-		
-		if(worldX + gP.getTamanioTile() > gP.getJugador().getX() - gP.getJugador().getPantallaX() &&
-		   worldX - gP.getTamanioTile() < gP.getJugador().getX() + gP.getJugador().getPantallaX() &&
-		   worldY + gP.getTamanioTile() > gP.getJugador().getY() - gP.getJugador().getPantallaY() &&
-		   worldY - gP.getTamanioTile() < gP.getJugador().getY() + gP.getJugador().getPantallaY()) {
+		if(worldX + gP.getTamanioTile() > gP.getJugador().getMundoX() - gP.getJugador().getPantallaX() &&
+		   worldX - gP.getTamanioTile() < gP.getJugador().getMundoX() + gP.getJugador().getPantallaX() &&
+		   worldY + gP.getTamanioTile() > gP.getJugador().getMundoY() - gP.getJugador().getPantallaY() &&
+		   worldY - gP.getTamanioTile() < gP.getJugador().getMundoY() + gP.getJugador().getPantallaY()) {
 			
-			g2.drawImage(getImage(), pantallaX, pantallaY, gP.getTamanioTile(), gP.getTamanioTile(), null);
+			g2.drawImage(image, x, y, gP.getTamanioTile(), gP.getTamanioTile(), null);
 		}else {
-			if(gP.getJugador().getX() < gP.getJugador().getPantallaX() ||
-				gP.getJugador().getY() < gP.getJugador().getPantallaY() ||
-				rOffs > gP.getAnchoMundo() - gP.getJugador().getX() ||
-				bOffs > gP.getAltoMundo() - gP.getJugador().getY()) {
-				g2.drawImage(getImage(), pantallaX, pantallaY, gP.getTamanioTile(), gP.getTamanioTile(), null);
+			if(gP.getJugador().getMundoX() < gP.getJugador().getPantallaX() ||
+				gP.getJugador().getMundoY() < gP.getJugador().getPantallaY() ||
+				rOffs > gP.getAnchoMundo() - gP.getJugador().getMundoX() ||
+				bOffs > gP.getAltoMundo() - gP.getJugador().getMundoY()) {
+				g2.drawImage(image, x, y, gP.getTamanioTile(), gP.getTamanioTile(), null);
 			}
 		}
     }

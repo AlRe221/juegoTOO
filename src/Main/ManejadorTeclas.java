@@ -33,7 +33,11 @@ public class ManejadorTeclas extends KeyAdapter {
         } 
         else if (estado == gP.getPauseState()) {
             manejarMenuPausa(e);
-        } 
+        }else if(estado == gP.getPantalaSetting()) {
+        	manejarMenuSettings(e);
+        }else if(estado == gP.getPantallaInfo()) {
+        	manejarMenuInfo(e);
+        }
         else if (estado == gP.getPlayState()) {
             manejarJuego(e);
             
@@ -98,9 +102,11 @@ public class ManejadorTeclas extends KeyAdapter {
                     }
                     case 1 -> { 
                         // TODO: Implementar pantalla de SETTINGS
+                    	 gP.setGameState(gP.getPantalaSetting());
                     }
                     case 2 -> { 
                         // TODO: Implementar pantalla de INFO
+                    	gP.setGameState(gP.getPantallaInfo());
                     }
                     case 3 -> { // EXIT
                         System.exit(0);
@@ -139,6 +145,33 @@ public class ManejadorTeclas extends KeyAdapter {
         }
     }
     
+    //MANEJAR MENU DE SETTINGS
+    private void manejarMenuSettings(KeyEvent e) {
+    	switch(e.getKeyCode()) {
+    	case KeyEvent.VK_ENTER -> {
+    		gP.playSE(13);
+        	if(gP.getUi().getNumCom() == 0) {
+            gP.setGameState(gP.getPantallaInicio());  	
+    	   }
+         break;
+        }
+      }
+    }
+    
+    //MANEJAR MENU DE INFO
+    private void manejarMenuInfo(KeyEvent e) {
+    	switch(e.getKeyCode()) {
+        case KeyEvent.VK_ENTER -> {
+        	gP.playSE(13);
+        	if(gP.getUi().getNumCom() == 0) {
+        		gP.setGameState(gP.getPantallaInicio());
+           }
+        	break;
+        }
+	  }
+    }
+    
+    //MANEJAR INVENTARIO
     private void manejarInventario(KeyEvent e) {
     	
     	UI ui = gP.getUi();
@@ -171,15 +204,9 @@ public class ManejadorTeclas extends KeyAdapter {
             case KeyEvent.VK_Q      -> teclaCorrer     = true;
         }
     }
+    
+    
 
-    // Alterna entre estado de juego y pausa 
-    /*private void alternarPausa() {
-        if (gP.getGameState() == gP.getPlayState()) {
-            gP.setGameState(gP.getPauseState());
-        } else if (gP.getGameState() == gP.getPauseState()) {
-            gP.setGameState(gP.getPlayState());
-        }
-    }*/
 
     public boolean getTeclaArriba()    { return teclaArriba; }
     public boolean getTeclaAbajo()     { return teclaAbajo; }

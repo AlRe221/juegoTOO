@@ -1,5 +1,6 @@
 package entidad;
 
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -9,9 +10,10 @@ import javax.imageio.ImageIO;
 import Main.GamePanel;
 import Main.ImagenesEscaladas;
 
-public class Entidad 
+public abstract class Entidad 
 {
 	GamePanel gP;
+	protected int tipoE; //0 jugador, 1, zombie
 	protected int mundoX, mundoY;
 	protected int velocidad;
 	
@@ -29,10 +31,13 @@ public class Entidad
 	protected int solidAreaDefaultX, solidAreaDefaultY;
 	protected boolean colisionOn = false;
 	
+	protected int actionLockCounter = 0;
 	
-	protected int vidaMaxima = 100; 
-	protected int vida = vidaMaxima;
+	protected double vidaMaxima = 100; 
+	protected double vida = vidaMaxima;
 	
+	
+	protected BufferedImage i;
 	public Entidad(GamePanel gp) {
 		this.gP = gp;
 	}
@@ -53,24 +58,40 @@ public class Entidad
 		return image;
 	}
 	
-	
-	public boolean isColisionOn() {
+	public boolean getColisionOn() {
 		return colisionOn;
 	}
-	public void setColisionOn(boolean colisionOn) {
-		this.colisionOn = colisionOn;
-	}
+	public abstract void setColisionOn(boolean colisionOn);
 	
 	
-	
+	//area solida
 	public Rectangle getSolidArea() {
 		return solidArea;
 	}
 	public void setSolidArea(Rectangle solidArea) {
 		this.solidArea = solidArea;
 	}
+	public int getAreaSolidaX() {
+		return this.solidArea.x;
+	}
+	public int getAreaSolidaY() {
+		return this.solidArea.y;
+	}
+	public int getAreaSolidaWidth() {
+		return this.solidArea.width;
+	}
+	public int getAreaSolidaHeigth() {
+		return this.solidArea.height;
+	}
+	public void setSolidAreaX(int valor) {
+		this.solidArea.x = valor;
+	}
+	public void setSolidAreaY(int valor) {
+		this.solidArea.y = valor;
+	}
 	
 	
+	//area solida x y y
 	public int getSolidAreaDefaultX() {
 		return solidAreaDefaultX;
 	}
@@ -83,6 +104,36 @@ public class Entidad
 	public void setSolidAreaDefaultY(int solidAreaDefaultY) {
 		this.solidAreaDefaultY = solidAreaDefaultY;
 	}
+	
+	//mundox y mundoy
+	public int getMundoX() {
+		return this.mundoX;
+	}
+	public int getMundoY() {
+		return this.mundoY;
+	}
+	public void setMundoX(int v) {
+		this.mundoX = v;
+	}
+	public void setMundoY(int v) {
+		this.mundoY = v;
+	}
+	
+	//direccion
+	public String getDireccion() {
+		return this.direccion;
+	}
+
+
+	
+	//velocidad
+	public int getVelocidad() {
+		return velocidad;
+	}
+	public void setVelocidad(int velocidad) {
+		this.velocidad = velocidad;
+	}
+	
 	
 	
 

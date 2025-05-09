@@ -14,6 +14,7 @@ import Inventario.Comida;
 import Inventario.Inventario;
 import Inventario.Objeto;
 import entidad.Jugador;
+import entidad.Zombie;
 import tile.ManejadorTiles;
 
 public class GamePanel extends JPanel implements Runnable
@@ -36,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable
 		ChecadorColision cC = new ChecadorColision(this);
 		//Inventario inv = new Inventario();
 		Objeto o[] = new Objeto[15];
+		Zombie z[] = new Zombie[8];
 		AssetSetter asSet = new AssetSetter(this);
 		UI ui = new UI(this);
 		
@@ -72,6 +74,7 @@ public class GamePanel extends JPanel implements Runnable
 		
 		public void setupGame() {
 			asSet.setObject();
+			asSet.setObjectZ();
 			playMusic(4);
 			gameState = pantallaInicio;
 			
@@ -109,6 +112,11 @@ public class GamePanel extends JPanel implements Runnable
 		{
 			if(gameState == playState) {
 				jugador.update();
+				for(int i = 0; i < z.length; i++) {
+					if(z[i] != null) {
+						z[i].update();
+					}
+				}
 			}
 			
 			if(gameState == pauseState) {
@@ -140,6 +148,11 @@ public class GamePanel extends JPanel implements Runnable
 		    	for(int i= 0; i < o.length; i++) {
 		    		if(o[i] != null) {
 		    			o[i].draw(g2,this);
+		    		}
+		    	}
+		    	for(int i = 0; i < z.length; i++) {
+		    		if(z[i] != null) {
+		    			z[i].draw(g2);
 		    		}
 		    	}
 		    	jugador.draw(g2);
@@ -237,6 +250,10 @@ public class GamePanel extends JPanel implements Runnable
 			return this.o;
 		}
 
+		public Zombie[] getZombie() {
+			return this.z;
+		}
+		
 
 		public int getAnchoMundo() {
 			return anchoMundo;
