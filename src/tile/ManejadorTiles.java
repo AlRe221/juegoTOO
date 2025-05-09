@@ -24,7 +24,7 @@ public class ManejadorTiles {
 		this.codigosMapaTiles = new int[gP.maxRenMundo]
 								[gP.maxRenMundo];
 		getImagenesTile();
-		cargaMapa("/mapas/world02.txt");
+		cargaMapa("/mapas/world001.txt");
 	}
 	public void cargaMapa(String rutaMapa){
 		try {
@@ -56,12 +56,13 @@ public class ManejadorTiles {
 		}
 	}
 	
+	
 	public void getImagenesTile() {
 		
 		setup(0,"agua",true);
 		setup(1,"arbol",true);
 		setup(2,"arena",false);
-		setup(3,"muro",true);
+		setup(3,"muro",false);
 		setup(4,"pasto",false);
 		setup(5,"suelo",false);
 		//salon
@@ -191,8 +192,8 @@ public class ManejadorTiles {
 	}
 	
 	
-	//este no pone las lineas, pero se come el mapa.
-	/*public void draw(Graphics2D g2) {
+	/*//este no pone las lineas, pero se come el mapa.
+	public void draw(Graphics2D g2) {
 		int tileSize = gP.getTamanioTile();
 		int pantallaAncho = gP.getAnchoPantalla();
 		int pantallaAlto = gP.getAltoPantalla();

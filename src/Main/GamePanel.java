@@ -50,8 +50,8 @@ public class GamePanel extends JPanel implements Runnable
 		protected final int pantallaInfo = 4; 
 		
 	//WORLD SETTINGS
-	public final int maxColMundo = 50; 
-	public final int maxRenMundo = 50; 
+	public final int maxColMundo = 42; 
+	public final int maxRenMundo = 109; 
 	public final int anchoMundo = tamanioTile * maxColMundo;
 	public final int altoMundo = tamanioTile * maxRenMundo;
 	
@@ -69,6 +69,8 @@ public class GamePanel extends JPanel implements Runnable
 				jugador.dañoInfeccion(0.5);
 				repaint();
 			}).start();
+			
+
 		}
 		
 		
