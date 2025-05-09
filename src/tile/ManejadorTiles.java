@@ -14,7 +14,7 @@ import Main.ImagenesEscaladas;
 public class ManejadorTiles {
 	
 	private GamePanel gP;
-	private int maxTiles = 10;
+	private int maxTiles = 50;
 	Tile[] arregloTiles;
 	private int codigosMapaTiles[][];
 	
@@ -64,6 +64,53 @@ public class ManejadorTiles {
 		setup(3,"muro",true);
 		setup(4,"pasto",false);
 		setup(5,"suelo",false);
+		//salon
+		setup(6,"piso", false);
+		setup(7,"estSbrits", true);
+		setup(8,"refri", true);
+		setup(9,"piso1", false);
+		setup(10,"paredSl", true);
+		setup(11,"paredSl2", true);
+		setup(12,"paredSlabajo", true);
+		setup(13,"paredSlDer", true);
+		setup(14,"paredSlIzq", true);
+		setup(15,"tv", true);
+		setup(16,"ventana", true);
+		setup(17,"salidaSL", false);
+		//fuera i
+		setup(18,"paredI", true);
+		setup(19,"pilarI", true);
+		setup(20,"puerta", true);
+		setup(21,"puertaBano", false);
+		setup(22,"escalera",false);
+		setup(23,"escaleraPSup",false);
+		setup(24,"escCPd",true);
+		setup(25,"escCPd2",true);
+		setup(26,"escCPd3",true);
+		setup(27,"escCPd4",true);
+		//baño
+		setup(28,"pisoB", false);
+		setup(29,"crtelB", true);
+		setup(30,"pBano", true);
+		setup(31,"torre", true);
+		setup(32,"pdB1", true);
+		setup(33,"pdB2", true);
+		setup(34,"pdB3", true);
+		setup(35,"pizDer", true);
+		setup(36,"pizIzq", true);
+		setup(37,"bano", true);
+		//depa
+		setup(38,"pDep", true);
+		setup(39,"maquinita1", true);
+		setup(40,"maquinita2", true);
+		//exterior
+		setup(41,"piso1Agua", false);
+		setup(42,"arbol1", true);
+		setup(43,"arbol2", true);
+		setup(44,"cem2", false);
+		setup(45,"mesa", true);
+		setup(46,"techoD", true);
+		setup(47,"cemento", true);
 	}
 	
 	public void setup(int index, String nombreImagen, boolean colision) {
