@@ -1,23 +1,9 @@
 package entidad;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import Inventario.Alimento;
-import Inventario.Arma;
-import Inventario.Bebida;
-import Inventario.Celular;
-import Inventario.Comida;
-import Inventario.Extintor;
 import Inventario.Inventario;
-import Inventario.ItemVelocidad;
-import Inventario.Laptop;
-import Inventario.Mochila;
 import Inventario.Objeto;
 import Main.Ambientacion;
 import Main.GamePanel;
@@ -92,57 +78,6 @@ public class Jugador extends Entidad
 	
 		}
 	}
-
-    // Usa la primera Comida que encuentre: la muestra y la retira 
-    /*public void usarComida() {
-        for (Objeto o : inventario.getObjetos()) {
-            if (o instanceof Comida) {
-                Comida c = (Comida)o;
-                c.mostrarComida();
-                if(c instanceof Alimento) {
-                gP.playSE(9);
-                }else if(c instanceof Bebida) {
-                	gP.playSE(12);
-                }
-                inventario.removeObjeto(c);
-                if(c instanceof Alimento) {
-                	this.vida +=3;
-                }else if(c instanceof Bebida) {
-                	this.vida +=6;
-                }
-                
-                System.out.println(">> Comida usada y retirada del inventario.");
-               
-                
-                return;
-            }
-        }
-        System.out.println(">> No hay comida en el inventario.");
-    }*/
-	/*
-	public void equiparArma() {
-        for (Objeto o : inventario.getObjetos()) {
-            if (o instanceof Arma) {
-                Arma a = (Arma)o;
-                System.out.print(
-                  ">> Arma equipada: ");
-                gP.playSE(14);
-               
-                if(((Arma)o) instanceof Mochila) {
-                	Mochila m = (Mochila)o;
-                	System.out.println(m.getNombreArma());
-                }else if(((Arma)o) instanceof Laptop) {
-                	Laptop l = (Laptop)o;
-                	System.out.println(l.getNombreArma());
-                }else if(((Arma)o) instanceof Celular) {
-                	Celular c = (Celular)o;
-                	System.out.println(c.getNombreArma());
-                }
-                return;
-            }
-        }
-        System.out.println(">> No tienes armas para equipar.");
-    } */
 	
 	public void update() {
 	    boolean moviendo = false;
@@ -280,61 +215,6 @@ public class Jugador extends Entidad
 		    }
 		}
 		    	
-		/* 
-		int maxElInv = 6; 
-		int contElInv = 0;
-		if(index != 999) { //si es 999, no se ha tocado ningun objeto
-			if(inventario.size() < maxElInv) {
-				if(gP.getObjetoInv()[index] instanceof ItemVelocidad) {
-					gP.playSE(11);
-					gP.getObjetoInv()[index] = null;
-					if(modoRapido == false) {
-						modoRapido = true; 
-						contadorRapido = 0;
-					    this.velocidad = velocidadBase +7;
-					}else {
-						this.velocidad +=2;
-					}
-				}else {
-					this.tS = gP.getObjetoInv()[index].getTipoObjeto();
-					inventario.addObjeto(gP.getObjetoInv()[index]);
-					getSpritesJugador(tS);
-					switch(gP.getObjetoInv()[index].getTipoObjeto()) {
-					case "Mochila":
-						gP.playSE(6);
-						break;
-					case "Laptop":
-						gP.playSE(6);
-						break;
-					case "Celular":
-						gP.playSE(6);
-						break;	
-					case "Coins":
-						gP.playSE(8);
-						break;
-					case "Torta Chilaquil":
-						gP.playSE(6);
-						break;
-					case "Aguita":
-						gP.playSE(6);
-						break;
-					case "Extintor":
-						gP.playSE(6);
-						break;	
-					}
-					gP.getObjetoInv()[index] = null;
-					//esto hace que aparezcan y desaparezcan los items durante un tiempo
-					//cuando el jugador lo toque.
-					javax.swing.Timer timer = new javax.swing.Timer(12000, e -> { 
-						gP.getObjetoInv()[index] = gP.getAssS().objetoUnico();
-					});
-					
-					timer.setRepeats(false);
-					timer.start();
-					
-				}
-			}	
-		}*/
 	}
 	public void draw(Graphics2D g2)
 	{
@@ -509,6 +389,10 @@ public class Jugador extends Entidad
 	}
 	public Inventario getInventario() {
 		return inventario;
+	}
+	public void usarObjeto(Objeto obj) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

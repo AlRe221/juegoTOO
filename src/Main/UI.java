@@ -3,12 +3,14 @@ package Main;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -30,8 +32,8 @@ public class UI {
 
    public int espacioCol = 0;
    public int espacioRen = 0;
-   public static final int MAX_REN = 4; // Ejemplo: 4 filas
-   public static final int MAX_COL = 6; // Ejemplo: 6 columnas
+   public static final int MAX_REN = 2; // Ejemplo: 4 filas
+   public static final int MAX_COL = 4; // Ejemplo: 6 columnas
        
    public UI(GamePanel gP) {
 	   this.gP = gP;
@@ -283,10 +285,10 @@ public class UI {
    public void dibujarInventario(Graphics2D g2) {
 
 	    // CUADRADO
-	    int x = gP.getTamanioTile() * 14; // empieza 14 tiles desde la izquierda
-	    int y = gP.getTamanioTile() * 2;  // un poquito más abajo (ajústalo a tu gusto)
-	    int ancho = gP.getAnchoPantalla() - (gP.getTamanioTile() * 19); // ancho de pantalla menos 19 tiles
-	    int alto = gP.getTamanioTile() * 5;
+	    int x = gP.getTamanioTile() * 13; // empieza 14 tiles desde la izquierda
+	    int y = gP.getTamanioTile() * 4;  // un poquito más abajo (ajústalo a tu gusto)
+	    int ancho = gP.getAnchoPantalla() - (gP.getTamanioTile() * 21); // ancho de pantalla menos 19 tiles
+	    int alto = gP.getTamanioTile() * 3;
 	    
 	    dibujarVentana(g2, x, y, ancho, alto);
 	    
@@ -306,16 +308,15 @@ public class UI {
 	        BufferedImage icon = obj.getImage();              // o obj.getImage() si lo tienes getter
 	        g2.drawImage(icon, slotX, slotY, 
 	                     gP.getTamanioTile(), gP.getTamanioTile(), null);
-
-	        // avanzamos columna
-	        slotX += gP.getTamanioTile();
-	        // si llegamos al final de la fila, saltamos a la siguiente
-	        if ((i + 1) % MAX_COL == 0) {
-	            slotX = casillaXInicio;
-	            slotY += gP.getTamanioTile();
+	        
+        // avanzamos columna
+        slotX += gP.getTamanioTile();
+        // si llegamos al final de la fila, saltamos a la siguiente
+        if ((i + 1) % MAX_COL == 0) {
+            slotX = casillaXInicio;
+            slotY += gP.getTamanioTile();
 	        }
-	    }
-
+        
 	    // ESPACIOS
 	    int cursorX = casillaXInicio + (gP.getTamanioTile() * espacioCol);
 	    int cursorY = casillaYInicio + (gP.getTamanioTile() * espacioRen);
@@ -325,32 +326,76 @@ public class UI {
 	    g2.setColor(Color.white);
 	    g2.setStroke(new BasicStroke(3));
 	    g2.drawRoundRect(cursorX, cursorY, cursorAncho, cursorAlto, 10, 10);
-	}
+	    
+	    // DESCRIPCIÓN 
 
-	    /*int x = 50, y = 50, w = 300, h = 200;
-	    g2.setFont(Tipografia.cargaFuente(10f));
-	    g2.setColor(new Color(0, 0, 0, 180));
-	    g2.fillRect(x, y, w, h);
-	    g2.setColor(Color.WHITE);
-	    g2.drawRect(x, y, w, h);
-	    g2.drawString("INVENTARIO", x + 10, y + 20);
+        //4) Obtener descripción del objeto bajo el cursor 
+        Objeto seleccionado = null;
+        int idx = espacioRen * MAX_COL + espacioCol;
+        if (idx >= 0 && idx < lista.size()) {
+            seleccionado = lista.get(idx);
+        }
 
-	    List<Objeto> objs = gP.getJugador().getInventario().getObjetos();
-	    int offsetY = 40;
-	    int offsety2 = 5;
-
-	    if (objs.isEmpty()) {
-	        g2.drawString("   (vacío)", x + 10, y + offsetY);
-	        return;
+        // 5) Dibujar cuadro dinámico con esa descripción 
+        if (seleccionado != null) {
+            String textoDesc = seleccionado.getDescripcion();
+            int cuadroX = x;
+            int cuadroY = y + alto + 10;
+            int cuadroAncho = ancho;
+            dibujarCuadroConTexto(g2, textoDesc, cuadroX, cuadroY, cuadroAncho);
 	    }
-	    for (int i = 0; i < objs.size(); i++) {
-	        if (i == inventoryCursor) {
-	            g2.drawString("-", x + 5, y + offsetY + i * 20);
-	        }
-	        g2.drawString((i+1) + ". " + objs.get(i).getTipoObjeto(), x + 20, y + offsetY + i * 20);
-	    }
-	}*/
-	
+    }
+	    
+}
+   
+   // Dibuja cuadro dinámico según el contenido.
+
+   private void dibujarCuadroConTexto(Graphics2D g2, String texto, int xVentana, int yVentana, int anchoVent) {
+       if (texto == null || texto.isEmpty()) return;
+
+       Font fuenteTexto  = Tipografia.cargaFuente(10f);
+       FontMetrics fm    = g2.getFontMetrics(fuenteTexto);
+
+       // 2) Márgenes internos (padding)
+       int paddingX      = 20;
+       int paddingY      = 12;
+       int anchoMaxTexto = anchoVent - 2 * paddingX;
+
+       // 3) Word-wrap: dividir en líneas que quepan en anchoMaxTexto
+       List<String> lineas = new ArrayList<>();
+       for (String parrafo : texto.split("\n")) {
+           StringBuilder linea = new StringBuilder();
+           for (String palabra : parrafo.split(" ")) {
+               String prueba = linea.length() == 0 ? palabra : linea + " " + palabra;
+               if (fm.stringWidth(prueba) > anchoMaxTexto) {
+                   lineas.add(linea.toString());
+                   linea = new StringBuilder(palabra);
+               } else {
+                   linea = new StringBuilder(prueba);
+               }
+           }
+           lineas.add(linea.toString());
+       }
+
+       // 4) Calcular el alto del cuadro según número de líneas
+       int altoLinea   = fm.getHeight();
+       int altoVentana = paddingY * 2 + lineas.size() * altoLinea;
+
+       // 5) Dibujar la ventana de fondo y su borde
+       dibujarVentana(g2, xVentana, yVentana, anchoVent, altoVentana);
+
+       // 6) Pintar cada línea de texto dentro del cuadro
+       int xTexto = xVentana + paddingX;
+       int yTexto = yVentana + paddingY + fm.getAscent();
+       g2.setFont(fuenteTexto);
+       g2.setColor(Color.WHITE);
+       for (String ln : lineas) {
+           g2.drawString(ln, xTexto, yTexto);
+           yTexto += altoLinea;
+       }
+   }
+
+
    private void dibujarVentana(Graphics2D g2, int x, int y, int ancho, int alto) {
 	    Color bg = new Color(0, 0, 0, 210);
 	    g2.setColor(bg);

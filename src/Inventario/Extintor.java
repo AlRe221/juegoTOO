@@ -7,9 +7,9 @@ import javax.imageio.ImageIO;
 public class Extintor extends Arma{
 	String nombreArma;
 	
-	public Extintor(int cantidadDanio, String nomAr, double tiempoVida, boolean haceSonido, double duracion) {
-		super(cantidadDanio, tiempoVida, haceSonido, duracion);
-		this.nombreArma =nomAr;
+	 public Extintor(int cantidadDanio, double tiempoVida, boolean haceSonido, double duracion, String nombreArma, String descripcion) {
+	        super(cantidadDanio, tiempoVida, haceSonido, duracion, descripcion);
+	        this.nombreArma = nombreArma;
 		
 		try {
 		       

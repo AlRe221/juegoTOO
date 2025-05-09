@@ -7,9 +7,9 @@ import javax.imageio.ImageIO;
 public class Mochila extends Arma{
 	String nombreArma;
 	
-	public Mochila(int cantidadDanio, String nomAr, double tiempoVida, boolean haceSonido, double duracion) {
-		super(cantidadDanio, tiempoVida, haceSonido, duracion);
-		this.nombreArma =nomAr;
+    public Mochila(int cantidadDanio, double tiempoVida, boolean haceSonido, double duracion, String nombreArma, String descripcion) {
+        super(cantidadDanio, tiempoVida, haceSonido, duracion, descripcion);
+        this.nombreArma = nombreArma;
 		
 		try {
        
