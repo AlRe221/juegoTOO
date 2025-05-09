@@ -6,22 +6,20 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Coins extends Objeto {
-	  private double valorCoin;
+	    private double valorCoin;
 	    private int   cantidadCoin;
 
-	    public Coins(double valorCoin, int cantidadCoin, double tiempoVida, boolean haceSonido, double duracion) {
-	        super("Coins", tiempoVida, haceSonido, duracion);
-	        this.valorCoin    = valorCoin;
-	        this.cantidadCoin = cantidadCoin;
-	        
-	        try {
-	        	
-	        	this.setImage(ImageIO.read(getClass().getResourceAsStream("/objetosV/dinero1.png")));
-	        	
-	        }catch(IOException e) {
-	        	e.printStackTrace();
-	        }
-	    }
+	   public Coins(double valorCoin, int cantidadCoin, double tiempoVida, boolean haceSonido, double duracion) {
+       super(
+           "Monedas","Monedas de oro.\nCada unidad vale " + valorCoin + " monedas.",tiempoVida, haceSonido, duracion);
+       this.valorCoin    = valorCoin;
+       this.cantidadCoin = cantidadCoin;
+       try { 
+       	this.setImage(ImageIO.read(getClass().getResourceAsStream("/objetosV/dinero1.png"))); }
+       catch (IOException e) { 
+       	e.printStackTrace(); 
+       	}
+   }
 	    
 	    
 

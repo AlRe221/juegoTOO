@@ -4,14 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.List;
 
 import javax.swing.JPanel;
 
-import Inventario.Arma;
-import Inventario.Coins;
-import Inventario.Comida;
-import Inventario.Inventario;
 import Inventario.Objeto;
 import entidad.Jugador;
 import entidad.Zombie;

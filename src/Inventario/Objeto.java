@@ -17,9 +17,11 @@ public abstract class Objeto {
     protected Rectangle solidArea = new Rectangle(0,0,48,48);
     protected int solidAreaDefaultX = 0;
     protected int solidAreaDefaultY = 0;
+    protected String descripcion;
 
-    public Objeto(String tipoObjeto, double tiempoVida, boolean haceSonido, double duracion) {
+    public Objeto(String tipoObjeto,String descripcion, double tiempoVida, boolean haceSonido, double duracion) {
         this.tipoObjeto  = tipoObjeto;
+        this.descripcion = descripcion;
         this.tiempoVida  = tiempoVida;
         this.haceSonido  = haceSonido;
         this.duracion    = duracion;
@@ -181,19 +183,20 @@ public abstract class Objeto {
     public void setColsionO(boolean val) {
     	this.colision = val;
     }
-
-
-
+    
 
 	public BufferedImage getImage() {
 		return image;
 	}
 
 
-
-
 	public void setImage(BufferedImage image) {
 		this.image = image;
 	}
+	
+	public String getDescripcion() {
+	    return descripcion;
+	}
+
 }
 

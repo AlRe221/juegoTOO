@@ -6,9 +6,9 @@ import javax.imageio.ImageIO;
 
 public class Celular extends Arma{
 	String nombreArma;
-	public Celular(int cantidadDanio, String nomAr, double tiempoVida, boolean haceSonido, double duracion) {
-		super(cantidadDanio, tiempoVida, haceSonido, duracion);
-		this.nombreArma = nomAr;
+	public Celular(int cantidadDanio, double tiempoVida, boolean haceSonido, double duracion, String nombreArma, String descripcion) {
+        super(cantidadDanio, tiempoVida, haceSonido, duracion, descripcion);
+        this.nombreArma = nombreArma;
 		
 		try {
 		       

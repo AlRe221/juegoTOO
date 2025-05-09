@@ -10,9 +10,10 @@ public class ItemVelocidad extends Objeto{
 	
 	
 
-	public ItemVelocidad(double tiempoVida, boolean haceSonido, double duracion) {
-		super("Coquita", tiempoVida, haceSonido, duracion);
-		this.tiempoMaxItem = 6;
+    public ItemVelocidad(double tiempoVida, boolean haceSonido, double duracion, String descripcion) {
+        super("ItemVelocidad", descripcion, tiempoVida, haceSonido, duracion);
+        this.tiempoMaxItem = (int) duracion;
+        this.esRapido = true;
 		 try {
 	        	
 	        	this.setImage(ImageIO.read(getClass().getResourceAsStream("/objetosV/itemVelocidad1.png")));

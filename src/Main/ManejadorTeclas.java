@@ -2,6 +2,10 @@ package Main;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
+
+import Inventario.Inventario;
+import Inventario.Objeto;
 
 public class ManejadorTeclas extends KeyAdapter {
 
@@ -57,6 +61,15 @@ public class ManejadorTeclas extends KeyAdapter {
         } else if (gP.getGameState() == gP.getPauseState()) {
             gP.setGameState(gP.getPlayState());
         }
+    }
+    
+    private void seleccionarObjeto() {
+        UI ui   = gP.getUi();
+        Inventario inv = gP.getJugador().getInventario();
+
+        inv.removeObjetoEn(ui.espacioRen, ui.espacioCol);
+           
+       // gP.getJugador().usarObjeto(obj);
     }
 
     
@@ -180,6 +193,7 @@ public class ManejadorTeclas extends KeyAdapter {
         case KeyEvent.VK_DOWN  -> ui.espacioRen++;
         case KeyEvent.VK_LEFT  -> ui.espacioCol--;
         case KeyEvent.VK_RIGHT -> ui.espacioCol++;
+        case KeyEvent.VK_ENTER -> seleccionarObjeto();
     }
     // Asegurar que los índices están dentro de los límites
     ui.espacioRen = Math.max(0, Math.min(ui.espacioRen, UI.MAX_REN - 1));
@@ -213,10 +227,8 @@ public class ManejadorTeclas extends KeyAdapter {
     public boolean getTeclaIzquierda() { return teclaIzquierda; }
     public boolean getTeclaDerecha()   { return teclaDerecha; }
     public boolean getTeclaInventario(){ return teclaInventario; }
-    public boolean getTeclaEnter()     { return teclaEnter; }
     public boolean isTeclaCorrer()     { return teclaCorrer; }
 
     public void setTeclaInventario(boolean b) { this.teclaInventario = b; }
-    public void setTeclaEnter(boolean b)      { this.teclaEnter      = b; }
     public void setTeclaCorrer(boolean b)     { this.teclaCorrer     = b; }
 }

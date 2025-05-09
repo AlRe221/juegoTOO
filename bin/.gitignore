@@ -1,5 +1,17 @@
+/Ambientacion/
+/ImagenesPantallas/
+/Inventario/
 /Main/
 /entidad/
+<<<<<<< HEAD
 /tile/
 /mapas/
+=======
+/mapas/
+/module-info.class
+/objetosV/
+/pixeled/
+/spritesjugador/
+/tile/
+>>>>>>> inventario
 /tiles/
