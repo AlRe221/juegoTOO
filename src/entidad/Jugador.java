@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import Inventario.Inventario;
+import Inventario.ItemVelocidad;
 import Inventario.Objeto;
 import Main.Ambientacion;
 import Main.GamePanel;
@@ -143,7 +144,7 @@ public class Jugador extends Entidad
 	    
 	    int obind = gP.getchecadorColision().checkObjeto(this, true);
 	    meterInventario(obind);
-	  
+	   
 	    //chechar colision contra zombie
 	    int zomind = gP.getchecadorColision().checarEntidad(this,gP.getZombie());
 	   
@@ -201,6 +202,15 @@ public class Jugador extends Entidad
 	    
 	}
 	    
+	public void itemCorrer() {
+		if(modoRapido == false) {
+			modoRapido = true; 
+			contadorRapido = 0;
+		    this.velocidad = velocidadBase +7;
+		}else {
+			this.velocidad +=2;
+		}	
+	}
 	    
 
 	public void meterInventario(int index) {
@@ -208,6 +218,10 @@ public class Jugador extends Entidad
 		if (objIndex != 999) {
 		    Objeto encontrado = gP.getObjetoInv()[objIndex];
 		    if (encontrado != null) {
+		    	if(encontrado instanceof ItemVelocidad) {
+		    		gP.playSE(11);
+		    		correrItem();
+		    	}
 		    	if (inventario.addObjeto(encontrado)) {
 	                gP.getObjetoInv()[objIndex] = null;
 	                gP.playSE(6);
@@ -216,6 +230,17 @@ public class Jugador extends Entidad
 		}
 		    	
 	}
+	
+	public void correrItem() {	
+		if(modoRapido == false) {
+			modoRapido = true; 
+			contadorRapido = 0;
+		    this.velocidad = velocidadBase +7;
+		}else {
+			this.velocidad +=2;
+		}
+	}
+	
 	public void draw(Graphics2D g2)
 	{
 		BufferedImage sprite = null;
@@ -361,7 +386,7 @@ public class Jugador extends Entidad
 	public void settS(String v) {
 		this.tS = v;
 	}
-<<<<<<< HEAD
+
 	public String gettS() {
 		return this.tS;
 	}
@@ -371,10 +396,9 @@ public class Jugador extends Entidad
         return inventario;
     }
 	
-=======
+
 	public void usarObjeto(Objeto obj) {
 		// TODO Auto-generated method stub
 		
 	}
->>>>>>> inventario
 }

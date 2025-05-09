@@ -48,8 +48,8 @@ public class AssetSetter {
 			// posición aleatoria
 			int x,y,tilen;
 			do { //esto es para que los objetos no salgan en espacios donde el perosnaje no puede pasar por colisión
-			x = rand.nextInt(50); // suponiendo 50 tiles en X
-			y = rand.nextInt(30); // suponiendo 30 tiles en Y
+			x = rand.nextInt(109); // suponiendo 50 tiles en X
+			y = rand.nextInt(109); // suponiendo 30 tiles en Y
 			
 			tilen = gP.mTi.getCodigoMapaTiles(y,x);
 			
@@ -89,8 +89,8 @@ public class AssetSetter {
 		// posición aleatoria
 		int x,y,tilen;
 		do { //esto es para que los objetos no salgan en espacios donde el perosnaje no puede pasar por colisión
-		x = rand.nextInt(50); // suponiendo 50 tiles en X
-		y = rand.nextInt(30); // suponiendo 30 tiles en Y
+		x = rand.nextInt(109); // suponiendo 50 tiles en X
+		y = rand.nextInt(109); // suponiendo 30 tiles en Y
 		
 		tilen = gP.mTi.getCodigoMapaTiles(y,x);
 		

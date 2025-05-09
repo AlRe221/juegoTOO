@@ -2,16 +2,14 @@
 /ImagenesPantallas/
 /Inventario/
 /Main/
+/Zombie1/
+/Zombie2/
+/Zombie3/
 /entidad/
-<<<<<<< HEAD
-/tile/
-/mapas/
-=======
 /mapas/
 /module-info.class
 /objetosV/
 /pixeled/
 /spritesjugador/
 /tile/
->>>>>>> inventario
 /tiles/
