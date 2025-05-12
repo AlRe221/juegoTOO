@@ -83,23 +83,18 @@ public class UI {
 	   //esto solo es de prueba, voy a hacer un dibujo para el fondo y lo voy a poner como 
 	   //background
 	   try {
-		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/fondodepantallaprueba.png"));
+		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/juegoPortadafinal.png"));
 		   g2.drawImage(image, 0, 0, gP.getAnchoPantalla(), gP.getAltoPantalla(), null);
 	   }catch(Exception e) {   
 	   }
 	   
-	   g2.setFont(Tipografia.cargaFuente(60F));
-	   String text = "JUEGO SUPERVIVIENCIA"; 
-	   int x = getXparaCentro(text); 
-	   int y = gP.getTamanioTile() * 3;
-	   g2.setColor(Color.white);
-	   g2.drawString(text, x, y);
+	
 	   
 	   //menu
 	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,30F));
-	   text = "START";
-	   x = getXparaCentro(text); 
-	   y += gP.getTamanioTile() * 4;
+	   String text = "START";
+	   int x = getXparaCentro(text); 
+	   int y = gP.getTamanioTile() * 6;
 	   g2.drawString(text, x, y);
 	   
 	   if(numCommand == 0) {
@@ -107,7 +102,7 @@ public class UI {
 	   }
 	   
 	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,30F));
-	   text = "SETTINGS";
+	   text = "CONTROLES";
 	   x = getXparaCentro(text); 
 	   y += gP.getTamanioTile() *2;
 	   g2.drawString(text, x, y);
@@ -146,7 +141,7 @@ public class UI {
    public void mostrarPantallaSettings(Graphics2D g2) {
 	   
 	   try {
-		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/imagenSettingsprueba2.png"));
+		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/juegoPortadaControles.png"));
 		   g2.drawImage(image, 0, 0, gP.getAnchoPantalla(), gP.getAltoPantalla(), null);
 	   }catch(Exception e) {   
 	   }
@@ -168,7 +163,7 @@ public class UI {
   
    public void mostrarPantallaInfo(Graphics2D g2) {
 	   try {
-		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/imagenInfoprueba.png"));
+		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/juegoPortadaInfo.png"));
 		   g2.drawImage(image, 0, 0, gP.getAnchoPantalla(), gP.getAltoPantalla(), null);
 	   }catch(Exception e) {   
 	   }
