@@ -63,8 +63,9 @@ public class UI {
 	   
 	   //pantalla de juego
 	   if(gP.getGameState() == gP.getPlayState()) {
-		   activarTiempo();
-		   mostrarTiempo(g2);
+		   //activarTiempo();
+		   //mostrarTiempo(g2);
+		   iniciarAlarma(gP.getAmbientacion());
 		   mostrarBarraVida(g2);
 	   }
 	   
@@ -400,6 +401,21 @@ public class UI {
 	    g2.setColor(Color.white);
 	    g2.drawRoundRect(x + 5, y + 5, ancho - 10, alto - 10, 25, 25);
 	}
+   
+   
+   public void iniciarAlarma(Ambientacion am) {
+	   if(gP.getJugador().getVida() <= 20) {
+		   am.activarAlerta();
+		   dibujarCuadroConTexto(g2, "CONSIGUE ALIMENTO!",20,50,120);
+		   activarTiempo();
+		   mostrarTiempo(g2);
+	   }else {
+		   detenerTiempo();
+	   }
+	   
+   }
+   
+   
 
 	public void setInventorOpen(boolean valor) {
 		this.inventoryOpen = valor;

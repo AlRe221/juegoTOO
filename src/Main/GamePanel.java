@@ -60,7 +60,7 @@ public class GamePanel extends JPanel implements Runnable
 			this.addKeyListener(mT);
 			this.setFocusable(true);
 			
-			new javax.swing.Timer(12000000, e -> { //esto disminuye cada 20 min la vida
+			new javax.swing.Timer(100, e -> { //esto disminuye cada 20 min la vida
 				jugador.dañoInfeccion(0.5);
 				repaint();
 			}).start();
@@ -124,6 +124,7 @@ public class GamePanel extends JPanel implements Runnable
 		        ui.setInventorOpen(!ui.inventoryOpen);
 		        mT.setTeclaInventario(false);
 			}
+			
 		}
 		
 		//checar como hacer que, si saca x objeto, el sprite csmbie al siguente y así susecivamente hasta que quede vacio con tS = "normal"
@@ -307,6 +308,9 @@ public class GamePanel extends JPanel implements Runnable
 			return this.asSet;
 		}
 		
+		public Ambientacion getAmbientacion() {
+			return this.se;
+		}
 		
 	
 	

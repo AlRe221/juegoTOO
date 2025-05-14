@@ -14,7 +14,8 @@ public class Jugador extends Entidad
 {
 	
 	private ManejadorTeclas mT;
-	private final int pantallaX, pantallaY;
+	private int pantallaX;
+	private int pantallaY;
 	private Ambientacion am;
 	
 	private boolean modoRapido = false;
@@ -48,8 +49,13 @@ public class Jugador extends Entidad
 	{
 		this.mundoX = gP.getTamanioTile() * 23;
 		this.mundoY = gP.getTamanioTile() * 21;
+		
+ 
+		
 		this.velocidad = velocidadBase;
 		this.direccion = "abajo";
+		
+		
 	}
 	public void getSpritesJugador(String o)
 	{
@@ -366,6 +372,14 @@ public class Jugador extends Entidad
 	}
 	public int getPantallaY() {
 		return pantallaY;
+	}
+	
+	public void setPantallaX(int s) {
+		this.pantallaX = s;
+	}
+	
+	public void setPantallaY(int s) {
+		this.pantallaY = s;
 	}
 	
 	

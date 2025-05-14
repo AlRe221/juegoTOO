@@ -32,6 +32,7 @@ public class Ambientacion {
 		urlSonido[12] = getClass().getResource("/Ambientacion/tomaragua.wav");
 		urlSonido[13] = getClass().getResource("/Ambientacion/clickbotonesjuego.wav");
 		urlSonido[14] = getClass().getResource("/Ambientacion/equipsound.wav");
+		urlSonido[15] = getClass().getResource("/Ambientacion/alarma2.wav");
 		
 		this.gP =gP;
 		this.activa = false; 
@@ -75,4 +76,9 @@ public class Ambientacion {
 	        }
 	    }
 
+	   public void activarAlerta() {	
+			if(gP.getJugador().getVida() == 20) {
+				gP.playSE(15);
+			}
+	   }
 }
