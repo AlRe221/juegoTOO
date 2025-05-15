@@ -24,7 +24,8 @@ public class ManejadorTiles {
 		this.codigosMapaTiles = new int[gP.maxRenMundo]
 								[gP.maxRenMundo];
 		getImagenesTile();
-		cargaMapa("/mapas/world001.txt");
+		//cargaMapa("/mapas/world001.txt");
+		cargaMapa("/mapas/mapaCasiFinal.txt");
 	}
 	public void cargaMapa(String rutaMapa){
 		try {

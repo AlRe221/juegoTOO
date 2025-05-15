@@ -47,8 +47,8 @@ public class Jugador extends Entidad
 	}
 	public void configuracionInicial()
 	{
-		this.mundoX = gP.getTamanioTile() * 23;
-		this.mundoY = gP.getTamanioTile() * 21;
+		this.mundoX = gP.getTamanioTile() * 22;
+		this.mundoY = gP.getTamanioTile() * 92;
 		
  
 		
