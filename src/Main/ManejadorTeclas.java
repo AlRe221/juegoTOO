@@ -20,6 +20,7 @@ public class ManejadorTeclas extends KeyAdapter {
 	
     private static final int OPCIONES_MENU_INICIO = 4;
     private static final int OPCIONES_MENU_PAUSA  = 2;
+    private static final int OPCIONES_MENU_DECISION = 3;
 
     
    
@@ -41,6 +42,8 @@ public class ManejadorTeclas extends KeyAdapter {
         	manejarMenuSettings(e);
         }else if(estado == gP.getPantallaInfo()) {
         	manejarMenuInfo(e);
+        }else if(estado == gP.getPantallaDecision()){
+        	manejarPantallaDecision(e);
         }
         else if (estado == gP.getPlayState()) {
             manejarJuego(e);
@@ -92,38 +95,32 @@ public class ManejadorTeclas extends KeyAdapter {
         }
     }
 
-    // NAVEGACIÓN MENÚ DE INICIO
-    private void manejarMenuInicio(KeyEvent e) {
+    // NAVEGACIÓN PANTALLA DE DECISION 
+    private void manejarPantallaDecision(KeyEvent e) {
         UI ui = gP.getUi();
         int sel = ui.getNumCom();
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W -> {
-                sel = (sel - 1 + OPCIONES_MENU_INICIO) % OPCIONES_MENU_INICIO;
+                sel = (sel - 1 + OPCIONES_MENU_DECISION) % OPCIONES_MENU_DECISION;
                 ui.setNUmCom(sel);
             }
             case KeyEvent.VK_S -> {
-                sel = (sel + 1) % OPCIONES_MENU_INICIO;
+                sel = (sel + 1) % OPCIONES_MENU_DECISION;
                 ui.setNUmCom(sel);
             }
             case KeyEvent.VK_ENTER -> {
                 switch (sel) {
-                    case 0 -> { // INICIAR
+                    case 6 -> { // INICIAR
                         gP.stopMusic();
-                        gP.setGameState(gP.getPlayState());
+                        gP.setGameState(gP.getWin());
                         gP.playMusic(2);
                     }
-                    case 1 -> { 
+                    case 7 -> { 
                         // TODO: Implementar pantalla de SETTINGS
-                    	 gP.setGameState(gP.getPantalaSetting());
+                    	 gP.setGameState(gP.getGameOver());
                     }
-                    case 2 -> { 
-                        // TODO: Implementar pantalla de INFO
-                    	gP.setGameState(gP.getPantallaInfo());
-                    }
-                    case 3 -> { // EXIT
-                        System.exit(0);
-                    }
+                    
                 }
             }
         }
@@ -182,6 +179,43 @@ public class ManejadorTeclas extends KeyAdapter {
         	break;
         }
 	  }
+    }
+    
+    //MANEJAR MENU DE INICIO
+    private void manejarMenuInicio(KeyEvent e) {
+    	UI ui = gP.getUi();
+        int sel = ui.getNumCom();
+
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_W -> {
+                sel = (sel - 1 + OPCIONES_MENU_INICIO) % OPCIONES_MENU_INICIO;
+                ui.setNUmCom(sel);
+            }
+            case KeyEvent.VK_S -> {
+                sel = (sel + 1) % OPCIONES_MENU_INICIO;
+                ui.setNUmCom(sel);
+            }
+            case KeyEvent.VK_ENTER -> {
+                switch (sel) {
+                    case 0 -> { // INICIAR
+                        gP.stopMusic();
+                        gP.setGameState(gP.getPlayState());
+                        gP.playMusic(2);
+                    }
+                    case 1 -> { 
+                        // TODO: Implementar pantalla de SETTINGS
+                    	 gP.setGameState(gP.getPantalaSetting());
+                    }
+                    case 2 -> { 
+                        // TODO: Implementar pantalla de INFO
+                    	gP.setGameState(gP.getPantallaInfo());
+                    }
+                    case 3 -> { // EXIT
+                        System.exit(0);
+                    }
+                }
+            }
+        }
     }
     
     //MANEJAR INVENTARIO

@@ -44,6 +44,8 @@ public class GamePanel extends JPanel implements Runnable
 		protected final int pantallaSetting = 3;
 		protected final int pantallaInfo = 4; 
 		protected final int pantallaDecision = 5;
+		protected final int win= 6; 
+		protected final int gameOver= 7;
 		
 	//WORLD SETTINGS
 	public final int maxColMundo = 42; 
@@ -149,6 +151,7 @@ public class GamePanel extends JPanel implements Runnable
 			if(jugador.getVida() == 0) {
 				stopMusic();
 				gameState = pantallaDecision;
+				playMusic(16);
 			}
        }
 
@@ -318,6 +321,14 @@ public class GamePanel extends JPanel implements Runnable
 		
 		public int getPantallaDecision() {
 			return this.pantallaDecision;
+		}
+		
+		public int getWin() {
+			return this.win;
+		}
+		
+		public int getGameOver() {
+			return this.gameOver;
 		}
 		
 		public UI getUi() {
