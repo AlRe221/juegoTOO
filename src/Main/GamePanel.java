@@ -43,6 +43,7 @@ public class GamePanel extends JPanel implements Runnable
 		protected final int pauseState = 2;
 		protected final int pantallaSetting = 3;
 		protected final int pantallaInfo = 4; 
+		protected final int pantallaDecision = 5;
 		
 	//WORLD SETTINGS
 	public final int maxColMundo = 42; 
@@ -105,6 +106,8 @@ public class GamePanel extends JPanel implements Runnable
 				}
 			}
 		}
+		
+		private boolean alarme=false;
 		public void update() 
 		{
 			if(gameState == playState) {
@@ -114,6 +117,7 @@ public class GamePanel extends JPanel implements Runnable
 						z[i].update();
 					}
 				}
+			detenerActivarAlarma();
 			}
 			
 			if(gameState == pauseState) {
@@ -128,9 +132,25 @@ public class GamePanel extends JPanel implements Runnable
 		}
 		
 		//checar como hacer que, si saca x objeto, el sprite csmbie al siguente y así susecivamente hasta que quede vacio con tS = "normal"
-		
-		
-
+	
+       public void detenerActivarAlarma() {
+    	   if(jugador.getVida() <=20) {
+				if(!alarme) {
+				playMusic(15);
+				alarme = true;
+				}
+			}else {
+				if(alarme) {
+					stopMusic();
+					alarme=false;
+				}
+			}
+			
+			if(jugador.getVida() == 0) {
+				stopMusic();
+				gameState = pantallaDecision;
+			}
+       }
 
 		@Override
 		public void paintComponent(Graphics g) {
@@ -295,10 +315,14 @@ public class GamePanel extends JPanel implements Runnable
 		public int getPantallaInfo() {
 			return this.pantallaInfo;
 		}
+		
+		public int getPantallaDecision() {
+			return this.pantallaDecision;
+		}
+		
 		public UI getUi() {
 			return ui;
 		}
-
 
 		public void setUi(UI ui) {
 			this.ui = ui;

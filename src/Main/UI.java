@@ -63,21 +63,20 @@ public class UI {
 	   
 	   //pantalla de juego
 	   if(gP.getGameState() == gP.getPlayState()) {
-		   //activarTiempo();
-		   //mostrarTiempo(g2);
-		   iniciarAlarma(gP.getAmbientacion());
+		   dibujarAlarma();
 		   mostrarBarraVida(g2);
 	   }
 	   
 	   //pantalla de pausa
 	   if(gP.getGameState() == gP.getPauseState()) {
-		   detenerTiempo();
-		   mostrarTiempo(g2);
 		   mostrarPantallaPausa();   
 	   }
 	   
-	   
-	   
+	  
+	   if(gP.getGameState() == gP.getPantallaDecision()) {
+		   mostrarPantallaDecision(g2);
+	   }
+			 
    }
    
    public void mostrarPantallaInicio(Graphics2D g2){
@@ -214,8 +213,51 @@ public class UI {
 	   
    }
    
-   
-   
+   public void  mostrarPantallaDecision(Graphics2D g2) {
+	   g2.setColor(Color.BLACK);
+	   g2.fillRect(0, 0, gP.getWidth(), gP.getHeight());
+	  cuadroCentro();
+	  
+	  g2.setFont(Tipografia.cargaFuente(30f));
+	   String text ="¿Como se origino el contagio?"; 
+	   int x2 = getXparaCentro(text) ;
+	   int y2 = gP.getTamanioTile() * 4;  
+	   g2.drawString(text, x2, y2);
+	   
+	   g2.setFont(Tipografia.cargaFuente(15f));
+	   text = "Falta de agua creo un hongo en el baño de hombres.";
+	   x2 = getXparaCentro(text); 
+	   y2 += gP.getTamanioTile() * 3;
+	   g2.drawString(text, x2, y2);
+	   
+	   if(numCommand == 0) {
+		   g2.drawString("-", x2 - gP.getTamanioTile(), y2);
+	   }
+	   
+	   g2.setFont(Tipografia.cargaFuente(15f));
+	   text = "Bolsas de atun viejas en el DFM causaron caos.";
+	   
+	   x2 = getXparaCentro(text); 
+	   y2 += gP.getTamanioTile() *2;
+	   g2.drawString(text, x2, y2);
+	   
+	   
+	   if(numCommand == 1) {
+		   g2.drawString("-", x2 - gP.getTamanioTile(), y2);
+	   }
+	   
+	   g2.setFont(Tipografia.cargaFuente(15f));
+	   text = "Estrés de fin de semestre propago una infeccion.";
+	   x2 = getXparaCentro(text); 
+	   y2 += gP.getTamanioTile() *2;
+	   g2.drawString(text, x2, y2);
+	   
+	   
+	   if(numCommand == 1) {
+		   g2.drawString("-", x2 - gP.getTamanioTile(), y2);
+	   }
+	   
+   }
    
    public void cuadroCentro() {
 	   int x = 120, y = 100, w =1000, h = 500;
@@ -230,26 +272,7 @@ public class UI {
 	   int x = gP.getAnchoPantalla()/2 - tam/2;
 	   return x;
    }
-   
-   public void mostrarTiempo(Graphics2D g2) {
-	   g2.setFont(arial_30);
-	   g2.setColor(Color.WHITE);
-	   
-	   if(tiempoActivo == true) {
-	   playTime += (double)1/60;
-	   }
-	   
-	   g2.drawString("TIME: " + dFormat.format(playTime), gP.getTamanioTile()*21,66);
-   }
-   
-   public void detenerTiempo() {
-	  this.tiempoActivo = false; 
-   }
-   
-   public void activarTiempo() {
-	  this.tiempoActivo = true; 
-   }
-   
+     
    
    public void mostrarBarraVida(Graphics2D g2) {
 	   g2.setFont(Tipografia.cargaFuente(15f));
@@ -265,6 +288,7 @@ public class UI {
 	   }
 	   
 	   int fillWi =(int)((double)vidaActual / vidM * width);
+	 
 	   
 	   g2.setColor(Color.GRAY); 
 	   g2.fillRect(x, y, width, heigth);
@@ -403,20 +427,31 @@ public class UI {
 	}
    
    
-   public void iniciarAlarma(Ambientacion am) {
-	   if(gP.getJugador().getVida() <= 20) {
-		   am.activarAlerta();
-		   dibujarCuadroConTexto(g2, "CONSIGUE ALIMENTO!",20,50,120);
-		   activarTiempo();
-		   mostrarTiempo(g2);
-	   }else {
-		   detenerTiempo();
+   private double tiempoA = 0; 
+   private boolean mostrarA = true;
+   
+   //se activa el sonido de la alarma y el cuadro de consigue comida parpadea.
+   public void dibujarAlarma() {
+	   if(gP.getGameState() == gP.getPlayState() && gP.getJugador().getVida() <= 20) {
+		   //am.activarAlerta();
+		   cuadroDeAdvertencia();
+	   }
+	}
+   
+   public void cuadroDeAdvertencia() {
+	   tiempoA+=1.0/60.0; 
+	   if(tiempoA >= 0.2) {
+		   mostrarA = !mostrarA;
+		   tiempoA = 0;
 	   }
 	   
-   }
+	   if(mostrarA) {
+	   dibujarCuadroConTexto(g2, "CONSIGUE ALIMENTO!",20,50,120);
+	   }
+  }
    
    
-
+   
 	public void setInventorOpen(boolean valor) {
 		this.inventoryOpen = valor;
 	}

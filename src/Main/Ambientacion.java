@@ -78,7 +78,12 @@ public class Ambientacion {
 
 	   public void activarAlerta() {	
 			if(gP.getJugador().getVida() == 20) {
-				gP.playSE(15);
+				gP.playMusic(15);
 			}
 	   }
+	   
+	   public void detenerAlarma() {
+		   gP.stopMusic();
+	   }
+	  
 }
