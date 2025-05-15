@@ -44,6 +44,11 @@ public class GamePanel extends JPanel implements Runnable
 		protected final int pantallaSetting = 3;
 		protected final int pantallaInfo = 4; 
 		protected final int pantallaDecision = 5;
+		protected final int win=6; 
+		protected final int gameOver1 = 7;
+		protected final int gameOver2 = 8;
+		
+		
 		
 	//WORLD SETTINGS
 	public final int maxColMundo = 42; 
@@ -61,7 +66,7 @@ public class GamePanel extends JPanel implements Runnable
 			this.addKeyListener(mT);
 			this.setFocusable(true);
 			
-			new javax.swing.Timer(100, e -> { //esto disminuye cada 20 min la vida
+			new javax.swing.Timer(1200000, e -> { //esto disminuye cada 20 min la vida
 				jugador.dañoInfeccion(0.5);
 				repaint();
 			}).start();
@@ -149,6 +154,7 @@ public class GamePanel extends JPanel implements Runnable
 			if(jugador.getVida() == 0) {
 				stopMusic();
 				gameState = pantallaDecision;
+				playMusic(16);
 			}
        }
 
@@ -319,6 +325,16 @@ public class GamePanel extends JPanel implements Runnable
 		public int getPantallaDecision() {
 			return this.pantallaDecision;
 		}
+		public int getWin() {
+			return this.win;
+		}
+		public int getgameOver1() {
+			return this.gameOver1;
+		}
+		public int getgameOver2() {
+			return this.gameOver2;
+		}
+		
 		
 		public UI getUi() {
 			return ui;

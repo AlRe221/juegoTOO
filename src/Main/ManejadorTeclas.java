@@ -20,6 +20,7 @@ public class ManejadorTeclas extends KeyAdapter {
 	
     private static final int OPCIONES_MENU_INICIO = 4;
     private static final int OPCIONES_MENU_PAUSA  = 2;
+    private static final int OPCIONES_PANTALLA_DECISION  = 3;
 
     
    
@@ -41,6 +42,10 @@ public class ManejadorTeclas extends KeyAdapter {
         	manejarMenuSettings(e);
         }else if(estado == gP.getPantallaInfo()) {
         	manejarMenuInfo(e);
+        }else if(estado == gP.getPantallaDecision()) {
+        	manejarPantallaDecision(e);
+        }else if(estado == gP.getWin() || estado == gP.getgameOver1() || estado == gP.getgameOver2()) {
+        	manejarWin_GameOver(e);
         }
         else if (estado == gP.getPlayState()) {
             manejarJuego(e);
@@ -183,6 +188,66 @@ public class ManejadorTeclas extends KeyAdapter {
         }
 	  }
     }
+    
+    
+    //MANEJAR PANTALLA DECISION 
+    private void manejarPantallaDecision(KeyEvent e) {
+        UI ui = gP.getUi();
+        int sel = ui.getNumCom();
+
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_W -> {
+                sel = (sel - 1 + OPCIONES_PANTALLA_DECISION) % OPCIONES_PANTALLA_DECISION;
+                ui.setNUmCom(sel);
+            }
+            case KeyEvent.VK_S -> {
+                sel = (sel + 1) % OPCIONES_PANTALLA_DECISION;
+                ui.setNUmCom(sel);
+            }
+            case KeyEvent.VK_ENTER -> {
+                switch (sel) {
+                    case 0 -> { // WIN
+                        gP.stopMusic();
+                        gP.setGameState(gP.getWin());
+                        gP.playSE(17);
+                    }
+                    case 1 -> { //GAMEOVER
+                    	 gP.stopMusic();
+                    	 gP.setGameState(gP.getgameOver1());
+                    	 ui.setNUmCom(0);
+                    	 gP.playSE(18);
+                    }
+                    case 2 -> { 
+                        // GAMEOVER
+                    	gP.stopMusic();
+                    	gP.setGameState(gP.getgameOver2());
+                    	ui.setNUmCom(0);
+                    	gP.playSE(18);
+                    }
+                    
+                }
+            }
+        }
+    }
+    
+    //PANTALLA WIN o GAME OVER
+    private void manejarWin_GameOver(KeyEvent e) {
+    	switch(e.getKeyCode()) {
+    	case KeyEvent.VK_ENTER -> {
+    		gP.playSE(13);
+        	if(gP.getUi().getNumCom() == 0) {
+        	gP.getJugador().setVida(100);
+            gP.setGameState(gP.getPantallaInicio());
+            gP.getUi().setNUmCom(0); // RESETEA LA SELECCIÓN DEL MENÚ
+            gP.playMusic(4);
+    	   }
+         break;
+        }
+      }
+    }
+    
+
+    
     
     //MANEJAR INVENTARIO
     private void manejarInventario(KeyEvent e) {

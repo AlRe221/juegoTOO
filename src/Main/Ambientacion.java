@@ -33,6 +33,9 @@ public class Ambientacion {
 		urlSonido[13] = getClass().getResource("/Ambientacion/clickbotonesjuego.wav");
 		urlSonido[14] = getClass().getResource("/Ambientacion/equipsound.wav");
 		urlSonido[15] = getClass().getResource("/Ambientacion/alarma2.wav");
+		urlSonido[16] = getClass().getResource("/Ambientacion/musicatomadecision.wav");
+		urlSonido[17] = getClass().getResource("/Ambientacion/win.wav");
+		urlSonido[18] = getClass().getResource("/Ambientacion/gameOver.wav");
 		
 		this.gP =gP;
 		this.activa = false; 

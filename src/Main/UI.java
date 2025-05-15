@@ -76,6 +76,18 @@ public class UI {
 	   if(gP.getGameState() == gP.getPantallaDecision()) {
 		   mostrarPantallaDecision(g2);
 	   }
+	   
+	   if(gP.getGameState() == gP.getWin()) {
+		   mostrarWin(g2);
+	   }
+	   
+	   if(gP.getGameState() == gP.getgameOver1()) {
+		   mostrarGameOver(g2);
+	   }
+	   
+	   if(gP.getGameState() == gP.getgameOver2()) {
+		   mostrarGameOver(g2);
+	   }
 			 
    }
    
@@ -253,11 +265,49 @@ public class UI {
 	   g2.drawString(text, x2, y2);
 	   
 	   
-	   if(numCommand == 1) {
+	   if(numCommand == 2) {
 		   g2.drawString("-", x2 - gP.getTamanioTile(), y2);
 	   }
 	   
    }
+   
+   public void mostrarWin(Graphics2D g2) {
+	   try {
+		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/pantallaWin.png"));
+		   g2.drawImage(image, 0, 0, gP.getAnchoPantalla(), gP.getAltoPantalla(), null);
+	   }catch(Exception e) {   
+	   }
+	  
+	   
+	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,20F));
+	   String text = "VOLVER AL INICIO";
+	   int x2= getXparaCentro(text); 
+	   int y2 = gP.getTamanioTile() * 11;
+	   g2.drawString(text, x2, y2);
+	   
+	   if(numCommand == 0) {
+		   g2.drawString("-", x2 - gP.getTamanioTile(), y2);
+	   } 
+   }
+   
+   public void mostrarGameOver(Graphics2D g2) {
+	   try {
+		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/gameOver.png"));
+		   g2.drawImage(image, 0, 0, gP.getAnchoPantalla(), gP.getAltoPantalla(), null);
+	   }catch(Exception e) {   
+	   }
+	  
+	   
+	   g2.setFont(g2.getFont().deriveFont(Font.BOLD,20F));
+	   String text = "VOLVER AL INICIO";
+	   int x2= getXparaCentro(text); 
+	   int y2 = gP.getTamanioTile() * 11;
+	   g2.drawString(text, x2, y2);
+	   
+	   if(numCommand == 0) {
+		   g2.drawString("-", x2 - gP.getTamanioTile(), y2);
+	   } 
+	}
    
    public void cuadroCentro() {
 	   int x = 120, y = 100, w =1000, h = 500;
