@@ -10,6 +10,7 @@ import Main.GamePanel;
 public abstract class Zombie extends Entidad{
 	String nombre;
 	BufferedImage i;
+	private final int radioDeteccion = 200;
 	
 
 	public Zombie(String n, GamePanel gP) {
@@ -24,31 +25,40 @@ public abstract class Zombie extends Entidad{
 		
 	}
 	//para que se mueva en cierto espacio.
-		public void setAction() {
-			
-			actionLockCounter ++;
-			
-			if(actionLockCounter == 120) {
-				Random r = new Random(); 
-				int i = r.nextInt(100) + 1;
-				
-				if(i <=25) {
-					direccion = "arriba";
-				}
-				if(i>25 && i <=50) {
-					direccion = "abajo";
-				}
-				if(i >50 && i <=75) {
-					direccion = "izquierda";
-				}
-				if(i>75 && i<=100) {
-					direccion = "derecha";
-				}
-				
-				actionLockCounter = 0;
-			}
-			
-		}
+	public void setAction() {
+	    // 1Calculamos la posición del jugador y la distancia al zombi
+	    int posJugadorX = gP.getJugador().getMundoX();
+	    int posJugadorY = gP.getJugador().getMundoY();
+	    int deltaX      = posJugadorX - this.mundoX;
+	    int deltaY      = posJugadorY - this.mundoY;
+	    double distancia = Math.hypot(deltaX, deltaY);
+
+	    // Si está dentro del radio de detección, perseguir al jugador
+	    if (distancia < radioDeteccion) {
+	        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+	            direccion = (deltaX > 0) ? "derecha" : "izquierda";
+	        } else {
+	            direccion = (deltaY > 0) ? "abajo"   : "arriba";
+	        }
+	        // Salimos para que colisiones() mueva al zombi inmediatamente
+	        return;
+	    }
+
+	    // Fuera de alcance: cada 120 frames patrulla de forma aleatoria
+	    actionLockCounter++;
+	    if (actionLockCounter >= 120) {
+	        Random aleatorio = new Random();
+	        int n = aleatorio.nextInt(4);  // valor entre 0 y 3
+	        switch (n) {
+	            case 0: direccion = "arriba";    break;
+	            case 1: direccion = "abajo";     break;
+	            case 2: direccion = "izquierda"; break;
+	            default: direccion = "derecha";  break;
+	        }
+	        actionLockCounter = 0;
+	    }
+	}
+
 		
 		int dañototal = 60; 
 		int dañoContador = 0;

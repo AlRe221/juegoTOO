@@ -133,6 +133,7 @@ public abstract class Entidad
 	public void setVelocidad(int velocidad) {
 		this.velocidad = velocidad;
 	}
+
 	
 	
 	
