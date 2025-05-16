@@ -4,6 +4,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+import Inventario.Alimento;
 import Inventario.Inventario;
 import Inventario.Objeto;
 
@@ -71,8 +72,25 @@ public class ManejadorTeclas extends KeyAdapter {
     private void seleccionarObjeto() {
         UI ui   = gP.getUi();
         Inventario inv = gP.getJugador().getInventario();
+        int ren = ui.espacioRen, col = ui.espacioCol;
 
-        inv.removeObjetoEn(ui.espacioRen, ui.espacioCol);
+        Objeto obj = inv.getObjetoEn(ren, col);
+        if (obj != null) {
+
+            // Si es alimento, curamos un 10% y hacemos desaparecer el alimento
+            if (obj instanceof Alimento) {
+                double vidaActual = gP.getJugador().getVida();
+                double vidaMax    = gP.getJugador().getVidaMax();
+                double recupera   = vidaMax * 0.10;   // 10%
+                double nuevaVida  = Math.min(vidaActual + recupera, vidaMax);
+                gP.getJugador().setVida(nuevaVida);
+                gP.playSE( /* sonido de comer, p.ej. */ 12 );
+            }
+
+            // Eliminamos el objeto del inventario siempre
+            inv.removeObjetoEn(ren, col);
+        }
+        
            
        // gP.getJugador().usarObjeto(obj);
     }

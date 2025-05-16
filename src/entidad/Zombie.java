@@ -11,6 +11,8 @@ public abstract class Zombie extends Entidad{
 	String nombre;
 	BufferedImage i;
 	private final int radioDeteccion = 200;
+	private boolean persiguiendo = false;
+	private char currentAxis  = 'x'; 
 	
 
 	public Zombie(String n, GamePanel gP) {
@@ -24,40 +26,50 @@ public abstract class Zombie extends Entidad{
 		this.solidAreaDefaultY = this.solidArea.y;
 		
 	}
-	//para que se mueva en cierto espacio.
-	public void setAction() {
-	    // 1Calculamos la posición del jugador y la distancia al zombi
-	    int posJugadorX = gP.getJugador().getMundoX();
-	    int posJugadorY = gP.getJugador().getMundoY();
-	    int deltaX      = posJugadorX - this.mundoX;
-	    int deltaY      = posJugadorY - this.mundoY;
-	    double distancia = Math.hypot(deltaX, deltaY);
+	
+		public void setAction() {
+	
+		    int px = gP.getJugador().getMundoX();
+		    int py = gP.getJugador().getMundoY();
+		    int dx = px - this.mundoX;
+		    int dy = py - this.mundoY;
+		    double dist = Math.hypot(dx, dy);
+		    
+		    // Persigue jugador
+		    if (dist < radioDeteccion) {
+	
+		        if (!persiguiendo) {
+		            persiguiendo = true;
+		            currentAxis  = (Math.abs(dx) >= Math.abs(dy)) ? 'x' : 'y';
+		        }
+	
+		        if (currentAxis == 'x' && dx == 0) currentAxis = 'y';
+		        if (currentAxis == 'y' && dy == 0) currentAxis = 'x';
+	
+		        if (currentAxis == 'x') {
+		            direccion = (dx > 0) ? "derecha" : "izquierda";
+		        } else { 
+		            direccion = (dy > 0) ? "abajo" : "arriba";
+		        }
+	
+		        return;             
+		    }
+	
+		    // Patrulla
+		    persiguiendo = false;
+		    actionLockCounter++;
+		    if (actionLockCounter >= 120) {
+		        switch (new Random().nextInt(4)) {
+		            case 0 -> direccion = "arriba";
+		            case 1 -> direccion = "abajo";
+		            case 2 -> direccion = "izquierda";
+		            default-> direccion = "derecha";
+		        }
+		        actionLockCounter = 0;
+		    }
+		}
 
-	    // Si está dentro del radio de detección, perseguir al jugador
-	    if (distancia < radioDeteccion) {
-	        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-	            direccion = (deltaX > 0) ? "derecha" : "izquierda";
-	        } else {
-	            direccion = (deltaY > 0) ? "abajo"   : "arriba";
-	        }
-	        // Salimos para que colisiones() mueva al zombi inmediatamente
-	        return;
-	    }
 
-	    // Fuera de alcance: cada 120 frames patrulla de forma aleatoria
-	    actionLockCounter++;
-	    if (actionLockCounter >= 120) {
-	        Random aleatorio = new Random();
-	        int n = aleatorio.nextInt(4);  // valor entre 0 y 3
-	        switch (n) {
-	            case 0: direccion = "arriba";    break;
-	            case 1: direccion = "abajo";     break;
-	            case 2: direccion = "izquierda"; break;
-	            default: direccion = "derecha";  break;
-	        }
-	        actionLockCounter = 0;
-	    }
-	}
 
 		
 		int dañototal = 60; 

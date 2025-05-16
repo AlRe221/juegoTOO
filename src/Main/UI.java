@@ -337,6 +337,8 @@ public class UI {
 		   vidaActual = vidM;
 	   }
 	   
+	   double rawPct = (vidaActual / vidM) * 100.0;
+	   int pct = (int) (Math.round(rawPct / 5.0) * 5);
 	   int fillWi =(int)((double)vidaActual / vidM * width);
 	 
 	   
@@ -348,6 +350,9 @@ public class UI {
 	   
 	   g2.setColor(Color.BLACK);
 	   g2.drawRect(x, y, width, heigth);
+	   
+	   g2.setColor(Color.WHITE);
+    g2.drawString(pct + "%", x + width + 10, y + heigth - 2);
    }
    
   

@@ -185,11 +185,9 @@ public class GamePanel extends JPanel implements Runnable
            }
            
            // Resto de estados
-           // Si estamos en Game Over, dibuja sólo el menú y la HUD 
            if (gameState == gameOver1 || gameState == gameOver2) {
-               // Pinta tu fondo / menú de Game Over
+               // menú de Game Over
                ui.mostrarGameOver(g2);
-               // Pinta la barra de vida 
                ui.draw(g2);
                return;
            }
