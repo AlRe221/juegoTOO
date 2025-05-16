@@ -22,6 +22,7 @@ public class GamePanel extends JPanel implements Runnable
 	private final int maxColPantalla = 26;
 	private final int anchoPantalla = tamanioTile * maxColPantalla;
 	private final int altoPantalla = tamanioTile * maxRenPantalla;
+	private javax.swing.Timer vidaTimer;
 		
 		Thread hebraJuego;
 		Ambientacion musica = new Ambientacion(this);
@@ -66,20 +67,35 @@ public class GamePanel extends JPanel implements Runnable
 			this.addKeyListener(mT);
 			this.setFocusable(true);
 			
-			new javax.swing.Timer(1200000, e -> { //esto disminuye cada 20 min la vida
-				jugador.dañoInfeccion(0.5);
-				repaint();
-			}).start();
+			vidaTimer = new javax.swing.Timer(1_200_000, e -> {
+	            if (gameState == playState) {
+	                jugador.dañoInfeccion(0.5);
+	                repaint();
+	            }
+	        });
+	        vidaTimer.start();
 			
 
 		}
 		
 		
 		public void setupGame() {
-			asSet.setObject();
-			playMusic(4);
-			gameState = pantallaInicio;
-			
+			// Reposicionar y curar al jugador
+	        jugador.configuracionInicial();                 // Pone mundoX/mundoY al inicio
+	        jugador.setVida(jugador.getVidaMax());          // rellena la barra
+	        jugador.getInventario().clear();                
+
+	        // Repoblar objetos y zombis
+	        asSet.setObject();       
+	        asSet.setObjectZ();      // inicializa el array z[] de zombis
+
+	        // Reset de alarma y timer
+	        alarme = false;
+	        vidaTimer.restart();     
+
+	        // Pantalla de Inicio
+	        playMusic(4);
+	        gameState = pantallaInicio;
 		}
 		
 		
@@ -140,65 +156,67 @@ public class GamePanel extends JPanel implements Runnable
 		//checar como hacer que, si saca x objeto, el sprite csmbie al siguente y así susecivamente hasta que quede vacio con tS = "normal"
 	
        public void detenerActivarAlarma() {
-    	   if(jugador.getVida() <=20) {
-				if(!alarme) {
+    	   if(jugador.getVida() <=20 && !alarme) {
 				playMusic(15);
 				alarme = true;
-				}
-			}else {
-				if(alarme) {
-					stopMusic();
-					alarme=false;
-				}
-			}
+    	   }
+    	   else if (jugador.getVida() > 20 && alarme) {
+    	        stopMusic();
+    	        alarme = false;
+    	    }
 			
-			if(jugador.getVida() == 0) {
+			if(jugador.getVida() <= 0) {
+		        vidaTimer.stop();
 				stopMusic();
 				gameState = pantallaDecision;
 				playMusic(16);
 			}
        }
 
-		@Override
-		public void paintComponent(Graphics g) {
-		    super.paintComponent(g);
-		    Graphics2D g2 = (Graphics2D) g;
-		    
-		    //pantalla de inicio 
-		    if(gameState == pantallaInicio) {
-		    	ui.draw(g2);
-		    }else {
-		    	// 1) Mundo + jugador + objetos
-		    	mTi.draw(g2);
-		    	for(int i= 0; i < o.length; i++) {
-		    		if(o[i] != null) {
-		    			o[i].draw(g2,this);
-		    		}
-		    	}
-		    	for(int i = 0; i < z.length; i++) {
-		    		if(z[i] != null) {
-		    			z[i].draw(g2);
-		    		}
-		    	}
-		    	jugador.draw(g2);
-		    
-		    	// 2) Inventario encima, si está abierto
-		    	if (ui.getInventorOpen()) {
-		    		ui.dibujarInventario(g2);
-		    	}
-		    	
-		    	if(gameState == pantallaSetting) {
-		    	ui.draw(g2);
-		    	}
-		    	ui.draw(g2);
-		    }
-		  
-		    
-		    //ui.mostrarTiempo(g2);
+       @Override
+       public void paintComponent(Graphics g) {
+           super.paintComponent(g);
+           Graphics2D g2 = (Graphics2D) g;
+           
+           // Pantalla de inicio
+           if (gameState == pantallaInicio) {
+               ui.draw(g2);
+               return;
+           }
+           
+           // Resto de estados
+           // Si estamos en Game Over, dibuja sólo el menú y la HUD 
+           if (gameState == gameOver1 || gameState == gameOver2) {
+               // Pinta tu fondo / menú de Game Over
+               ui.mostrarGameOver(g2);
+               // Pinta la barra de vida 
+               ui.draw(g2);
+               return;
+           }
+           
+           mTi.draw(g2);
+           for (Objeto obj : o) {
+               if (obj != null) obj.draw(g2, this);
+           }
+           for (Zombie zb : z) {
+               if (zb != null) zb.draw(g2);
+           }
+           jugador.draw(g2);
 
-		    
-		  //  g2.dispose();
-		}
+           //   b) Inventario encima, si está abierto
+           if (ui.getInventorOpen()) {
+               ui.dibujarInventario(g2);
+           }
+
+           //   c) Si fuera pantallaSetting, vuelvo a llamar a menu (opcional)
+           if (gameState == pantallaSetting) {
+               ui.draw(g2);
+           }
+
+           //   d) HUD general 
+           ui.draw(g2);
+       }
+
 		
 		public void playMusic(int i) {
 			musica.setFile(i);

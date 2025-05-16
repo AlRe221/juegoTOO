@@ -54,5 +54,9 @@ public class Inventario {
         return capacidad;
     }
     
+    public void clear() {
+        objetos.clear(); 
+    }
+    
 
 }

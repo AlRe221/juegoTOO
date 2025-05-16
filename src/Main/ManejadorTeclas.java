@@ -236,8 +236,7 @@ public class ManejadorTeclas extends KeyAdapter {
     	case KeyEvent.VK_ENTER -> {
     		gP.playSE(13);
         	if(gP.getUi().getNumCom() == 0) {
-        	gP.getJugador().setVida(100);
-            gP.setGameState(gP.getPantallaInicio());
+            gP.setupGame();                          // reposiciona jugador, zombies, objetos, inventario…            gP.setGameState(gP.getPantallaInicio());
             gP.getUi().setNUmCom(0); // RESETEA LA SELECCIÓN DEL MENÚ
             gP.playMusic(4);
     	   }
