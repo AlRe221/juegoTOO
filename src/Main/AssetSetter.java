@@ -89,8 +89,8 @@ public class AssetSetter {
 		// posición aleatoria
 		int x,y,tilen;
 		do { //esto es para que los objetos no salgan en espacios donde el perosnaje no puede pasar por colisión
-		x = rand.nextInt(109); // suponiendo 50 tiles en X
-		y = rand.nextInt(109); // suponiendo 30 tiles en Y
+		x = rand.nextInt(109); // suponiendo 109 tiles en X
+		y = rand.nextInt(109); // suponiendo 109tiles en Y
 		
 		tilen = gP.mTi.getCodigoMapaTiles(y,x);
 		
@@ -102,12 +102,27 @@ public class AssetSetter {
 		return z;
 	}
 	
+	private double tiempoAparecer = 0;
+	private boolean aparecer = false;
+	private int contadorZ = 0;
+	
+	//los zombies se generan despues de 20 seg, para que no esten al inicio en el salon de clases con el jugador. 
 	public void setObjectZ(){
-		for (int i = 0; i < gP.z.length; i++) {
-			gP.z[i] = zombieUnico();
+		if(!aparecer) {
+		tiempoAparecer += 1.0/60.0;
+		if(tiempoAparecer >= 20.0) {
+			aparecer = true;
 		}
-		
-	}
+		}
+		//se cambio el for para evitar el lag de que todos los zombies salieran de una tras los 20 seg 
+		if (aparecer && contadorZ < gP.z.length) {
+	        gP.z[contadorZ] = zombieUnico();
+	        contadorZ++;
+	    }
+	}	
+	
+	//metodo para detectar que han pasado 20 seg
+	
 
 
 }

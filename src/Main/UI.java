@@ -480,17 +480,16 @@ public class UI {
    private double tiempoA = 0; 
    private boolean mostrarA = true;
    
-   //se activa el sonido de la alarma y el cuadro de consigue comida parpadea.
+   //El cuadro de consigue comida parpadea.
    public void dibujarAlarma() {
 	   if(gP.getGameState() == gP.getPlayState() && gP.getJugador().getVida() <= 20) {
-		   //am.activarAlerta();
 		   cuadroDeAdvertencia();
 	   }
 	}
    
    public void cuadroDeAdvertencia() {
 	   tiempoA+=1.0/60.0; 
-	   if(tiempoA >= 0.2) {
+	   if(tiempoA >= 0.2) { //para que parpade 
 		   mostrarA = !mostrarA;
 		   tiempoA = 0;
 	   }
