@@ -237,6 +237,13 @@ public class Jugador extends Entidad
 		    	
 	}
 	
+	public void cambiarPantallaCombate() {
+		//checar la colisión de el jugador con el jefe final 
+		//si devuelve true, entonces, cambiamos a la pantalla de combate
+		//si no, pues no, lol
+	}
+	
+	
 	public void correrItem() {	
 		if(modoRapido == false) {
 			modoRapido = true; 

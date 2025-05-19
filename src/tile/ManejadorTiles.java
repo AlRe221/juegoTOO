@@ -193,73 +193,7 @@ public class ManejadorTiles {
 	}
 	
 	
-	/*//este no pone las lineas, pero se come el mapa.
-	public void draw(Graphics2D g2) {
-		int tileSize = gP.getTamanioTile();
-		int pantallaAncho = gP.getAnchoPantalla();
-		int pantallaAlto = gP.getAltoPantalla();
-		int jugadorX = gP.getJugador().getX();
-		int jugadorY = gP.getJugador().getY();
-		int pantallaJugadorX = gP.getJugador().getPantallaX();
-		int pantallaJugadorY = gP.getJugador().getPantallaY();
 
-		int mundoX=0;
-		int mundoY=0;
-		int pantallaX=0;
-		int pantallaY=0;
-		int rOffs=0; 
-		int bOffs=0;
-		int numTile=0;
-		
-		for (int ren = 0; ren < gP.maxRenMundo; ren++) {
-			for (int col = 0; col < gP.maxColMundo; col++) {
-				
-				 mundoX = col * tileSize;
-				 mundoY = ren * tileSize;
-
-				// Solo dibujar si está dentro de la zona visible
-				if (
-					mundoX + tileSize > jugadorX - pantallaJugadorX &&
-					mundoX - tileSize < jugadorX + pantallaJugadorX &&
-					mundoY + tileSize > jugadorY - pantallaJugadorY &&
-					mundoY - tileSize < jugadorY + pantallaJugadorY
-				) {
-					// Calculamos la posición en pantalla
-					pantallaX = mundoX - jugadorX + pantallaJugadorX;
-					pantallaY = mundoY - jugadorY + pantallaJugadorY;
-
-					// Correcciones de bordes
-					if (pantallaJugadorX > jugadorX) pantallaX = mundoX;
-					if (pantallaJugadorY > jugadorY) pantallaY = mundoY;
-
-					rOffs = pantallaAncho - pantallaJugadorX;
-					if (rOffs > gP.anchoMundo - jugadorX) {
-						pantallaX = pantallaAncho - (gP.anchoMundo - mundoX);
-					}
-
-					bOffs = pantallaAlto - pantallaJugadorY;
-					if (bOffs > gP.altoMundo - jugadorY) {
-						pantallaY = pantallaAlto - (gP.altoMundo - mundoY);
-					}
-
-					numTile = codigosMapaTiles[ren][col];
-					g2.drawImage(arregloTiles[numTile].getImagen(), pantallaX, pantallaY, tileSize, tileSize, null);
-				}else {
-					if(gP.getJugador().getPantallaX() > gP.getJugador().getX() ||
-						gP.getJugador().getPantallaY() > gP.getJugador().getY() ||
-						rOffs > gP.anchoMundo - gP.getJugador().getX() ||
-						bOffs > gP.altoMundo - gP.getJugador().getY()) {
-					
-					g2.drawImage(this.arregloTiles[numTile].getImagen(), pantallaX, pantallaY, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
-					}
-				} 
-			}
-		}
-	}*/
-
-	
-	
-	
 	
 	public int getCodigoMapaTiles(int ren, int col) {
 		return this.codigosMapaTiles[ren][col];
