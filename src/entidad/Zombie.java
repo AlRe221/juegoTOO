@@ -83,7 +83,7 @@ public abstract class Zombie extends Entidad{
 			
 			reducirVidaPocoApoco(res);
 			colisiones();
-		    contarSprites();
+		    contadorSprites();
 		}
 		
 		
@@ -139,19 +139,7 @@ public abstract class Zombie extends Entidad{
 			    	}
 			    }
 		}
-		
-		public void contarSprites() {
-			  this.contadorSprites++;
-			    
-			    if (this.contadorSprites > this.cambiaSprite) {
-			        if (this.numeroSprite == 1)
-			            this.numeroSprite = 2;
-			        else
-			            this.numeroSprite = 1;
-			        this.contadorSprites = 0;
-			    }
-		}
-		
+				
 		
 		
 		public void draw(Graphics2D g2) {

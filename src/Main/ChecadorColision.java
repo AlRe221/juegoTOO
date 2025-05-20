@@ -163,6 +163,7 @@ public class ChecadorColision {
 	}
 	
 	//genenar colisión entre los jugador-zombie
+	//generar colisión entre jugador - jefe 
 	public int checarEntidad(Entidad e, Entidad[] objetivo) {
 	int index = 999; 
 		
@@ -221,12 +222,13 @@ public class ChecadorColision {
 	//obtener la posicion del area solida del objeto (con la que chocará pue)
 		gP.getJugador().setSolidAreaX(gP.getJugador().getMundoX() + gP.getJugador().getAreaSolidaX());
 		gP.getJugador().setSolidAreaY(gP.getJugador().getMundoY() + gP.getJugador().getAreaSolidaY());
-	
-	
+		
+		
 		switch(e.getDireccion()) {
 		case "arriba":
 			e.setSolidAreaY(e.getAreaSolidaY() - e.getVelocidad());
 		break;
+		
 		case "abajo": 
 			e.setSolidAreaY(e.getAreaSolidaY() + e.getVelocidad());
 			
@@ -239,6 +241,7 @@ public class ChecadorColision {
 			e.setSolidAreaX(e.getAreaSolidaX() - e.getVelocidad());	
 		break;
 		}
+        
 		
 		if(e.getSolidArea().intersects(gP.getJugador().getSolidArea())) { //aquí checamos si ambos rectangulos se estan tocando
 			e.setColisionOn(true);
@@ -250,7 +253,7 @@ public class ChecadorColision {
 	
 		gP.getJugador().setSolidAreaX(gP.getJugador().getSolidAreaDefaultX());
 		gP.getJugador().setSolidAreaY(gP.getJugador().getSolidAreaDefaultY());
-
+		
 		return areaContacto;
 	}
 	

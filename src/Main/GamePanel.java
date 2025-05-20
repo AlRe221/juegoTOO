@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import Inventario.Objeto;
+import entidad.JefePorNivel;
 import entidad.Jugador;
 import entidad.Zombie;
 import tile.ManejadorTiles;
@@ -36,6 +37,8 @@ public class GamePanel extends JPanel implements Runnable
 		Zombie z[] = new Zombie[15];
 		AssetSetter asSet = new AssetSetter(this);
 		UI ui = new UI(this);
+		JefePorNivel jF[] = new JefePorNivel[3];
+		
 		
 		//GAME STATE
 		protected int gameState; 
@@ -87,7 +90,9 @@ public class GamePanel extends JPanel implements Runnable
 
 	        // Repoblar objetos y zombis
 	        asSet.setObject();       
-	        asSet.setObjectZ();      // inicializa el array z[] de zombis
+	       // asSet.setObjectZ();      // inicializa el array z[] de zombis
+	        
+	       
 
 	        // Reset de alarma y timer
 	        alarme = false;
@@ -139,6 +144,14 @@ public class GamePanel extends JPanel implements Runnable
 						z[i].update();
 					}
 				}
+				asSet.setJF();
+				for (JefePorNivel jefe : jF) {
+			        if (jefe != null) {
+			             jefe.update(); // << Aquí ocurre la colisión y el combate
+			         }
+			     }
+				
+				
 			detenerActivarAlarma();
 			}
 			
@@ -199,7 +212,12 @@ public class GamePanel extends JPanel implements Runnable
            for (Zombie zb : z) {
                if (zb != null) zb.draw(g2);
            }
+           
+           for(JefePorNivel j: jF) {
+        	   if(j != null) j.draw(g2); 
+           }
            jugador.draw(g2);
+           
 
            //   b) Inventario encima, si está abierto
            if (ui.getInventorOpen()) {
@@ -295,6 +313,9 @@ public class GamePanel extends JPanel implements Runnable
 			return this.z;
 		}
 		
+		public JefePorNivel[] getJF() {
+			return this.jF;
+		}
 
 		public int getAnchoMundo() {
 			return anchoMundo;

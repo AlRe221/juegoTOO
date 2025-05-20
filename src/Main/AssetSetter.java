@@ -14,6 +14,10 @@ import Inventario.ItemVelocidad;
 import Inventario.Laptop;
 import Inventario.Mochila;
 import Inventario.Objeto;
+import entidad.JefeN1;
+import entidad.JefeN2;
+import entidad.JefeN3;
+import entidad.JefePorNivel;
 import entidad.Zombie;
 import entidad.Zombie1;
 import entidad.Zombie2;
@@ -121,8 +125,46 @@ public class AssetSetter {
 	    }
 	}	
 	
-	//metodo para detectar que han pasado 20 seg
+	int idNivel = 1;
+	public JefePorNivel jefe() {
+		JefePorNivel j = null;
+		
+		if(!aparecer) {
+			tiempoAparecer += 1.0/60.0;
+			if(tiempoAparecer >= 5.0 && idNivel <=3) {
+				aparecer = true;
+				tiempoAparecer = 0;
+			}
+		}
+		
+	 if(aparecer) {
+		if(idNivel ==1) {
+			j = new JefeN1(gP);
+			j.setMundoX(6 * gP.getTamanioTile());
+			j.setMundoY(69* gP.getTamanioTile());
+		}else if(idNivel == 2) {
+			j = new JefeN2(gP);
+			j.setMundoX(33* gP.getTamanioTile());
+			j.setMundoY(73 * gP.getTamanioTile());
+		}else if(idNivel == 3) {
+			j = new JefeN3(gP);
+			j.setMundoX(15 * gP.getTamanioTile());
+			j.setMundoY(41 * gP.getTamanioTile());
+		}
+		
+		idNivel ++;
+		aparecer = false; 
+	 }	
+		return j;
+	}
 	
+	
+	public void setJF() {
+		JefePorNivel NJ = jefe(); 
+		if(NJ != null ) {
+			gP.jF[idNivel - 2] = NJ;
+		}
+	}
 
 
 }

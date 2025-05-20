@@ -58,6 +58,18 @@ public abstract class Entidad
 		return image;
 	}
 	
+	public void contadorSprites() {
+		  this.contadorSprites++;
+		    
+		    if (this.contadorSprites > this.cambiaSprite) {
+		        if (this.numeroSprite == 1)
+		            this.numeroSprite = 2;
+		        else
+		            this.numeroSprite = 1;
+		        this.contadorSprites = 0;
+		    }
+	}
+	
 	public boolean getColisionOn() {
 		return colisionOn;
 	}

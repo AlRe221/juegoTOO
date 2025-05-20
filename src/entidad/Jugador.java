@@ -84,6 +84,8 @@ public class Jugador extends Entidad
 		}
 	}
 	
+	int index=0;
+
 	public void update() {
 	    boolean moviendo = false;
 	    this.colisionOn = false;
@@ -153,7 +155,16 @@ public class Jugador extends Entidad
 	   
 	    //chechar colision contra zombie
 	    int zomind = gP.getchecadorColision().checarEntidad(this,gP.getZombie());
-	   
+	    
+	    int jefind = gP.getchecadorColision().checarEntidad(this, gP.getJF());
+	    
+	 
+	 
+	    if(jefind != 999) {
+	    	 gP.getJF()[jefind].setActivaCombate();
+	    }
+	 
+
 	    //si no hubo colisión
 	    if(colisionOn == false) {
 	    	switch(direccion) {
@@ -193,19 +204,8 @@ public class Jugador extends Entidad
 	    	}
 	    }
 	    
-	    this.contadorSprites++;
-	    
-	    if (this.contadorSprites > this.cambiaSprite) {
-	        if (this.numeroSprite == 1)
-	            this.numeroSprite = 2;
-	        else
-	            this.numeroSprite = 1;
-	        this.contadorSprites = 0;
-	    }
-	    
 	   
-	    
-	    
+	    contadorSprites();
 	}
 	    
 	public void itemCorrer() {
@@ -418,8 +418,4 @@ public class Jugador extends Entidad
     }
 	
 
-	public void usarObjeto(Objeto obj) {
-		// TODO Auto-generated method stub
-		
-	}
 }
