@@ -1,6 +1,6 @@
 package Inventario;
 
-public class Arma extends Objeto {
+public class Arma extends Objeto implements Equipable{
     private int  cantidadDanio;
 
     public Arma(int cantidadDanio, double tiempoVida, boolean haceSonido, double duracion, String descripcion) {
@@ -8,7 +8,10 @@ public class Arma extends Objeto {
     this.cantidadDanio = cantidadDanio;
 }
     
-
+    @Override
+    public String getSpriteKey() {
+        return getClass().getSimpleName();   // «Extintor», «Celular», …
+    }
     public int  getCantidadDanio() { 
     	return cantidadDanio; 
     }

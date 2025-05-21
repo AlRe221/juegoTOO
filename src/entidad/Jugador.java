@@ -25,6 +25,7 @@ public class Jugador extends Entidad
 	private String tS;
 	
 	private Inventario inventario;
+	private String spriteKeyActual = "normal"; 
 	
 	public Jugador(GamePanel gP, ManejadorTeclas mT, Ambientacion am, String tipoSprite)
 	{
@@ -57,8 +58,63 @@ public class Jugador extends Entidad
 		
 		
 	}
-	public void getSpritesJugador(String o)
+	
+	public void equipar(String key) {
+	    if (key == null) key = "normal";
+	    if (key.equals(spriteKeyActual)) return;     // ya lo tengo puesto
+	    spriteKeyActual = key;
+	    getSpritesJugador(spriteKeyActual);          // recarga imágenes
+	}
+	
+	public void getSpritesJugador(String key)
 	{
+		String carpeta, prefijo;
+
+	    if ("normal".equals(key)) {
+	        carpeta = "/spritesjugador/";
+	        prefijo = "paco";
+	    } else {
+	        char pref = Character.toUpperCase(key.charAt(0));    // E, C, L, M…
+	        carpeta = "/paquitoObjetos." + key + "/";
+	        prefijo = "paco" + pref;
+	    }
+	    arriba1    = setup1(carpeta + prefijo + "Arriba1");
+	    arriba2    = setup1(carpeta + prefijo + "Arriba2");
+	    abajo1     = setup1(carpeta + prefijo + "Abajo1");
+	    abajo2     = setup1(carpeta + prefijo + "Abajo2");
+	    izquierda1 = setup1(carpeta + prefijo + "Izquierda1");
+	    izquierda2 = setup1(carpeta + prefijo + "EstaticoI2");
+	    derecha1   = setup1(carpeta + prefijo + "Derecha1");
+	    derecha2   = setup1(carpeta + prefijo + "EstaticoD1");
+
+	    estatico1  = setup1(carpeta + prefijo + "Estatico1");
+	    estatico2  = setup1(carpeta + prefijo + "Estatico2");
+	    estaticoA1 = setup1(carpeta + prefijo + "EstaticoA1");
+	    estaticoA2 = setup1(carpeta + prefijo + "EstaticoA2");
+	    estaticoI1 = setup1(carpeta + prefijo + "EstaticoI1");
+	    estaticoI2 = setup1(carpeta + prefijo + "EstaticoI2");
+	    estaticoD1 = setup1(carpeta + prefijo + "EstaticoD1");
+	    estaticoD2 = setup1(carpeta + prefijo + "EstaticoD2");
+	    /*
+	    arriba1    = setup1(carpeta + prefijo + "Arriba1");
+	    arriba2    = setup1(carpeta + prefijo + "Arriba2");
+	    abajo1     = setup1(carpeta + prefijo + "Abajo1");
+	    abajo2     = setup1(carpeta + prefijo + "Abajo2");
+	    izquierda1 = setup1(carpeta + prefijo + "Izquierda1");
+	    izquierda2 = setup1(carpeta + prefijo + "EstaticoI2");
+	    derecha1   = setup1(carpeta + prefijo + "Derecha1");
+	    derecha2   = setup1(carpeta + prefijo + "EstaticoD1");
+
+	    estatico1  = setup1(carpeta + prefijo + "Estatico1");
+	    estatico2  = setup1(carpeta + prefijo + "Estatico2");
+	    estaticoA1 = setup1(carpeta + prefijo + "EstaticoA1");
+	    estaticoA2 = setup1(carpeta + prefijo + "EstaticoA2");
+	    estaticoI1 = setup1(carpeta + prefijo + "EstaticoI1");
+	    estaticoI2 = setup1(carpeta + prefijo + "EstaticoI2");
+	    estaticoD1 = setup1(carpeta + prefijo + "EstaticoD1");
+	    estaticoD2 = setup1(carpeta + prefijo + "EstaticoD2");
+	    */
+	    /*
 		if(o.equals("normal")) {
 			
 			arriba1 = setup1("/spritesjugador/pacoArriba1");
@@ -81,7 +137,7 @@ public class Jugador extends Entidad
 			derecha1 = setup1("/spritesjugador/pacoCamD1");
 			derecha2 = setup1("/spritesjugador/pacoEstaticoD1");
 	
-		}
+		}*/
 	}
 	
 	int index=0;
