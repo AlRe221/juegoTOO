@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 
 import Inventario.Alimento;
+import Inventario.Equipable;
 import Inventario.Inventario;
 import Inventario.Objeto;
 
@@ -76,6 +77,13 @@ public class ManejadorTeclas extends KeyAdapter {
 
         Objeto obj = inv.getObjetoEn(ren, col);
         if (obj != null) {
+        	if (obj instanceof Equipable equipable) {
+        	    gP.getJugador().equipar(equipable.getSpriteKey());
+                inv.removeObjetoEn(ren, col);         // quitarlo (opcional)
+                gP.playSE(12);                        // sonido “equipar”
+                ui.setInventorOpen(false);
+                return;
+            }
 
             // Si es alimento, curamos un 10% y hacemos desaparecer el alimento
             if (obj instanceof Alimento) {
@@ -85,14 +93,11 @@ public class ManejadorTeclas extends KeyAdapter {
                 double nuevaVida  = Math.min(vidaActual + recupera, vidaMax);
                 gP.getJugador().setVida(nuevaVida);
                 gP.playSE( /* sonido de comer, p.ej. */ 12 );
-            }
-
-            // Eliminamos el objeto del inventario siempre
-            inv.removeObjetoEn(ren, col);
+                inv.removeObjetoEn(ren, col);
+            }    
+            
         }
         
-           
-       // gP.getJugador().usarObjeto(obj);
     }
 
     
@@ -276,6 +281,7 @@ public class ManejadorTeclas extends KeyAdapter {
         case KeyEvent.VK_LEFT  -> ui.espacioCol--;
         case KeyEvent.VK_RIGHT -> ui.espacioCol++;
         case KeyEvent.VK_ENTER -> seleccionarObjeto();
+        case KeyEvent.VK_R -> gP.getJugador().equipar(null);   // manos vacías
     }
     // Asegurar que los índices están dentro de los límites
     ui.espacioRen = Math.max(0, Math.min(ui.espacioRen, UI.MAX_REN - 1));

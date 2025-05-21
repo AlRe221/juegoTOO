@@ -29,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable
 		Ambientacion musica = new Ambientacion(this);
 		Ambientacion se = new Ambientacion(this);
 		ManejadorTeclas mT = new ManejadorTeclas(this);
-		Jugador jugador = new Jugador(this, mT,se,"normal");
+		Jugador jugador = new Jugador(this, mT,se);
 		ManejadorTiles mTi =new ManejadorTiles(this);
 		ChecadorColision cC = new ChecadorColision(this);
 		//Inventario inv = new Inventario();

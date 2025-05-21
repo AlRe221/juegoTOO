@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import Main.GamePanel;
 import Main.ImagenesEscaladas;
+import tile.MemoriaSprite;
 
 public abstract class Entidad 
 {
@@ -43,19 +44,12 @@ public abstract class Entidad
 	}
 	
 	
-	public BufferedImage setup1(String imageName) {
-		ImagenesEscaladas iE = new ImagenesEscaladas(); 
-		BufferedImage image = null; 
-		
-		try {
-			image = ImageIO.read(getClass().getResourceAsStream(imageName + ".png"));
-            image = iE.scaleImage(image, gP.getTamanioTile(), gP.getTamanioTile());		
-		}catch(IOException e)
-		{
-			System.out.println(e);
-		}
-		
-		return image;
+	protected BufferedImage setup1(String rutaBase) {
+	    return MemoriaSprite.load(
+	        rutaBase,
+	        gP.getTamanioTile(),
+	        gP.getTamanioTile()
+	    );
 	}
 	
 	public void contadorSprites() {
