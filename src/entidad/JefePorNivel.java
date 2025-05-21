@@ -107,11 +107,11 @@ public abstract class JefePorNivel extends Entidad{
 		this.id_Nivel = v;
 	}
 	
-	public void setActivaCombate() {
-	   this.activa_combate = true;
+	public void setActivaDesactivaCombate(boolean t) {
+	   this.activa_combate = t;
 	}
 	
-	public boolean getActivaCombate() {
+	public boolean getActivaDesactivaCombate() {
 		return this.activa_combate;
 	}
 	

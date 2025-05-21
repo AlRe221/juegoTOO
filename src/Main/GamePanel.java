@@ -33,12 +33,15 @@ public class GamePanel extends JPanel implements Runnable
 		ManejadorTiles mTi =new ManejadorTiles(this);
 		ChecadorColision cC = new ChecadorColision(this);
 		//Inventario inv = new Inventario();
-		Objeto o[] = new Objeto[8];
+		Objeto o[] = new Objeto[10];
 		Zombie z[] = new Zombie[15];
 		AssetSetter asSet = new AssetSetter(this);
 		UI ui = new UI(this);
 		JefePorNivel jF[] = new JefePorNivel[3];
 		
+		
+		//PELEA 
+		FightGame fg = null;
 		
 		//GAME STATE
 		protected int gameState; 
@@ -51,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable
 		protected final int win=6; 
 		protected final int gameOver1 = 7;
 		protected final int gameOver2 = 8;
+		protected final int fightState = 9;
 		
 		
 		
@@ -147,12 +151,15 @@ public class GamePanel extends JPanel implements Runnable
 				asSet.setJF();
 				for (JefePorNivel jefe : jF) {
 			        if (jefe != null) {
+			        	fg = new FightGame(this, jugador,jefe);
 			             jefe.update(); // << Aquí ocurre la colisión y el combate
 			         }
 			     }
 				
 				detenerActivarAlarma();
 				detenerActivarAlarmaJ();
+			}else if(gameState == playState) {
+				fg.update();
 			}
 			
 			if(gameState == pauseState) {
@@ -197,6 +204,9 @@ public class GamePanel extends JPanel implements Runnable
     		   notiJefe = false;
     	   }
        }
+       
+       //Controlar pantalla combate
+       
 
        @Override
        public void paintComponent(Graphics g) {
@@ -240,7 +250,11 @@ public class GamePanel extends JPanel implements Runnable
            if (gameState == pantallaSetting) {
                ui.draw(g2);
            }
-
+           
+           //PELEA
+            if(gameState == fightState) {
+            	fg.draw(g2);
+            }
            //   d) HUD general 
            ui.draw(g2);
        }
@@ -385,6 +399,9 @@ public class GamePanel extends JPanel implements Runnable
 			return this.gameOver2;
 		}
 		
+		public int getFightState() {
+			return this.fightState;
+		}
 		
 		public UI getUi() {
 			return ui;

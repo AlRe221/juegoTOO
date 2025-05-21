@@ -171,13 +171,8 @@ public class Jugador extends Entidad
 	    //chechar colision contra zombie
 	    int zomind = gP.getchecadorColision().checarEntidad(this,gP.getZombie());
 	    
-	    int jefind = gP.getchecadorColision().checarEntidad(this, gP.getJF());
 	    
-	 
-	 
-	    if(jefind != 999) {
-	    	 gP.getJF()[jefind].setActivaCombate();
-	    }
+	    cambiarPantallaCombate();
 	 
 
 	    //si no hubo colisión
@@ -223,16 +218,8 @@ public class Jugador extends Entidad
 	    contadorSprites();
 	}
 	    
-	public void itemCorrer() {
-		if(modoRapido == false) {
-			modoRapido = true; 
-			contadorRapido = 0;
-		    this.velocidad = velocidadBase +7;
-		}else {
-			this.velocidad +=2;
-		}	
-	}
-	    
+	
+	   
 
 	public void meterInventario(int index) {
 		int objIndex = gP.getchecadorColision().checkObjeto(this, true);
@@ -246,16 +233,39 @@ public class Jugador extends Entidad
 		    	if (inventario.addObjeto(encontrado)) {
 	                gP.getObjetoInv()[objIndex] = null;
 	                gP.playSE(6);
+	                
+	                aparecerItemenCiertoTiempo();
 		    	}
 		    }
 		}
 		    	
 	}
 	
+	//REGENERAR LOS ITEMS PARA QUE EL MAPA NO SE QUEDE PELÓN
+	//120000 son 2 min 
+	public void aparecerItemenCiertoTiempo() {
+		javax.swing.Timer timer = new javax.swing.Timer(120000, e -> {
+		    gP.getObjetoInv()[index] = gP.getAssS().objetoUnico();
+		});
+		timer.setRepeats(false);
+		timer.start();
+	}
+	
 	public void cambiarPantallaCombate() {
 		//checar la colisión de el jugador con el jefe final 
 		//si devuelve true, entonces, cambiamos a la pantalla de combate
 		//si no, pues no, lol
+		int jefind = gP.getchecadorColision().checarEntidad(this, gP.getJF());
+	    if(jefind != 999) {
+	    	 gP.getJF()[jefind].setActivaDesactivaCombate(true);
+	    	 
+	    	 boolean combate = gP.getJF()[jefind].getActivaDesactivaCombate();
+	    	 if(combate) {
+	    		 gP.getAssS().setidJFN(jefind);
+	    		 gP.setGameState(gP.getFightState());
+	    	 }
+	    }
+	      
 	}
 	
 	

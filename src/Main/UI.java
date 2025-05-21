@@ -73,15 +73,17 @@ public class UI {
 		   mostrarPantallaPausa();   
 	   }
 	   
-	  
+	  //pantalla de decisión
 	   if(gP.getGameState() == gP.getPantallaDecision()) {
 		   mostrarPantallaDecision(g2);
 	   }
 	   
+	   //pantalla de win
 	   if(gP.getGameState() == gP.getWin()) {
 		   mostrarWin(g2);
 	   }
 	   
+	   //pantalla game over
 	   if(gP.getGameState() == gP.getgameOver1()) {
 		   mostrarGameOver(g2);
 	   }
@@ -89,7 +91,8 @@ public class UI {
 	   if(gP.getGameState() == gP.getgameOver2()) {
 		   mostrarGameOver(g2);
 	   }
-			 
+	   
+	    
    }
    
    public void mostrarPantallaInicio(Graphics2D g2){
@@ -310,6 +313,8 @@ public class UI {
 	   } 
 	}
    
+      
+  
    public void cuadroCentro() {
 	   int x = 120, y = 100, w =1000, h = 500;
 	    g2.setColor(new Color(0, 0, 0, 180));

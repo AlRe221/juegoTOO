@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 
 import Inventario.Alimento;
+import Inventario.Bebida;
 import Inventario.Equipable;
 import Inventario.Inventario;
 import Inventario.Objeto;
@@ -80,24 +81,34 @@ public class ManejadorTeclas extends KeyAdapter {
         	if (obj instanceof Equipable equipable) {
         	    gP.getJugador().equipar(equipable.getSpriteKey());
                 inv.removeObjetoEn(ren, col);         // quitarlo (opcional)
-                gP.playSE(12);                        // sonido “equipar”
+                gP.playSE(14);                        // sonido “equipar”
                 ui.setInventorOpen(false);
                 return;
             }
 
             // Si es alimento, curamos un 10% y hacemos desaparecer el alimento
             if (obj instanceof Alimento) {
-                double vidaActual = gP.getJugador().getVida();
-                double vidaMax    = gP.getJugador().getVidaMax();
-                double recupera   = vidaMax * 0.10;   // 10%
-                double nuevaVida  = Math.min(vidaActual + recupera, vidaMax);
-                gP.getJugador().setVida(nuevaVida);
-                gP.playSE( /* sonido de comer, p.ej. */ 12 );
+            	aumentaVida();
+                gP.playSE(9);
                 inv.removeObjetoEn(ren, col);
-            }    
+            }else if( obj instanceof Bebida) {
+            	aumentaVida();
+                gP.playSE(12);
+                
+                inv.removeObjetoEn(ren, col);
+            }
             
         }
         
+    }
+    
+    public void aumentaVida() {
+    	double vidaActual = gP.getJugador().getVida();
+        double vidaMax    = gP.getJugador().getVidaMax();
+        double recupera   = vidaMax * 0.10;   // 10%
+        double nuevaVida  = Math.min(vidaActual + recupera, vidaMax);
+        gP.getJugador().setVida(nuevaVida);
+       
     }
 
     

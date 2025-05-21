@@ -115,6 +115,7 @@ public class ManejadorTiles {
 		setup(47,"cemento", true);
 	}
 	
+	//AQUÍ SE OCUPAN LAS IMAGENES ESCALADAS
 	public void setup(int index, String nombreImagen, boolean colision) {
 		ImagenesEscaladas iE = new ImagenesEscaladas();
 		try {

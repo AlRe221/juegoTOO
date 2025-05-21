@@ -147,22 +147,22 @@ public class AssetSetter {
 	 if(aparecer && idNivel <=3) {
 		if(idNivel ==1) {
 			j = new JefeN1(gP);
-			j.setMundoX(6 * gP.getTamanioTile());
-			j.setMundoY(69* gP.getTamanioTile());
+			j.setMundoX(4 * gP.getTamanioTile());
+			j.setMundoY(53* gP.getTamanioTile());
 			
-			gP.getJF()[0] = j;
+			//gP.getJF()[0] = j;
 		}else if(idNivel == 2) {
 			j = new JefeN2(gP);
 			j.setMundoX(33* gP.getTamanioTile());
 			j.setMundoY(73 * gP.getTamanioTile());
 			
-			gP.getJF()[1] = j;
+			//gP.getJF()[1] = j;
 		}else if(idNivel == 3) {
 			j = new JefeN3(gP);
 			j.setMundoX(15 * gP.getTamanioTile());
 			j.setMundoY(41 * gP.getTamanioTile());
 			
-			gP.getJF()[2] = j;
+			//gP.getJF()[2] = j;
 		}
 		
 		mostrarN = true; 
@@ -201,6 +201,10 @@ public class AssetSetter {
 	
 	public int getidJFN() {
 		return this.idJN;
+	}
+	
+	public void setidJFN(int i) {
+		this.idJN = i;
 	}
 	
 	public void setTiempoN(double t) {
