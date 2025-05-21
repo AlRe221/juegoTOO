@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 
 import Main.GamePanel;
 
-public class JefePorNivel extends Entidad{
+public abstract class JefePorNivel extends Entidad{
 	int id_Nivel;  
 	boolean activa_combate;
 
@@ -114,5 +114,7 @@ public class JefePorNivel extends Entidad{
 	public boolean getActivaCombate() {
 		return this.activa_combate;
 	}
+	
+	public abstract String getLocation();
 
 }

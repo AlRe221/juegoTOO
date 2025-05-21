@@ -64,6 +64,7 @@ public class UI {
 	   //pantalla de juego
 	   if(gP.getGameState() == gP.getPlayState()) {
 		   dibujarAlarma();
+		   dibujarCuadroJ();
 		   mostrarBarraVida(g2);
 	   }
 	   
@@ -504,6 +505,29 @@ public class UI {
 	   }
   }
    
+   
+   public void dibujarCuadroJ() {
+	   if(gP.getGameState() == gP.getPlayState()) {
+		   cuadroDeJefe();
+	   }
+   }
+   
+   public void cuadroDeJefe() {
+	   if(gP.getAssS().getNotificacion()) {
+		   int i = gP.getAssS().getidJFN();
+		   dibujarCuadroConTexto(g2, "DIRIGETE A" + gP.getJF()[i].getLocation(),20,50,120);
+		   
+		   //DESAPARECER CUADRO EN X TIEMPO
+		   double nt = gP.getAssS().getTiempoN() + (1.0/60.0);
+		   gP.getAssS().setTiempoN(nt);
+		   
+		   if(gP.getAssS().getTiempoN() >= 2.0) {
+			   gP.getAssS().setNotificacion(false);
+			   gP.getAssS().setTiempoN(0);
+		   }
+		   
+	   }
+   }
    
    
 	public void setInventorOpen(boolean valor) {

@@ -28,9 +28,11 @@ import java.util.Random;
 public class AssetSetter {
 	private GamePanel gP;
 	private Graphics2D g2;
+	private int idNivel;
 	
 	public AssetSetter(GamePanel gP) {
 		this.gP = gP;
+		this.idNivel =1; 
 	}
 	
 	public Objeto objetoUnico() {
@@ -125,35 +127,50 @@ public class AssetSetter {
 	    }
 	}	
 	
-	int idNivel = 1;
+	//NOTIFICACION
+	private boolean mostrarN = false; 
+	private double tiempoN = 0; 
+	private int idJN= -1;
+	
+	
 	public JefePorNivel jefe() {
 		JefePorNivel j = null;
 		
 		if(!aparecer) {
 			tiempoAparecer += 1.0/60.0;
-			if(tiempoAparecer >= 5.0 && idNivel <=3) {
+			if(tiempoAparecer >= 10.0 && idNivel <=3) {
 				aparecer = true;
 				tiempoAparecer = 0;
 			}
 		}
 		
-	 if(aparecer) {
+	 if(aparecer && idNivel <=3) {
 		if(idNivel ==1) {
 			j = new JefeN1(gP);
 			j.setMundoX(6 * gP.getTamanioTile());
 			j.setMundoY(69* gP.getTamanioTile());
+			
+			gP.getJF()[0] = j;
 		}else if(idNivel == 2) {
 			j = new JefeN2(gP);
 			j.setMundoX(33* gP.getTamanioTile());
 			j.setMundoY(73 * gP.getTamanioTile());
+			
+			gP.getJF()[1] = j;
 		}else if(idNivel == 3) {
 			j = new JefeN3(gP);
 			j.setMundoX(15 * gP.getTamanioTile());
 			j.setMundoY(41 * gP.getTamanioTile());
+			
+			gP.getJF()[2] = j;
 		}
+		
+		mostrarN = true; 
+		idJN = idNivel -1;
 		
 		idNivel ++;
 		aparecer = false; 
+		
 	 }	
 		return j;
 	}
@@ -162,9 +179,31 @@ public class AssetSetter {
 	public void setJF() {
 		JefePorNivel NJ = jefe(); 
 		if(NJ != null ) {
-			gP.jF[idNivel - 2] = NJ;
+			gP.jF[idJN] = NJ;
 		}
 	}
-
-
+ 
+	public int getIDNivel() {
+		return this.idNivel;
+	}
+	
+	public boolean getNotificacion() {
+		return this.mostrarN;
+	}
+	
+	public void setNotificacion(boolean n) {
+		 this.mostrarN = n;
+	}
+	
+	public double getTiempoN() {
+		return this.tiempoN;
+	}
+	
+	public int getidJFN() {
+		return this.idJN;
+	}
+	
+	public void setTiempoN(double t) {
+		this.tiempoN = t;
+	}
 }

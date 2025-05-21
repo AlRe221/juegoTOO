@@ -17,4 +17,8 @@ public class JefeN3 extends JefePorNivel{
 	}
 
 
+	@Override
+	public String getLocation() {
+		return ": EXPLANADA ENGRANAJE";
+	}
 }

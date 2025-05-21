@@ -16,4 +16,10 @@ public class JefeN1 extends JefePorNivel{
 		estatico2 = setup1("/JefesPorNivel/miguelito2");
 	}
 
+
+	@Override
+	public String getLocation() {
+		return ": EDIFICIO I";
+	}
+
 }

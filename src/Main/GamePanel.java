@@ -151,8 +151,8 @@ public class GamePanel extends JPanel implements Runnable
 			         }
 			     }
 				
-				
-			detenerActivarAlarma();
+				detenerActivarAlarma();
+				detenerActivarAlarmaJ();
 			}
 			
 			if(gameState == pauseState) {
@@ -184,6 +184,18 @@ public class GamePanel extends JPanel implements Runnable
 				gameState = pantallaDecision;
 				playMusic(16);
 			}
+       }
+       
+       //NOTIFICACION APARICIÓN JEFE 
+       boolean notiJefe = false;
+       
+       public void detenerActivarAlarmaJ() {
+    	   if(asSet.getNotificacion() && !notiJefe) {
+    		   playSE(19);
+    		   notiJefe = true;
+    	   }else if( !asSet.getNotificacion() && notiJefe) {
+    		   notiJefe = false;
+    	   }
        }
 
        @Override

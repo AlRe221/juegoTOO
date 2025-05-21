@@ -16,4 +16,8 @@ public class JefeN2 extends JefePorNivel{
 		estatico2 = setup1("/JefesPorNivel/eloy2");
 	}
 
+	@Override
+	public String getLocation() {
+		return ": DFM";
+	}
 }
