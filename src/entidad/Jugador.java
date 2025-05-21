@@ -261,6 +261,7 @@ public class Jugador extends Entidad
 	    	 
 	    	 boolean combate = gP.getJF()[jefind].getActivaDesactivaCombate();
 	    	 if(combate) {
+	    		 gP.playMusic(20); //se inicia la musica del combate
 	    		 gP.getAssS().setidJFN(jefind);
 	    		 gP.setGameState(gP.getFightState());
 	    	 }

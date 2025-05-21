@@ -29,12 +29,14 @@ public class FightGame {
 	}
 	
 	public void update() {
+	
 		
 	}
 	
 	
 	public void draw(Graphics2D g2) {
 		mostrarFondoCombates(g2);
+	
 	}
 	
 	   public void mostrarFondoCombates(Graphics2D g2) {

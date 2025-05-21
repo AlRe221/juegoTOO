@@ -158,13 +158,15 @@ public class GamePanel extends JPanel implements Runnable
 				
 				detenerActivarAlarma();
 				detenerActivarAlarmaJ();
-			}else if(gameState == playState) {
+			}else if(gameState == fightState) {
 				fg.update();
 			}
 			
 			if(gameState == pauseState) {
 	
 			}
+			
+			
 			// toggle inventario
 			if (mT.getTeclaInventario()) {
 		        ui.setInventorOpen(!ui.inventoryOpen);
