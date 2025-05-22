@@ -38,9 +38,8 @@ public class FightGame {
 	
 	public void draw(Graphics2D g2) {
 		mostrarFondoCombates(g2);
-		
-		
-	
+		gP.getUi().mostrarBarraVida(g2);
+		gP.getUi().mostrarBarraVidaJ(g2);
 	}
 	
 	public void jefeAparecer() {

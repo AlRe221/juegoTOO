@@ -361,6 +361,37 @@ public class UI {
     g2.drawString(pct + "%", x + width + 10, y + heigth - 2);
    }
    
+   
+   public void mostrarBarraVidaJ(Graphics2D g2) {
+	   g2.setFont(Tipografia.cargaFuente(15f));
+	   g2.setColor(Color.WHITE);
+	   g2.drawString("LIFE ",710,38);
+	   
+	   int x = 770, y = 20, width = 400, heigth = 20;
+	   
+	   double vidaActual = gP.getJF()[gP.getAssS().getidJFN()].getVida();
+	   double vidM = gP.getJF()[gP.getAssS().getidJFN()].getVM(); 
+	   if(vidaActual > vidM) {
+		   vidaActual = vidM;
+	   }
+	   
+	   double rawPct = (vidaActual / vidM) * 100.0;
+	   int pct = (int) (Math.round(rawPct / 5.0) * 5);
+	   int fillWi =(int)((double)vidaActual / vidM * width);
+	 
+	   
+	   g2.setColor(Color.GRAY); 
+	   g2.fillRect(x, y, width, heigth);
+	   
+	   g2.setColor(Color.RED);
+	   g2.fillRect(x, y, fillWi, heigth);
+	   
+	   g2.setColor(Color.BLACK);
+	   g2.drawRect(x, y, width, heigth);
+	   
+	   g2.setColor(Color.WHITE);
+    g2.drawString(pct + "%", x + width + 10, y + heigth - 2);
+   }
   
    
    public void dibujarInventario(Graphics2D g2) {
@@ -520,7 +551,7 @@ public class UI {
    public void cuadroDeJefe() {
 	   if(gP.getAssS().getNotificacion()) {
 		   int i = gP.getAssS().getidJFN();
-		   dibujarCuadroConTexto(g2, "DIRIGETE A" + gP.getJF()[i].getLocation(),20,50,120);
+		   dibujarCuadroConTexto(g2, "DIRIGETE A" + gP.getJF()[i].getLocation(),20,50,150);
 		   
 		   //DESAPARECER CUADRO EN X TIEMPO
 		   double nt = gP.getAssS().getTiempoN() + (1.0/60.0);

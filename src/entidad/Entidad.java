@@ -140,7 +140,13 @@ public abstract class Entidad
 		this.velocidad = velocidad;
 	}
 
+	public double getVida() {
+		return this.vida;
+	}
 	
+	public double getVM() {
+		return this.vidaMaxima;
+	}
 	
 	
 
