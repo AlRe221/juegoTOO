@@ -218,7 +218,68 @@ public class Jugador extends Entidad
 	   
 	    contadorSprites();
 	}
-	    
+	  
+	public void updateCombate() {
+		   boolean moviendo = false;
+		    this.colisionOn = false;
+		    
+		    if (modoRapido) {
+		        contadorRapido++;
+		        if (contadorRapido >= maxCiclosRapido) {
+		            this.velocidad = velocidadBase;
+		            modoRapido = false;
+		            contadorRapido = 0;
+		        }
+		    }
+		    
+		    if (mT.getTeclaIzquierda()) {
+		        this.direccion = "izquierda";
+		        moviendo = true;
+		    } else if (mT.getTeclaDerecha()) {
+		        this.direccion = "derecha";
+		        moviendo = true;
+		    } 
+		    
+		    
+		    if(mT.isTeclaCorrer()) {
+		    	
+		    	if(moviendo) {
+		    		if(!modoRapido) {
+		    			this.velocidad = velocidadBase +5;
+		    		}
+		    	}	
+		    }
+		    if (!moviendo) {
+		      if (this.direccion.equals("izquierda")) {
+		            this.direccion = "estatico";
+		        }else if(this.direccion.equals("derecha")) {
+		        	this.direccion ="estatico";
+		        }
+		    }
+		    
+		    if(colisionOn == false) {
+		    	switch(direccion) {
+		    	case "izquierda" :{
+		    		if(this.mundoX - velocidad >= 0) {
+		    			this.setMundoX(this.mundoX - velocidad);
+		    		}else {
+		    			this.setMundoX(0);
+		    		}
+		    		break;
+		    		} 
+		    	case "derecha" :{
+		    		if(this.mundoX + velocidad + gP.getTamanioTile() <= gP.anchoMundo) {
+		    			this.setMundoX(this.mundoX + this.velocidad); 
+		    		}else {
+		    			this.setMundoX(gP.anchoMundo - gP.getTamanioTile());
+		    		}
+		    		break; 
+		    		}
+		    	}
+		    }
+		    
+		    contadorSprites();
+	}
 	
 	   
 
@@ -269,6 +330,7 @@ public class Jugador extends Entidad
 	    		 cambiarSpriteCombate();       
 	    		 direccion = "estatico";     
 	    		 numeroSprite = 1; 
+	    		 
 	    		 
 	    		 gP.setFightGame(new FightGame(gP, this, gP.getJF()[gP.getAssS().getidJFN()]));
 	    		 gP.setGameState(gP.getFightState());
@@ -357,18 +419,46 @@ public class Jugador extends Entidad
 		//g2.drawImage(sprite, x, y, gP.getTamanioTile(), gP.getTamanioTile(),null);
 	}
 	
-	public void drawEnCombate(Graphics2D g2, int x, int y, int ancho, int largo) {
+	public void drawEnCombate(Graphics2D g2) {
 		BufferedImage sprite = direcciones(); 
 		
-		if(sprite != null) {
-			g2.drawImage(sprite, x, y, ancho, largo, null);
+		switch(this.direccion)
+		{
+		
+		case "izquierda" : 
+			if(this.numeroSprite == 1)
+				sprite = this.izquierda1; 
+			if(this.numeroSprite == 2)
+				sprite = this.izquierda2; 
+			break;
+		case "derecha" : 
+			if(this.numeroSprite == 1)
+				sprite = this.derecha1; 
+			if(this.numeroSprite == 2)
+				sprite = this.derecha2; 
+			break;
+		case "estatico" : 
+			if(this.numeroSprite == 1)
+				sprite = this.estatico1; 
+			if(this.numeroSprite == 2)
+				sprite = this.estatico2; 
+			break;
 		}
+		
+		int x = this.pantallaX; 
+		int y = this.pantallaY; 
+		
+		bordesPantalla(x,y,sprite,g2);
+	
 	}
 	
 	public void cambiarSpriteCombate() {
 		this.estatico1 = setup1("/spritesjugador/paquitoCombate1");
 		this.estatico2 = setup1("/spritesjugador/paquitoCombate2");
-		
+		this.derecha1 = setup1("/spritesjugador/paquitoCombate1");
+		this.derecha2 = setup1("/spritesjugador/paquitoCombate2");
+		this.izquierda1 = setup1("/spritesjugador/paquitoCombate1");
+		this.izquierda2 =setup1("/spritesjugador/paquitoCombate2");
 	}
 	
 	public BufferedImage direcciones() {
@@ -380,8 +470,19 @@ public class Jugador extends Entidad
 				sprite = this.estatico1; 
 			if(this.numeroSprite == 2)
 				sprite = this.estatico2; 
+			break;	
+		case "izquierda" : 
+			if(this.numeroSprite == 1)
+				sprite = this.izquierda1; 
+			if(this.numeroSprite == 2)
+				sprite = this.izquierda2; 
+			break;
+		case "derecha" : 
+			if(this.numeroSprite == 1)
+				sprite = this.derecha1; 
+			if(this.numeroSprite == 2)
+				sprite = this.derecha2; 
 			break;		
-			
 		}
 		
 		return sprite;
@@ -414,7 +515,11 @@ public class Jugador extends Entidad
 				   mundoY + gP.getTamanioTile() > this.mundoY - pantallaY &&
 				   mundoY - gP.getTamanioTile() < this.mundoY + pantallaY) {
 					
-					g2.drawImage(sprite, x, y, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
+					if(gP.getGameState() == gP.getFightState()) {
+						g2.drawImage(sprite, x, 400,200,200, null);
+					}else {
+						g2.drawImage(sprite, x, y, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
+					}
 					
 				}else {
 					if(pantallaY > this.mundoX ||
@@ -422,7 +527,15 @@ public class Jugador extends Entidad
 							rOffs > gP.anchoMundo - this.mundoX||
 							bottomOffs > gP.altoMundo - this.mundoY) {
 						
-						g2.drawImage(sprite, x, y, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
+						if(gP.getGameState() == gP.getFightState()) {
+							g2.drawImage(sprite, x, 400,200,200, null);
+						
+						}else {
+							g2.drawImage(sprite, x, y, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
+						}
+						
+						
+						
 						}
 					}
 	}

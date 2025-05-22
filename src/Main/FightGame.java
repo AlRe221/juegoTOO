@@ -31,7 +31,7 @@ public class FightGame {
 	
 	public void update() {
 	  jefeAparecer();
-	  jugadorAparecer();
+	  jug.updateCombate();
 		
 	}
 	
@@ -46,11 +46,6 @@ public class FightGame {
 	public void jefeAparecer() {
 		jN.contadorSprites();
 	}
-	
-	public void jugadorAparecer() {
-		jug.contadorSprites();
-	}
-	
 	
 	
 	   public void mostrarFondoCombates(Graphics2D g2) {
@@ -90,7 +85,7 @@ public class FightGame {
 		   }
 		   
 		   if(jug != null) {
-			  jug.drawEnCombate(g2,30, 400, 200, 200);
+			  jug.drawEnCombate(g2);
 		   }
 	   }
 	

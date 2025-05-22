@@ -59,6 +59,8 @@ public class ManejadorTeclas extends KeyAdapter {
             else {
                 manejarJuego(e);
             }
+        }else if(estado == gP.getFightState()) {
+        	manejarCombate(e);
         }
     }
     
@@ -318,6 +320,13 @@ public class ManejadorTeclas extends KeyAdapter {
         }
     }
     
+    private void manejarCombate(KeyEvent e) {
+    	 switch (e.getKeyCode()) {
+         case KeyEvent.VK_A      -> teclaIzquierda  = true;
+         case KeyEvent.VK_D      -> teclaDerecha    = true;
+         case KeyEvent.VK_Q      -> teclaCorrer     = true;
+     }
+    }
     
 
 
