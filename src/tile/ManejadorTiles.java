@@ -63,7 +63,7 @@ public class ManejadorTiles {
 		setup(0,"agua",true);
 		setup(1,"arbol",true);
 		setup(2,"arena",false);
-		setup(3,"muro",false);
+		setup(3,"muro",true);
 		setup(4,"pasto",false);
 		setup(5,"suelo",false);
 		//salon
@@ -78,7 +78,7 @@ public class ManejadorTiles {
 		setup(14,"paredSlIzq", true);
 		setup(15,"tv", true);
 		setup(16,"ventana", true);
-		setup(17,"salidaSL", false);
+		setup(17,"salidaSL", true);
 		//fuera i
 		setup(18,"paredI", true);
 		setup(19,"pilarI", true);
