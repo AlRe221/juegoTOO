@@ -7,6 +7,7 @@ import Inventario.Inventario;
 import Inventario.ItemVelocidad;
 import Inventario.Objeto;
 import Main.Ambientacion;
+import Main.FightGame;
 import Main.GamePanel;
 import Main.ManejadorTeclas;
 
@@ -127,7 +128,7 @@ public class Jugador extends Entidad
 	    } else if (mT.getTeclaDerecha()) {
 	        this.direccion = "derecha";
 	        moviendo = true;
-	    }
+	    } 
 	    
 	    if(mT.isTeclaCorrer()) {
 	    	
@@ -263,11 +264,20 @@ public class Jugador extends Entidad
 	    	 if(combate) {
 	    		 gP.playMusic(20); //se inicia la musica del combate
 	    		 gP.getAssS().setidJFN(jefind);
+	    		 
+	    		 //SE AGREGARON SPRITES PARA LA PANTALLA DE FORMA LINEAL, POR ELLO DE CAMBIA
+	    		 cambiarSpriteCombate();       
+	    		 direccion = "estatico";     
+	    		 numeroSprite = 1; 
+	    		 
+	    		 gP.setFightGame(new FightGame(gP, this, gP.getJF()[gP.getAssS().getidJFN()]));
 	    		 gP.setGameState(gP.getFightState());
 	    	 }
 	    }
 	      
 	}
+	
+	
 	
 	
 	public void correrItem() {	
@@ -279,6 +289,10 @@ public class Jugador extends Entidad
 			this.velocidad +=2;
 		}
 	}
+	
+	
+	
+	
 	
 	public void draw(Graphics2D g2)
 	{
@@ -341,6 +355,36 @@ public class Jugador extends Entidad
 		bordesPantalla(x,y,sprite,g2);
 	
 		//g2.drawImage(sprite, x, y, gP.getTamanioTile(), gP.getTamanioTile(),null);
+	}
+	
+	public void drawEnCombate(Graphics2D g2, int x, int y, int ancho, int largo) {
+		BufferedImage sprite = direcciones(); 
+		
+		if(sprite != null) {
+			g2.drawImage(sprite, x, y, ancho, largo, null);
+		}
+	}
+	
+	public void cambiarSpriteCombate() {
+		this.estatico1 = setup1("/spritesjugador/paquitoCombate1");
+		this.estatico2 = setup1("/spritesjugador/paquitoCombate2");
+		
+	}
+	
+	public BufferedImage direcciones() {
+		BufferedImage sprite = null;
+		
+		switch(this.direccion) {
+		case "estatico" : 
+			if(this.numeroSprite == 1)
+				sprite = this.estatico1; 
+			if(this.numeroSprite == 2)
+				sprite = this.estatico2; 
+			break;		
+			
+		}
+		
+		return sprite;
 	}
 	
 	

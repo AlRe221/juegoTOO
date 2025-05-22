@@ -1,5 +1,6 @@
 package Main;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -29,15 +30,28 @@ public class FightGame {
 	}
 	
 	public void update() {
-	
+	  jefeAparecer();
+	  jugadorAparecer();
 		
 	}
 	
 	
 	public void draw(Graphics2D g2) {
 		mostrarFondoCombates(g2);
+		
+		
 	
 	}
+	
+	public void jefeAparecer() {
+		jN.contadorSprites();
+	}
+	
+	public void jugadorAparecer() {
+		jug.contadorSprites();
+	}
+	
+	
 	
 	   public void mostrarFondoCombates(Graphics2D g2) {
 		   int nivel = gP.getAssS().getidJFN();
@@ -66,7 +80,18 @@ public class FightGame {
 			   }
 			   break;
 		   }
-		   } 
+		   }
+		   
+		   g2.setColor(Color.GRAY);
+		   g2.fillRect(0, 590, gP.getWidth(), 150);
+		   
+		   if(jN != null) {
+			   jN.drawEnCombate(g2,1000,400,200,200);
+		   }
+		   
+		   if(jug != null) {
+			  jug.drawEnCombate(g2,30, 400, 200, 200);
+		   }
 	   }
 	
 	

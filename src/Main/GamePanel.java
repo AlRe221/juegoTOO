@@ -149,9 +149,10 @@ public class GamePanel extends JPanel implements Runnable
 					}
 				}
 				asSet.setJF();
+				
 				for (JefePorNivel jefe : jF) {
 			        if (jefe != null) {
-			        	fg = new FightGame(this, jugador,jefe);
+			        	//fg = new FightGame(this, jugador,jefe);
 			             jefe.update(); // << Aquí ocurre la colisión y el combate
 			         }
 			     }
@@ -358,6 +359,11 @@ public class GamePanel extends JPanel implements Runnable
 
 		public int getGameState() {
 			return gameState;
+		}
+		
+		public void setFightGame(FightGame nf) {
+			this.fg = nf;
+			
 		}
 
 

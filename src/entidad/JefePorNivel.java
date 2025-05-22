@@ -31,10 +31,6 @@ public abstract class JefePorNivel extends Entidad{
 		 contadorSprites();
 		 gP.getchecadorColision().checkJugador(this);
 		 
-		 /*if(res) {
-			 setActivaCombate();
-			 System.out.println("Se activo el combate!");
-		 }*/
 	}
 	
 	
@@ -45,6 +41,17 @@ public abstract class JefePorNivel extends Entidad{
 	   colocarObjeto(pantallaX, pantallaY,g2,gP);
 	     
 	}
+	
+	public void drawEnCombate(Graphics2D g2, int x, int y, int ancho, int largo) {
+		BufferedImage sprite = direcciones(); 
+		
+		if(sprite != null) {
+			g2.drawImage(sprite, x, y, ancho, largo, null);
+		}
+	}
+
+
+	
 	
 	
 	public void colocarObjeto(int x,int y, Graphics2D g2, GamePanel gP) {
@@ -98,6 +105,10 @@ public abstract class JefePorNivel extends Entidad{
 		
 		return sprite;
 	}
+	
+	
+	
+	
 	
 	public int getIdNivel() {
 		return this.id_Nivel;
