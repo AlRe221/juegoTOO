@@ -21,9 +21,12 @@ public abstract class Entidad
 	protected BufferedImage arriba1, arriba2, abajo1, abajo2, izquierda1,
 							izquierda2, derecha1, derecha2,estatico1,estatico2,
 							estaticoA1,estaticoA2,estaticoD1,estaticoD2,
-							estaticoI1,estaticoI2, saltar; //saltar es solo para combate 
+							estaticoI1,estaticoI2, saltar1,saltar2; //saltar es solo para combate 
 	protected String direccion;
 	
+	
+	protected BufferedImage estaticoCombate1,estaticoCombate2,derCombate1,derCombate2,
+	                        izqCombate1,izqCombate2;
 	protected int contadorSprites = 0;
 	protected int numeroSprite = 1;
 	protected int cambiaSprite = 10;
@@ -128,6 +131,9 @@ public abstract class Entidad
 	//direccion
 	public String getDireccion() {
 		return this.direccion;
+	}
+	public void setDireccion(String d) {
+		this.direccion = d;
 	}
 
 

@@ -18,7 +18,7 @@ public class ManejadorTeclas extends KeyAdapter {
     // MOVIMIENTO Y ACCIONES
     private boolean teclaArriba, teclaAbajo, teclaIzquierda, teclaDerecha;
     private boolean teclaInventario, teclaArribaInv, teclaAbajoInv, teclaEnter, teclaIzqInvCol, teclaDerInvCol;
-    private boolean teclaCorrer;
+    private boolean teclaCorrer,teclaSaltar;
  
 	
     private static final int OPCIONES_MENU_INICIO = 4;
@@ -129,7 +129,8 @@ public class ManejadorTeclas extends KeyAdapter {
             case KeyEvent.VK_RIGHT -> teclaDerInvCol  = false;
             case KeyEvent.VK_ENTER -> teclaEnter      = false;
             case KeyEvent.VK_Q     -> teclaCorrer     = false;
-            case KeyEvent.VK_ESCAPE -> alternarPausa();  
+            case KeyEvent.VK_ESCAPE -> alternarPausa();
+            case KeyEvent.VK_SPACE   -> teclaSaltar     = false;
         }
     }
 
@@ -325,6 +326,16 @@ public class ManejadorTeclas extends KeyAdapter {
          case KeyEvent.VK_A      -> teclaIzquierda  = true;
          case KeyEvent.VK_D      -> teclaDerecha    = true;
          case KeyEvent.VK_Q      -> teclaCorrer     = true;
+         case KeyEvent.VK_SPACE   -> teclaSaltar    = true;
+         case KeyEvent.VK_ENTER  -> { //Esto es temporal, esto se agregara cuando el jefe tenga vida 0, se reseteara todo.
+        	 gP.stopMusic();
+        	 gP.getJugador().setMundoX(gP.getJugador().getMundoX_previo());
+        	 gP.getJugador().setMundoY(gP.getJugador().getMundoY_previo());
+        	 gP.getJugador().setPantallaX(gP.getJugador().getPantallaX_previa());
+        	 gP.getJugador().setPantallaY(gP.getJugador().getPantallaY_previa());
+        	 gP.getJugador().setDireccion("estatico");
+        	 gP.setGameState(gP.getPlayState());
+         }
      }
     }
     
@@ -336,6 +347,8 @@ public class ManejadorTeclas extends KeyAdapter {
     public boolean getTeclaDerecha()   { return teclaDerecha; }
     public boolean getTeclaInventario(){ return teclaInventario; }
     public boolean isTeclaCorrer()     { return teclaCorrer; }
+    public boolean getTeclaSaltar()     { return teclaSaltar; }
+    
 
     public void setTeclaInventario(boolean b) { this.teclaInventario = b; }
     public void setTeclaCorrer(boolean b)     { this.teclaCorrer     = b; }

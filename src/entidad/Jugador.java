@@ -28,6 +28,10 @@ public class Jugador extends Entidad
 	private Inventario inventario;
 	private String spriteKeyActual = "normal"; 
 	
+	
+	
+	
+	
 	public Jugador(GamePanel gP, ManejadorTeclas mT, Ambientacion am)
 	{
 		super(gP);
@@ -52,8 +56,6 @@ public class Jugador extends Entidad
 		this.mundoX = gP.getTamanioTile() * 22;
 		this.mundoY = gP.getTamanioTile() * 92;
 		
- 
-		
 		this.velocidad = velocidadBase;
 		this.direccion = "abajo";
 		
@@ -67,6 +69,10 @@ public class Jugador extends Entidad
 	    getSpritesJugador(spriteKeyActual);          // recarga imágenes
 	}
 	
+	
+	public void reestablecerSprites() {
+		
+	}
 	public void getSpritesJugador(String key)
 	{
 		String carpeta, prefijo;
@@ -219,6 +225,15 @@ public class Jugador extends Entidad
 	    contadorSprites();
 	}
 	  
+	
+    //SALTO   
+	
+	private int velocidadY = 0;     // Velocidad vertical
+	private boolean saltando = false; // Si está saltando
+	private final int sueloY = 400;     // Piso (posicion Y donde está el suelo)
+	private final int fuerzaSalto = -15; // Velocidad inicial al saltar (negativo para subir)
+	private final int gravedad = 1;  
+	
 	public void updateCombate() {
 		   boolean moviendo = false;
 		    this.colisionOn = false;
@@ -238,7 +253,9 @@ public class Jugador extends Entidad
 		    } else if (mT.getTeclaDerecha()) {
 		        this.direccion = "derecha";
 		        moviendo = true;
-		    } 
+		    } else if(mT.getTeclaSaltar()) {
+		    	this.direccion = "saltar";
+		    }
 		    
 		    
 		    if(mT.isTeclaCorrer()) {
@@ -277,6 +294,29 @@ public class Jugador extends Entidad
 		    		}
 		    	}
 		    }
+		
+		    
+		    
+		    //SI SE PRESIONA SALTAR Y AUN NO ESTA SALTANDO
+		    if (mT.getTeclaSaltar() && !saltando) {
+		        velocidadY = fuerzaSalto;
+		        saltando = true;
+		    }
+
+		    // ACTUALIZAMOS POSICIÓN VERTICAL
+		    mundoY += velocidadY;
+
+		    // SI SE ESTA SALTANDO, Y SE TIENE QUE CAER, APLICAR GRAVEDAD
+		    if (saltando) {
+		        velocidadY += gravedad;
+		    }
+
+		    // LIMITE CON EL PISO 
+		    if (mundoY >= sueloY) {
+		        mundoY = sueloY;
+		        velocidadY = 0;
+		        saltando = false;
+		    }
 		    
 		    contadorSprites();
 	}
@@ -313,6 +353,10 @@ public class Jugador extends Entidad
 		timer.start();
 	}
 	
+	private int pantallaX_previa;
+	private int pantallaY_previa;
+	private int mundoX_previo; 
+	private int mundoY_previo;
 	public void cambiarPantallaCombate() {
 		//checar la colisión de el jugador con el jefe final 
 		//si devuelve true, entonces, cambiamos a la pantalla de combate
@@ -330,7 +374,10 @@ public class Jugador extends Entidad
 	    		 cambiarSpriteCombate();       
 	    		 direccion = "estatico";     
 	    		 numeroSprite = 1; 
-	    		 
+	    		 pantallaX_previa = this.pantallaX;
+	    		 pantallaY_previa = this.pantallaY;
+	    		 mundoY_previo = this.mundoY;
+	    		 mundoX_previo = this.mundoX;
 	    		 
 	    		 gP.setFightGame(new FightGame(gP, this, gP.getJF()[gP.getAssS().getidJFN()]));
 	    		 gP.setGameState(gP.getFightState());
@@ -419,46 +466,31 @@ public class Jugador extends Entidad
 		//g2.drawImage(sprite, x, y, gP.getTamanioTile(), gP.getTamanioTile(),null);
 	}
 	
+	
 	public void drawEnCombate(Graphics2D g2) {
 		BufferedImage sprite = direcciones(); 
 		
-		switch(this.direccion)
-		{
 		
-		case "izquierda" : 
-			if(this.numeroSprite == 1)
-				sprite = this.izquierda1; 
-			if(this.numeroSprite == 2)
-				sprite = this.izquierda2; 
-			break;
-		case "derecha" : 
-			if(this.numeroSprite == 1)
-				sprite = this.derecha1; 
-			if(this.numeroSprite == 2)
-				sprite = this.derecha2; 
-			break;
-		case "estatico" : 
-			if(this.numeroSprite == 1)
-				sprite = this.estatico1; 
-			if(this.numeroSprite == 2)
-				sprite = this.estatico2; 
-			break;
-		}
+		pantallaY = mundoY;
 		
 		int x = this.pantallaX; 
 		int y = this.pantallaY; 
+		
+		
 		
 		bordesPantalla(x,y,sprite,g2);
 	
 	}
 	
 	public void cambiarSpriteCombate() {
-		this.estatico1 = setup1("/spritesjugador/paquitoCombate1");
-		this.estatico2 = setup1("/spritesjugador/paquitoCombate2");
-		this.derecha1 = setup1("/spritesjugador/paquitoCombate1");
-		this.derecha2 = setup1("/spritesjugador/paquitoCombate2");
-		this.izquierda1 = setup1("/spritesjugador/paquitoCombate1");
-		this.izquierda2 =setup1("/spritesjugador/paquitoCombate2");
+		this.estaticoCombate1 = setup1("/spritesjugador/paquitoCombate1");
+		this.estaticoCombate2 = setup1("/spritesjugador/paquitoCombate2");
+		this.derCombate1 = setup1("/spritesjugador/paquitoCombate1");
+		this.derCombate2 = setup1("/spritesjugador/paquitoCombate2");
+		this.izqCombate1 = setup1("/spritesjugador/paquitoCombate1");
+		this.izqCombate2 =setup1("/spritesjugador/paquitoCombate2");
+		this.saltar1 = setup1("/spritesjugador/paquitoCombate1");
+		this.saltar2 =setup1("/spritesjugador/paquitoCombate2");
 	}
 	
 	public BufferedImage direcciones() {
@@ -467,23 +499,30 @@ public class Jugador extends Entidad
 		switch(this.direccion) {
 		case "estatico" : 
 			if(this.numeroSprite == 1)
-				sprite = this.estatico1; 
+				sprite = this.estaticoCombate1; 
 			if(this.numeroSprite == 2)
-				sprite = this.estatico2; 
+				sprite = this.estaticoCombate2; 
 			break;	
 		case "izquierda" : 
 			if(this.numeroSprite == 1)
-				sprite = this.izquierda1; 
+				sprite = this.izqCombate1; 
 			if(this.numeroSprite == 2)
-				sprite = this.izquierda2; 
+				sprite = this.izqCombate2; 
 			break;
 		case "derecha" : 
 			if(this.numeroSprite == 1)
-				sprite = this.derecha1; 
+				sprite = this.derCombate1; 
 			if(this.numeroSprite == 2)
-				sprite = this.derecha2; 
+				sprite = this.derCombate2; 
+			break;	
+		case "saltar" : 
+			if(this.numeroSprite == 1)
+				sprite = this.saltar1; 
+			if(this.numeroSprite == 2)
+				sprite = this.saltar2; 
 			break;		
 		}
+		
 		
 		return sprite;
 	}
@@ -495,9 +534,12 @@ public class Jugador extends Entidad
 			x = this.mundoX;
 		}
 		
-		if(pantallaY > this.mundoY) {
-			y = this.mundoY;
+
+		
+	   if(pantallaY > this.mundoY) {
+				y = this.mundoY;
 		}
+		
 		
 		int rOffs = gP.getAnchoPantalla() - this.pantallaX;
 		
@@ -516,7 +558,7 @@ public class Jugador extends Entidad
 				   mundoY - gP.getTamanioTile() < this.mundoY + pantallaY) {
 					
 					if(gP.getGameState() == gP.getFightState()) {
-						g2.drawImage(sprite, x, 400,200,200, null);
+						g2.drawImage(sprite, x, y,200,200, null);
 					}else {
 						g2.drawImage(sprite, x, y, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
 					}
@@ -528,7 +570,7 @@ public class Jugador extends Entidad
 							bottomOffs > gP.altoMundo - this.mundoY) {
 						
 						if(gP.getGameState() == gP.getFightState()) {
-							g2.drawImage(sprite, x, 400,200,200, null);
+							g2.drawImage(sprite, x, y,200,200, null);
 						
 						}else {
 							g2.drawImage(sprite, x, y, this.gP.getTamanioTile(), this.gP.getTamanioTile(), null);
@@ -539,6 +581,9 @@ public class Jugador extends Entidad
 						}
 					}
 	}
+	
+	
+
 	
 	public void dañoInfeccion(double infeccion) {
 		this.vida -= infeccion;
@@ -599,6 +644,35 @@ public class Jugador extends Entidad
     public Inventario getInventario() {
         return inventario;
     }
+    
+    
+    
+	public int getPantallaX_previa() {
+		return pantallaX_previa;
+	}
+	public void setPantallaX_previa(int pantallaX_previa) {
+		this.pantallaX_previa = pantallaX_previa;
+	}
+	public int getPantallaY_previa() {
+		return pantallaY_previa;
+	}
+	public void setPantallaY_previa(int pantallaY_previa) {
+		this.pantallaY_previa = pantallaY_previa;
+	}
+	public int getMundoX_previo() {
+		return mundoX_previo;
+	}
+	public void setMundoX_previo(int mundoX_previo) {
+		this.mundoX_previo = mundoX_previo;
+	}
+	public int getMundoY_previo() {
+		return mundoY_previo;
+	}
+	public void setMundoY_previo(int mundoY_previo) {
+		this.mundoY_previo = mundoY_previo;
+	}
 	
+    
+    
 
 }
