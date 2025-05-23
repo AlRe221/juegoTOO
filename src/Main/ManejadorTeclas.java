@@ -18,7 +18,7 @@ public class ManejadorTeclas extends KeyAdapter {
     // MOVIMIENTO Y ACCIONES
     private boolean teclaArriba, teclaAbajo, teclaIzquierda, teclaDerecha;
     private boolean teclaInventario, teclaArribaInv, teclaAbajoInv, teclaEnter, teclaIzqInvCol, teclaDerInvCol;
-    private boolean teclaCorrer,teclaSaltar;
+    private boolean teclaCorrer,teclaSaltar,tecladisparar;
  
 	
     private static final int OPCIONES_MENU_INICIO = 4;
@@ -129,8 +129,9 @@ public class ManejadorTeclas extends KeyAdapter {
             case KeyEvent.VK_RIGHT -> teclaDerInvCol  = false;
             case KeyEvent.VK_ENTER -> teclaEnter      = false;
             case KeyEvent.VK_Q     -> teclaCorrer     = false;
-            case KeyEvent.VK_ESCAPE -> alternarPausa();
-            case KeyEvent.VK_SPACE   -> teclaSaltar     = false;
+            case KeyEvent.VK_ESCAPE-> alternarPausa();
+            case KeyEvent.VK_SPACE -> teclaSaltar     = false;
+            case KeyEvent.VK_B     -> tecladisparar   = false;
         }
     }
 
@@ -336,6 +337,7 @@ public class ManejadorTeclas extends KeyAdapter {
         	 gP.getJugador().setDireccion("estatico");
         	 gP.setGameState(gP.getPlayState());
          }
+         case KeyEvent.VK_B -> tecladisparar       = true;
      }
     }
     
@@ -348,7 +350,7 @@ public class ManejadorTeclas extends KeyAdapter {
     public boolean getTeclaInventario(){ return teclaInventario; }
     public boolean isTeclaCorrer()     { return teclaCorrer; }
     public boolean getTeclaSaltar()     { return teclaSaltar; }
-    
+    public boolean getTeclaDisparar()   { return tecladisparar; }
 
     public void setTeclaInventario(boolean b) { this.teclaInventario = b; }
     public void setTeclaCorrer(boolean b)     { this.teclaCorrer     = b; }

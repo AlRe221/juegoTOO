@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
 import Inventario.Objeto;
 import entidad.JefePorNivel;
 import entidad.Jugador;
+import entidad.Proyectil;
 import entidad.Zombie;
 import tile.ManejadorTiles;
 
@@ -38,7 +40,7 @@ public class GamePanel extends JPanel implements Runnable
 		AssetSetter asSet = new AssetSetter(this);
 		UI ui = new UI(this);
 		JefePorNivel jF[] = new JefePorNivel[3];
-		
+		protected ArrayList<Proyectil> listaProyectilJugador = new ArrayList<>();
 		
 		//PELEA 
 		FightGame fg = null;
@@ -426,8 +428,19 @@ public class GamePanel extends JPanel implements Runnable
 		public Ambientacion getAmbientacion() {
 			return this.se;
 		}
+
+
+		//PROYECTILES JUGADOR
+		public ArrayList<Proyectil> getListaProyectilJugador() {
+			return listaProyectilJugador;
+		}
+
+
+		public void setListaProyectilJugador(ArrayList<Proyectil> listaProyectilJugador) {
+			this.listaProyectilJugador = listaProyectilJugador;
+		}
 		
-	
+		
 	
 	
 	

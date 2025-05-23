@@ -3,17 +3,20 @@ package Main;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 import entidad.JefePorNivel;
 import entidad.Jugador;
+import entidad.Proyectil;
 
 public class FightGame {
 	protected GamePanel gP; 
 	protected Jugador jug; 
 	protected JefePorNivel jN;
 	protected BufferedImage image;
+	
 	
 	private boolean peleaTerminada = false; 
 	private boolean gano = false;
@@ -32,6 +35,19 @@ public class FightGame {
 	public void update() {
 	  jefeAparecer();
 	  jug.updateCombate();
+	  
+	  for (int i = 0; i < gP.getListaProyectilJugador().size(); i++) {
+		    Proyectil p = gP.getListaProyectilJugador().get(i);
+		    if (p != null) {
+		        if (p.getVivo()) {
+		            p.update();
+		        } else {
+		            gP.getListaProyectilJugador().remove(i);
+		            i--; // <-- para revisar correctamente el siguiente proyectil
+		        }
+		    }
+		}
+
 		
 	}
 	
@@ -40,12 +56,21 @@ public class FightGame {
 		mostrarFondoCombates(g2);
 		gP.getUi().mostrarBarraVida(g2);
 		gP.getUi().mostrarBarraVidaJ(g2);
+		pintarProyectil(g2);
 	}
 	
 	public void jefeAparecer() {
 		jN.contadorSprites();
 	}
 	
+	
+	public void pintarProyectil(Graphics2D g2) {
+		for(int i = 0; i < gP.getListaProyectilJugador().size(); i++) {
+			  if(gP.getListaProyectilJugador().get(i) != null) {
+				  gP.getListaProyectilJugador().get(i).dibujar(g2);
+			  }
+		  }
+	}
 	
 	   public void mostrarFondoCombates(Graphics2D g2) {
 		   int nivel = gP.getAssS().getidJFN();

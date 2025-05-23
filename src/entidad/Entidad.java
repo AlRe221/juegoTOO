@@ -14,7 +14,7 @@ import tile.MemoriaSprite;
 public abstract class Entidad 
 {
 	GamePanel gP;
-	protected int tipoE; //0 jugador, 1, zombie
+	protected int tipoE; //0 jugador, 1, zombie, 2,proyectilJug, 3 proyectilJefe
 	protected int mundoX, mundoY;
 	protected int velocidad;
 	
@@ -40,6 +40,16 @@ public abstract class Entidad
 	protected double vidaMaxima = 100; 
 	protected double vida = vidaMaxima;
 	
+	//COMBATE
+	protected double ataque = 5;
+	protected boolean vivo = true;
+	
+	
+	//PROYECTILES
+	protected int maxProy; 
+	protected int proy;
+	protected Proyectil pro; 
+	protected int useCost;
 	
 	protected BufferedImage i;
 	public Entidad(GamePanel gp) {
@@ -154,6 +164,9 @@ public abstract class Entidad
 		return this.vidaMaxima;
 	}
 	
+	public boolean getVivo() {
+		return this.vivo;
+	}
 	
 
 	

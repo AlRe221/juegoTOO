@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import Inventario.Inventario;
 import Inventario.ItemVelocidad;
 import Inventario.Objeto;
+import Inventario.ProyectilPaco;
 import Main.Ambientacion;
 import Main.FightGame;
 import Main.GamePanel;
@@ -58,7 +59,6 @@ public class Jugador extends Entidad
 		
 		this.velocidad = velocidadBase;
 		this.direccion = "abajo";
-		
 		
 	}
 	
@@ -234,6 +234,7 @@ public class Jugador extends Entidad
 	private final int fuerzaSalto = -15; // Velocidad inicial al saltar (negativo para subir)
 	private final int gravedad = 1;  
 	
+	
 	public void updateCombate() {
 		   boolean moviendo = false;
 		    this.colisionOn = false;
@@ -292,9 +293,17 @@ public class Jugador extends Entidad
 		    		}
 		    		break; 
 		    		}
+		    	
 		    	}
 		    }
 		
+		    //PROYECTILES
+		    if(mT.getTeclaDisparar()) {
+		    	ProyectilPaco newP = new ProyectilPaco(gP);
+		    	newP.set(this.mundoX, this.mundoY, "derecha",true,this);
+		    	gP.getListaProyectilJugador().add(newP);
+		    	
+		    }
 		    
 		    
 		    //SI SE PRESIONA SALTAR Y AUN NO ESTA SALTANDO
@@ -357,6 +366,7 @@ public class Jugador extends Entidad
 	private int pantallaY_previa;
 	private int mundoX_previo; 
 	private int mundoY_previo;
+	
 	public void cambiarPantallaCombate() {
 		//checar la colisión de el jugador con el jefe final 
 		//si devuelve true, entonces, cambiamos a la pantalla de combate
@@ -371,6 +381,7 @@ public class Jugador extends Entidad
 	    		 gP.getAssS().setidJFN(jefind);
 	    		 
 	    		 //SE AGREGARON SPRITES PARA LA PANTALLA DE FORMA LINEAL, POR ELLO DE CAMBIA
+	    		 //SE GUARDAN LOS VALORES ORIGINALES DE LAS PANTALLAS Y LOS MUNDOS 
 	    		 cambiarSpriteCombate();       
 	    		 direccion = "estatico";     
 	    		 numeroSprite = 1; 
@@ -482,6 +493,7 @@ public class Jugador extends Entidad
 	
 	}
 	
+	//SE AGREGARON VARIABLES DE COMBATE PARA NO MODIFICAR LAS ORIGINALES
 	public void cambiarSpriteCombate() {
 		this.estaticoCombate1 = setup1("/spritesjugador/paquitoCombate1");
 		this.estaticoCombate2 = setup1("/spritesjugador/paquitoCombate2");
@@ -646,7 +658,8 @@ public class Jugador extends Entidad
     }
     
     
-    
+    //GUARDAR LOS VALORES PREVIOS DE LAS PANTALLAS Y LOS MUNDOS PARA QUE, CUANDO SE REGRESE AL MODO EXPLORATORIO
+    //NO MODIFIQUE NADOTA
 	public int getPantallaX_previa() {
 		return pantallaX_previa;
 	}
