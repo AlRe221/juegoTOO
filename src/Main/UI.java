@@ -553,7 +553,10 @@ public class UI {
    public void cuadroDeJefe() {
 	   if(gP.getAssS().getNotificacion()) {
 		   int i = gP.getAssS().getidJFN();
-		   dibujarCuadroConTexto(g2, "DIRIGETE A" + gP.getJF()[i].getLocation(),20,50,150);
+		   if (i >= 0 && i < gP.getJF().length && gP.getJF()[i] != null) {
+	            // Solo si el jefe existe, muestra la notificación
+	            dibujarCuadroConTexto(g2, "DIRIGETE A" + gP.getJF()[i].getLocation(), 20, 50, 150);
+	        }
 		   
 		   //DESAPARECER CUADRO EN X TIEMPO
 		   double nt = gP.getAssS().getTiempoN() + (1.0/60.0);

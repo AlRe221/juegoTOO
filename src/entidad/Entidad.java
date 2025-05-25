@@ -57,7 +57,7 @@ public abstract class Entidad
         this.gP = gp;
 
         // Inicializa solidArea con un rectángulo por defecto.
-        // Puedes ajustar las coordenadas (0,0) y el tamaño (32,32) según sea necesario  
+        // coordenadas (0,0) y el tamaño (32,32) según sea necesario  
         this.solidArea = new Rectangle(0, 0, 32, 32); 
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;       

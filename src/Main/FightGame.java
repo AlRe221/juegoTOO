@@ -33,6 +33,31 @@ public class FightGame {
 	}
 	
 	public void update() {
+		if (peleaTerminada) {
+			gP.stopMusic();
+		    gP.getJugador().setMundoX(gP.getJugador().getMundoX_previo());
+		    gP.getJugador().setMundoY(gP.getJugador().getMundoY_previo());
+		    gP.getJugador().setPantallaX(gP.getJugador().getPantallaX_previa());
+		    gP.getJugador().setPantallaY(gP.getJugador().getPantallaY_previa());
+		    gP.getJugador().setDireccion("estatico");        
+	        
+	        // Limpiamos la lista de proyectiles
+	        gP.getListaProyectilJugador().clear();
+
+	        // Jugador ganó 
+	        if (gano) {
+	            
+	            int indiceJefeDerrotado = gP.getAssS().getidJFN(); // Obtenemos el índice del jefe que estaba en combate	            
+	            if (indiceJefeDerrotado >= 0 && indiceJefeDerrotado < gP.getJF().length) {	                
+	                gP.getJF()[indiceJefeDerrotado] = null; 
+	            }
+	            // Opcional: podrías querer resetear idJFN en AssetSetter
+	            // gP.getAssS().setidJFN(-1); // Para indicar que no hay jefe activo para notificación	            
+	        }	        
+	        gP.setGameState(gP.getPlayState());
+	        return; 
+	    }
+	
 	  jefeAparecer();
 	  jug.updateCombate();
 	  
@@ -47,6 +72,12 @@ public class FightGame {
 		        }
 		    }
 		}
+  	
+    if (jug.getVida() <= 0) {
+        terminaCombate(false); // El jugador pierde
+    } else if (jN.getVida() <= 0) { 
+        terminaCombate(true); // El jugador gana (jefe derrotado)
+    }
 
 		
 	}

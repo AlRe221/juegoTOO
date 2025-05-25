@@ -239,7 +239,7 @@ public class GamePanel extends JPanel implements Runnable
            }
            
            for(JefePorNivel j: jF) {
-        	   if(j != null) j.draw(g2); 
+        	   if(j != null) j.draw(g2); // Solo dibuja si el jefe no es null
            }
            jugador.draw(g2);
            //PELEA
