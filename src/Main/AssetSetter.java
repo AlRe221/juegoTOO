@@ -14,9 +14,6 @@ import Inventario.ItemVelocidad;
 import Inventario.Laptop;
 import Inventario.Mochila;
 import Inventario.Objeto;
-import entidad.JefeN1;
-import entidad.JefeN2;
-import entidad.JefeN3;
 import entidad.JefePorNivel;
 import entidad.Zombie;
 import entidad.Zombie1;
@@ -144,32 +141,35 @@ public class AssetSetter {
 			}
 		}
 		
-	 if(aparecer && idNivel <=3) {
-		if(idNivel ==1) {
-			j = new JefeN1(gP);
-			j.setMundoX(4 * gP.getTamanioTile());
-			j.setMundoY(53* gP.getTamanioTile());
-			
-			//gP.getJF()[0] = j;
-		}else if(idNivel == 2) {
-			j = new JefeN2(gP);
-			j.setMundoX(33* gP.getTamanioTile());
-			j.setMundoY(73 * gP.getTamanioTile());
-			
-			//gP.getJF()[1] = j;
-		}else if(idNivel == 3) {
-			j = new JefeN3(gP);
-			j.setMundoX(15 * gP.getTamanioTile());
-			j.setMundoY(41 * gP.getTamanioTile());
-			
-			//gP.getJF()[2] = j;
-		}
+		if(aparecer && idNivel <= 3) {
+	        switch(idNivel) {
+	            case 1:
+	                // Usamos el nuevo constructor para configurar el primer jefe
+	                j = new JefePorNivel(gP, 1, "Miguelito", ": EDIFICIO I", "/JefesPorNivel/miguelito1", "/JefesPorNivel/miguelito2");
+	                j.setMundoX(4 * gP.getTamanioTile());
+	                j.setMundoY(53 * gP.getTamanioTile());
+	                break;
+	            case 2:
+	                // Configuramos el segundo jefe
+	                j = new JefePorNivel(gP, 2, "Eloy", ": DFM", "/JefesPorNivel/eloy1", "/JefesPorNivel/eloy2");
+	                j.setMundoX(33 * gP.getTamanioTile());
+	                j.setMundoY(73 * gP.getTamanioTile());
+	                break;
+	            case 3:
+	                // Configuramos el tercer jefe
+	                j = new JefePorNivel(gP, 3, "Nacho", ": EXPLANADA ENGRANAJE", "/JefesPorNivel/nacho1", "/JefesPorNivel/nacho2");
+	                j.setMundoX(15 * gP.getTamanioTile());
+	                j.setMundoY(41 * gP.getTamanioTile());
+	                break;
+	        }
 		
-		mostrarN = true; 
-		idJN = idNivel -1;
-		
-		idNivel ++;
-		aparecer = false; 
+        if (j != null) {
+            mostrarN = true; 
+            idJN = idNivel - 1; 
+            
+            idNivel++;
+            aparecer = false; 
+        }
 		
 	 }	
 		return j;

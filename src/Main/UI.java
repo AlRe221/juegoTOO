@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 
 import Inventario.Coins;
 import Inventario.Objeto;
+import entidad.JefePorNivel;
 
 public class UI {
    protected GamePanel gP; 
@@ -362,15 +363,16 @@ public class UI {
    }
    
    
-   public void mostrarBarraVidaJ(Graphics2D g2) {
+   public void mostrarBarraVidaJ(Graphics2D g2, JefePorNivel jefe) {
 	   g2.setFont(Tipografia.cargaFuente(15f));
 	   g2.setColor(Color.WHITE);
 	   g2.drawString("LIFE ",710,38);
 	   
 	   int x = 770, y = 20, width = 400, heigth = 20;
 	   
-	   double vidaActual = gP.getJF()[gP.getAssS().getidJFN()].getVida();
-	   double vidM = gP.getJF()[gP.getAssS().getidJFN()].getVM(); 
+	   double vidaActual = jefe.getVida();
+	    double vidM = jefe.getVM();
+	   
 	   if(vidaActual > vidM) {
 		   vidaActual = vidM;
 	   }
@@ -390,7 +392,7 @@ public class UI {
 	   g2.drawRect(x, y, width, heigth);
 	   
 	   g2.setColor(Color.WHITE);
-    g2.drawString(pct + "%", x + width + 10, y + heigth - 2);
+	   g2.drawString(pct + "%", x + width + 10, y + heigth - 2);
    }
   
    

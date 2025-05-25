@@ -3,23 +3,37 @@ package entidad;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
 import Main.GamePanel;
 
-public abstract class JefePorNivel extends Entidad{
+public class JefePorNivel extends Entidad{
 	int id_Nivel;  
 	boolean activa_combate;
+	String nombre;
+    String ubicacion;
 
-	 public JefePorNivel(GamePanel gp) {
-		super(gp);
-		this.id_Nivel = 1; 
-		this.activa_combate = false; 
-		this.direccion = "estatico";
-		this.solidArea = new Rectangle(8,16,32,32); 
-		this.solidAreaDefaultX = this.solidArea.x;
-		this.solidAreaDefaultY = this.solidArea.y;
-		
-	}
+    public JefePorNivel(GamePanel gp, int id, String nombre, String ubicacion, String spritePath1, String spritePath2) {
+        super(gp);
+        this.id_Nivel = id;
+        this.nombre = nombre;
+        this.ubicacion = ubicacion;
+        
+        this.activa_combate = false;
+        this.direccion = "estatico";
+        this.solidArea = new Rectangle(8, 16, 32, 32);
+        this.solidAreaDefaultX = this.solidArea.x;
+        this.solidAreaDefaultY = this.solidArea.y;
+        
+        getImage(spritePath1, spritePath2);
+    }
+    
+    public void getImage(String path1, String path2) {
+        estatico1 = setup1(path1);
+        estatico2 = setup1(path2);
+    }
+    
+    public String getLocation() {
+        return this.ubicacion;
+    }
 
 	@Override
 	public void setColisionOn(boolean colisionOn) {
@@ -118,14 +132,16 @@ public abstract class JefePorNivel extends Entidad{
 		this.id_Nivel = v;
 	}
 	
-	public void setActivaDesactivaCombate(boolean t) {
-	   this.activa_combate = t;
-	}
+	
 	
 	public boolean getActivaDesactivaCombate() {
 		return this.activa_combate;
 	}
-	
-	public abstract String getLocation();
+
+	public void setActivaDesactivaCombate(boolean b) {
+		this.activa_combate =  b;
+		
+	}
+
 
 }

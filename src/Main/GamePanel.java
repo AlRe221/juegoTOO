@@ -231,8 +231,8 @@ public class GamePanel extends JPanel implements Runnable
                ui.draw(g2);
                return;
            }
-           
-           mTi.draw(g2);
+           if (gameState == playState) {
+               mTi.draw(g2);
            for (Objeto obj : o) {
                if (obj != null) obj.draw(g2, this);
            }
@@ -244,8 +244,12 @@ public class GamePanel extends JPanel implements Runnable
         	   if(j != null) j.draw(g2); 
            }
            jugador.draw(g2);
-           
-
+           //PELEA
+           } else if (gameState == fightState) {
+               if (fg != null) {
+                   fg.draw(g2);
+               }
+           }
            //   b) Inventario encima, si está abierto
            if (ui.getInventorOpen()) {
                ui.dibujarInventario(g2);
@@ -256,10 +260,6 @@ public class GamePanel extends JPanel implements Runnable
                ui.draw(g2);
            }
            
-           //PELEA
-            if(gameState == fightState) {
-            	fg.draw(g2);
-            }
            //   d) HUD general 
            ui.draw(g2);
        }
