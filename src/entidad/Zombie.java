@@ -76,6 +76,10 @@ public abstract class Zombie extends Entidad{
 		int dañoContador = 0;
 		
 		public void update() {
+			if (!getVivo()) { 
+		        return;
+		    }
+			
 			setAction();
 			colisionOn = false;
 			gP.getchecadorColision().checkTile(this);
@@ -143,6 +147,9 @@ public abstract class Zombie extends Entidad{
 		
 		
 		public void draw(Graphics2D g2) {
+			if (!getVivo()) { 
+		        return;
+		    }
 			int pantallaX = mundoX -gP.getJugador().getMundoX() + gP.getJugador().getPantallaX();
 			int pantallaY = mundoY - gP.getJugador().getMundoY() + gP.getJugador().getPantallaY();
 			
@@ -175,13 +182,16 @@ public abstract class Zombie extends Entidad{
 			   mundoY + gP.getTamanioTile() > gP.getJugador().getMundoY() - gP.getJugador().getPantallaY() &&
 			   mundoY- gP.getTamanioTile() < gP.getJugador().getMundoY() + gP.getJugador().getPantallaY()) {
 				i = direcciones();
-				g2.drawImage(i, x, y, gP.getTamanioTile(), gP.getTamanioTile(), null);
+				g2.drawImage(i, x, y, gP.getTamanioTile(), gP.getTamanioTile(), null);				
+				
 			}else {
 				if(gP.getJugador().getMundoX() < gP.getJugador().getPantallaX() ||
 						gP.getJugador().getMundoY() < gP.getJugador().getPantallaY() ||
 						rOffs > gP.getAnchoMundo() - gP.getJugador().getMundoX() ||
 						bOffs > gP.getAltoMundo() - gP.getJugador().getMundoY()) {
 						g2.drawImage(i, x, y, gP.getTamanioTile(), gP.getTamanioTile(), null);
+						
+						
 					}
 			}
 			

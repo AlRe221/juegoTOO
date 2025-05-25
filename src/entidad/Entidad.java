@@ -51,6 +51,12 @@ public abstract class Entidad
 	protected Proyectil pro; 
 	protected int useCost;
 	
+	 // ---> NUEVAS VARIABLES PARA EL FEEDBACK VISUAL DE DAÑO <---
+    protected boolean fueGolpeadoRecientemente = false;
+    protected int contadorFlashDaño = 0;
+    protected final int DURACION_FLASH_DAÑO = 15; // Duración del flash en frames (aprox. 0.25 seg a 60FPS)
+    // ---> FIN DE NUEVAS VARIABLES <---
+	
 	protected BufferedImage i;
 	
 	public Entidad(GamePanel gp) {
@@ -89,6 +95,12 @@ public abstract class Entidad
             this.vida = 0;
             this.vivo = false; // La entidad ha sido derrotada
         }
+     // ---> AÑADIR ESTAS LÍNEAS PARA ACTIVAR EL FLASH <---
+        if (daño > 0) { // Solo flashea si realmente hubo daño
+            this.fueGolpeadoRecientemente = true;
+            this.contadorFlashDaño = DURACION_FLASH_DAÑO;
+        }
+        // ---> FIN DE LÍNEAS AÑADIDAS <---
     }
 	
 	public void curar(double cantidad) {

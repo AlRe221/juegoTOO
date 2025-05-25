@@ -145,7 +145,11 @@ public class GamePanel extends JPanel implements Runnable
 				asSet.setObjectZ();
 				for(int i = 0; i < z.length; i++) {
 					if(z[i] != null) {
-						z[i].update();
+						if (z[i].getVivo()) { 
+				            z[i].update();
+				        } else {				           
+				            z[i] = null; 
+				        }
 					}
 				}
 				asSet.setJF();
@@ -159,8 +163,10 @@ public class GamePanel extends JPanel implements Runnable
 				
 				detenerActivarAlarma();
 				detenerActivarAlarmaJ();
-			}else if(gameState == fightState) {
-				fg.update();
+			} else if(gameState == fightState) {
+				 if (fg != null) {
+					 fg.update();
+				 }
 			}
 			
 			if(gameState == pauseState) {
@@ -234,9 +240,12 @@ public class GamePanel extends JPanel implements Runnable
            for (Objeto obj : o) {
                if (obj != null) obj.draw(g2, this);
            }
+           
            for (Zombie zb : z) {
-               if (zb != null) zb.draw(g2);
-           }
+        	    if (zb != null && zb.getVivo()) { // <--- ¡MODIFICADO! Solo dibuja si no es null Y está vivo.
+        	        zb.draw(g2);
+        	    }
+        	}
            
            for(JefePorNivel j: jF) {
         	   if(j != null) j.draw(g2); // Solo dibuja si el jefe no es null

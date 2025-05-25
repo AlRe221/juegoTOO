@@ -3,6 +3,9 @@ package entidad;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+
+import Inventario.Arma;
+import Inventario.Equipable;
 import Inventario.Inventario;
 import Inventario.ItemVelocidad;
 import Inventario.Objeto;
@@ -29,9 +32,20 @@ public class Jugador extends Entidad
 	private Inventario inventario;
 	private String spriteKeyActual = "normal"; 
 	
+	private boolean atacando = false;
+    private int contadorAnimacionAtaque = 0;
+    private final int DURACION_FRAME_ATAQUE = 15; // Duración de cada frame del sprite de ataque 
+    private final int FRAME_DE_DAÑO = 2; // El segundo sprite es el que hace daño
+    private long tiempoUltimoAtaque = 0;
+    private final long COOLDOWN_ATAQUE = 500; // 0.5 segundos
+    private Rectangle areaAtaque; // Alcance del golpe
 	
-	
-	
+    
+    // BufferedImages para los sprites de ataque
+    protected BufferedImage ataqueAbajo1, ataqueAbajo2; 
+    protected BufferedImage ataqueArriba1, ataqueArriba2;
+    protected BufferedImage ataqueIzquierda1, ataqueIzquierda2;
+    protected BufferedImage ataqueDerecha1, ataqueDerecha2;
 	
 	public Jugador(GamePanel gP, ManejadorTeclas mT, Ambientacion am)
 	{
@@ -47,6 +61,7 @@ public class Jugador extends Entidad
 		this.solidAreaDefaultX = this.solidArea.x;
 		this.solidAreaDefaultY = this.solidArea.y;
 		this.inventario = new Inventario();
+		this.areaAtaque = new Rectangle(0, 0, 0, 0);
 		
 		configuracionInicial();
 		getSpritesJugador("normal");
@@ -76,7 +91,7 @@ public class Jugador extends Entidad
 	}
 	public void getSpritesJugador(String key)
 	{
-		String carpeta, prefijo;
+		String carpeta, prefijo, prefijoAtaque = null;
 
 	    if ("normal".equals(key)) {
 	        carpeta = "/spritesjugador/";
@@ -86,6 +101,7 @@ public class Jugador extends Entidad
 	        System.out.println(pref);
 	        carpeta = "/paquitoCobjetos/" + key + "/";
 	        prefijo = "paco" + pref;
+	        prefijoAtaque = "Pegar/";  
 	    }
 	    arriba1    = setup1(carpeta + prefijo + "Arriba1");
 	    arriba2    = setup1(carpeta + prefijo + "Arriba2");
@@ -105,23 +121,42 @@ public class Jugador extends Entidad
 	    estaticoD1 = setup1(carpeta + prefijo + "EstaticoD1");
 	    estaticoD2 = setup1(carpeta + prefijo + "EstaticoD2");
 	    
+	    // Cargar sprites de ataque (ejemplo para abajo)
+	    ataqueAbajo1     = setup1(carpeta + prefijoAtaque + prefijo + "Abajo1"); 
+	    ataqueAbajo2     = setup1(carpeta + prefijoAtaque + prefijo + "Abajo2");
+	    ataqueArriba1    = setup1(carpeta + prefijoAtaque + prefijo + "Arriba1");
+	    ataqueArriba2    = setup1(carpeta + prefijoAtaque + prefijo + "Arriba2");
+	    ataqueIzquierda1 = setup1(carpeta + prefijo + "EstaticoI1");
+	    ataqueIzquierda2 = setup1(carpeta + prefijoAtaque + prefijo + "Izquierda2");
+	    ataqueDerecha1   = setup1(carpeta + prefijo + "EstaticoD1");
+	    ataqueDerecha2   = setup1(carpeta + prefijoAtaque + prefijo + "Derecha2");
 	}
 	
 	int index=0;
 
-	public void update() {
-	    boolean moviendo = false;
-	    this.colisionOn = false;
-	    
-	    if (modoRapido) {
-	        contadorRapido++;
-	        if (contadorRapido >= maxCiclosRapido) {
-	            this.velocidad = velocidadBase;
-	            modoRapido = false;
-	            contadorRapido = 0;
+	public void update() {	 
+	    if (atacando) {
+	        contadorAnimacionAtaque++;
+	        contadorSprites(); 
+
+	        
+	        // FRAME_DE_DAÑO duración de cada sprite.
+
+	        // Aquí asumimos que el daño se aplica a la mitad de la duración del segundo sprite.
+	        if (numeroSprite == FRAME_DE_DAÑO && contadorAnimacionAtaque == (DURACION_FRAME_ATAQUE + (DURACION_FRAME_ATAQUE / 2))) {
+	            aplicarDañoAZombiesCercanos();
 	        }
+
+	        // Terminar la animación 
+	        if (contadorAnimacionAtaque >= DURACION_FRAME_ATAQUE * 2) {
+	            atacando = false;
+	            contadorAnimacionAtaque = 0;
+	            
+	        }	        
+	        return; 
 	    }
-	    
+
+	    boolean moviendo = false;
 
 	    if (mT.getTeclaArriba()) {
 	        this.direccion = "arriba";
@@ -135,94 +170,74 @@ public class Jugador extends Entidad
 	    } else if (mT.getTeclaDerecha()) {
 	        this.direccion = "derecha";
 	        moviendo = true;
-	    } 
-	    
-	    if(mT.isTeclaCorrer()) {
-	    	
-	    	if(moviendo) {
-	    		if(!modoRapido) {
-	    			this.velocidad = velocidadBase +5;
-	    		}
-	    	}	
 	    }
-	    
-	    
-	    if (!mT.isTeclaCorrer() && !modoRapido) {
+
+	    // Iniciar Ataque 
+	    if (mT.getTeclaAtacar() && (System.currentTimeMillis() - tiempoUltimoAtaque > COOLDOWN_ATAQUE)) {
+	        atacando = true;
+	        moviendo = false; 
+	        contadorAnimacionAtaque = 0;
+	        numeroSprite = 1;          
+	        contadorSprites = 0;       
+	        tiempoUltimoAtaque = System.currentTimeMillis();
+	        //gP.playSE(5); 	        	      	        
+	        return; 
+	    }
+
+	    // Correr 
+	    if (modoRapido) {
+	        contadorRapido++;
+	        if (contadorRapido >= maxCiclosRapido) {
+	            this.velocidad = velocidadBase;
+	            modoRapido = false;
+	            contadorRapido = 0;
+	        }
+	    } else if (mT.isTeclaCorrer() && moviendo) {
+	        this.velocidad = velocidadBase + 5;
+	    } else {
 	        this.velocidad = velocidadBase;
-	    }
-	    
+	    }	    
 	    am.sonidoCamina(moviendo, colisionOn, 0);
-
-	    // Si no se está moviendo, aplicar estático dependiendo de la última dirección
+	    
 	    if (!moviendo) {
-	        if (this.direccion.equals("arriba")) {
-	            this.direccion = "estaticoArriba";
-	        } else if (this.direccion.equals("abajo")) {
-	            this.direccion = "estatico";
-	        }else if(this.direccion.equals("derecha")) {
-	        	this.direccion ="estaticoDerecha";
-	        }else if(this.direccion.equals("izquierda")) {
-	        	this.direccion = "estaticoIzquierda";
-	        }	// Puedes agregar también estaticoIzquierda y estaticoDerecha si quieres
-	        
-	        
+	        if (this.direccion.equals("arriba")) this.direccion = "estaticoArriba";
+	        else if (this.direccion.equals("abajo")) this.direccion = "estatico";
+	        else if (this.direccion.equals("derecha")) this.direccion = "estaticoDerecha";
+	        else if (this.direccion.equals("izquierda")) this.direccion = "estaticoIzquierda";
 	    }
-	    
-	    
-	    //revisa coli con tiles
-	     
-	    gP.getchecadorColision().checkTile(this);
-	    
-	    int obind = gP.getchecadorColision().checkObjeto(this, true);
-	    meterInventario(obind);
-	   
-	    //chechar colision contra zombie
-	    int zomind = gP.getchecadorColision().checarEntidad(this,gP.getZombie());
-	    
-	    
-	    cambiarPantallaCombate();
-	 
 
-	    //si no hubo colisión
-	    if(colisionOn == false) {
-	    	switch(direccion) {
-	    	case "arriba":{
-	    		if(this.mundoY - this.velocidad >= 0) {
-	    			this.setMundoY(this.mundoY - this.velocidad);
-	    		 }else {
-	    			 this.setMundoY(0);
-	    		 }
-	    		break;
-	    		} 
-	    	case "abajo" :{ 
-	    		if(this.mundoY + this.velocidad -  gP.getTamanioTile() <= gP.altoMundo ) {
-	    			this.setMundoY(this.mundoY + this.velocidad);
-	    			
-	    		}else {
-	    			this.setMundoY(gP.altoMundo - gP.getTamanioTile());
-	    		}
-	    		break;
-	    		}
-	    	case "izquierda" :{
-	    		if(this.mundoX - velocidad >= 0) {
-	    			this.setMundoX(this.mundoX - velocidad);
-	    		}else {
-	    			this.setMundoX(0);
-	    		}
-	    		break;
-	    		} 
-	    	case "derecha" :{
-	    		if(this.mundoX + velocidad + gP.getTamanioTile() <= gP.anchoMundo) {
-	    			this.setMundoX(this.mundoX + this.velocidad); 
-	    		}else {
-	    			this.setMundoX(gP.anchoMundo - gP.getTamanioTile());
-	    		}
-	    		break; 
-	    		}
-	    	}
+	    // Colisiones
+	    this.colisionOn = false; 
+	    gP.getchecadorColision().checkTile(this);
+	    int obind = gP.getchecadorColision().checkObjeto(this, true);
+	    meterInventario(obind); 
+	    int zomind = gP.getchecadorColision().checarEntidad(this, gP.getZombie());
+	    // Aquí podrías añadir lógica si un zombie te golpea: if(zomind != 999) { recibirDaño(...); }
+	    
+	    cambiarPantallaCombate(); 
+
+	    
+	    if (!colisionOn && moviendo) {
+	        switch (direccion) {
+	            case "arriba":
+	                if (this.mundoY - this.velocidad >= 0) this.mundoY -= this.velocidad;
+	                else this.mundoY = 0;
+	                break;
+	            case "abajo":	               
+	                if (this.mundoY + this.velocidad + gP.getTamanioTile() <= gP.altoMundo) this.mundoY += this.velocidad;
+	                else this.mundoY = gP.altoMundo - gP.getTamanioTile();
+	                break;
+	            case "izquierda":
+	                if (this.mundoX - this.velocidad >= 0) this.mundoX -= this.velocidad;
+	                else this.mundoX = 0;
+	                break;
+	            case "derecha":	                
+	                if (this.mundoX + this.velocidad + gP.getTamanioTile() <= gP.anchoMundo) this.mundoX += this.velocidad;
+	                else this.mundoX = gP.anchoMundo - gP.getTamanioTile();
+	                break;
+	        }
 	    }
 	    
-	   
 	    contadorSprites();
 	}
 	  
@@ -234,101 +249,147 @@ public class Jugador extends Entidad
 	private final int sueloY = 400;     // Piso (posicion Y donde está el suelo)
 	private final int fuerzaSalto = -15; // Velocidad inicial al saltar (negativo para subir)
 	private final int gravedad = 1;  
-	
-	
-	public void updateCombate() {
-		   boolean moviendo = false;
-		    this.colisionOn = false;
-		    
-		    if (modoRapido) {
-		        contadorRapido++;
-		        if (contadorRapido >= maxCiclosRapido) {
-		            this.velocidad = velocidadBase;
-		            modoRapido = false;
-		            contadorRapido = 0;
-		        }
-		    }
-		    
-		    if (mT.getTeclaIzquierda()) {
-		        this.direccion = "izquierda";
-		        moviendo = true;
-		    } else if (mT.getTeclaDerecha()) {
-		        this.direccion = "derecha";
-		        moviendo = true;
-		    } else if(mT.getTeclaSaltar()) {
-		    	this.direccion = "saltar";
-		    }
-		    
-		    
-		    if(mT.isTeclaCorrer()) {
-		    	
-		    	if(moviendo) {
-		    		if(!modoRapido) {
-		    			this.velocidad = velocidadBase +5;
-		    		}
-		    	}	
-		    }
-		    if (!moviendo) {
-		      if (this.direccion.equals("izquierda")) {
-		            this.direccion = "estatico";
-		        }else if(this.direccion.equals("derecha")) {
-		        	this.direccion ="estatico";
-		        }
-		    }
-		    
-		    if(colisionOn == false) {
-		    	switch(direccion) {
-		    	case "izquierda" :{
-		    		if(this.mundoX - velocidad >= 0) {
-		    			this.setMundoX(this.mundoX - velocidad);
-		    		}else {
-		    			this.setMundoX(0);
-		    		}
-		    		break;
-		    		} 
-		    	case "derecha" :{
-		    		if(this.mundoX + velocidad + gP.getTamanioTile() <= gP.anchoMundo) {
-		    			this.setMundoX(this.mundoX + this.velocidad); 
-		    		}else {
-		    			this.setMundoX(gP.anchoMundo - gP.getTamanioTile());
-		    		}
-		    		break; 
-		    		}
-		    	
-		    	}
-		    }
 		
-		    //PROYECTILES
-		    if(mT.getTeclaDisparar()) {
-		    	ProyectilPaco newP = new ProyectilPaco(gP);
-		    	newP.set(this.mundoX, this.mundoY, "derecha",true,this);
-		    	gP.getListaProyectilJugador().add(newP);
-		    	
-		    }
-		    
-		    
-		    //SI SE PRESIONA SALTAR Y AUN NO ESTA SALTANDO
-		    if (mT.getTeclaSaltar() && !saltando) {
-		        velocidadY = fuerzaSalto;
-		        saltando = true;
-		    }
+	public void updateCombate() {
+	    boolean moviendoHorizontalmente = false; 
+	    
 
-		    // ACTUALIZAMOS POSICIÓN VERTICAL
-		    mundoY += velocidadY;
+	    // LEER ENTRADAS DEL TECLADO PARA COMBATE
+	    if (mT.getTeclaIzquierda()) {
+	        this.direccion = "izquierda";
+	        moviendoHorizontalmente = true;
+	    } else if (mT.getTeclaDerecha()) {
+	        this.direccion = "derecha";
+	        moviendoHorizontalmente = true;
+	    }
 
-		    // SI SE ESTA SALTANDO, Y SE TIENE QUE CAER, APLICAR GRAVEDAD
-		    if (saltando) {
-		        velocidadY += gravedad;
-		    }
+	  
+	    if (!moviendoHorizontalmente) {
+	        if (this.direccion.equals("izquierda") || this.direccion.equals("derecha")) {
+	            this.direccion = "estatico";
+	        }
+	    }
+	    
+	    // LÓGICA DE MOVIMIENTO HORIZONTAL EN COMBATE && COLICIONES
+	    switch (this.direccion) {
+	        case "izquierda":	            
+	            if (this.mundoX - velocidad >= 0) {
+	                this.mundoX -= velocidad;
+	            } else {
+	                this.mundoX = 0; 
+	            }
+	            break;
+	        case "derecha":
+	            if (this.mundoX + velocidad + gP.getTamanioTile() <= gP.getAnchoPantalla()) {
+	                this.mundoX += velocidad;
+	            } else {
+	                this.mundoX = gP.getAnchoPantalla() - gP.getTamanioTile(); // No puede pasar del borde derecho
+	            }
+	            break;
+	    }
 
-		    // LIMITE CON EL PISO 
-		    if (mundoY >= sueloY) {
-		        mundoY = sueloY;
-		        velocidadY = 0;
-		        saltando = false;
-		    }
-		    
-		    contadorSprites();
+	    // LÓGICA DE SALTO
+	    if (mT.getTeclaSaltar() && !saltando) { 
+	        this.direccion = "saltar"; 
+	        velocidadY = fuerzaSalto;
+	        saltando = true;
+	        // gP.playSE(); // Sonido de salto
+	    }
+
+	    mundoY += velocidadY;
+	    if (saltando) {
+	        velocidadY += gravedad;
+	    }
+
+	    if (mundoY >= sueloY) {
+	        mundoY = sueloY;
+	        velocidadY = 0;
+	        if (saltando) { 
+	            saltando = false;	            
+	            if (!moviendoHorizontalmente) {
+	                this.direccion = "estatico";
+	            }
+	        }
+	    }
+	    
+	    // DISPARO DE PROYECTILES
+	    if (mT.getTeclaDisparar()) {	   
+	        ProyectilPaco newP = new ProyectilPaco(gP); 
+
+	        newP.set(this.mundoX, this.mundoY, "derecha", true, this);
+	        gP.getListaProyectilJugador().add(newP);
+
+	    }	    	    
+	    contadorSprites();
+	}
+	
+	private void aplicarDañoAZombiesCercanos() {
+	   
+	    int attackAreaSize = gP.getTamanioTile(); // Cuán lejos y ancho es el golpe
+	    int offsetX = 0;
+	    int offsetY = 0;
+	    
+	    String dirBase = this.direccion;
+	    if (atacando) { 	                   
+	        if (this.direccion.contains("Arriba")) dirBase = "arriba";
+	        else if (this.direccion.contains("Abajo")) dirBase = "abajo";
+	        else if (this.direccion.contains("Izquierda")) dirBase = "izquierda";
+	        else if (this.direccion.contains("Derecha")) dirBase = "derecha";
+	    }
+
+
+	    switch (dirBase) {
+	        case "arriba":
+	        case "estaticoArriba":
+	            areaAtaque.setBounds(mundoX + solidArea.x, mundoY + solidArea.y - attackAreaSize, solidArea.width, attackAreaSize);
+	            break;
+	        case "abajo":
+	        case "estatico":
+	            areaAtaque.setBounds(mundoX + solidArea.x, mundoY + solidArea.y + solidArea.height, solidArea.width, attackAreaSize);
+	            break;
+	        case "izquierda":
+	        case "estaticoIzquierda":
+	            areaAtaque.setBounds(mundoX + solidArea.x - attackAreaSize, mundoY + solidArea.y, attackAreaSize, solidArea.height);
+	            break;
+	        case "derecha":
+	        case "estaticoDerecha":
+	            areaAtaque.setBounds(mundoX + solidArea.x + solidArea.width, mundoY + solidArea.y, attackAreaSize, solidArea.height);
+	            break;
+	    }
+
+	   
+	    double dañoInfligido = this.ataque; 
+	    if (!"normal".equals(spriteKeyActual)) {
+	       
+	        Objeto itemEquipado = null;
+	        for(Objeto obj : inventario.getObjetos()){ 
+	            if(obj instanceof Equipable && ((Equipable)obj).getSpriteKey().equals(spriteKeyActual)){
+	                itemEquipado = obj;
+	                break;
+	            }
+	        }
+	        if(itemEquipado instanceof Arma){
+	            dañoInfligido = ((Arma)itemEquipado).getCantidadDanio();
+	        }
+	    }
+	    
+
+	    // Iterar sobre los zombis y aplicar daño
+	    for (Zombie zombie : gP.getZombie()) { 
+	        if (zombie != null && zombie.getVivo()) {
+	            Rectangle zombieHitbox = new Rectangle(
+	                zombie.getMundoX() + zombie.getSolidAreaDefaultX(),
+	                zombie.getMundoY() + zombie.getSolidAreaDefaultY(),
+	                zombie.getSolidArea().width,
+	                zombie.getSolidArea().height
+	            );
+
+	            if (areaAtaque.intersects(zombieHitbox)) {
+	                zombie.recibirDaño(dañoInfligido);
+	                System.out.println("Zombie golpeado! Vida restante: " + zombie.getVida()); // Para depuración
+	            }
+	        }
+	    }
 	}
 	
 	   
@@ -418,57 +479,37 @@ public class Jugador extends Entidad
 	public void draw(Graphics2D g2)
 	{
 		BufferedImage sprite = null;
-		switch(this.direccion)
-		{
-		case "arriba" : 
-			if(this.numeroSprite == 1)
-				sprite = this.arriba1; 
-			if(this.numeroSprite == 2)
-				sprite = this.arriba2; 
-			break;
-		case "abajo" : 
-			if(this.numeroSprite == 1)
-				sprite = this.abajo1; 
-			if(this.numeroSprite == 2)
-				sprite = this.abajo2; 
-			break;
-		case "izquierda" : 
-			if(this.numeroSprite == 1)
-				sprite = this.izquierda1; 
-			if(this.numeroSprite == 2)
-				sprite = this.izquierda2; 
-			break;
-		case "derecha" : 
-			if(this.numeroSprite == 1)
-				sprite = this.derecha1; 
-			if(this.numeroSprite == 2)
-				sprite = this.derecha2; 
-			break;
-		case "estatico" : 
-			if(this.numeroSprite == 1)
-				sprite = this.estatico1; 
-			if(this.numeroSprite == 2)
-				sprite = this.estatico2; 
-			break;
-		case "estaticoArriba" : 
-			if(this.numeroSprite == 1)
-				sprite = this.estaticoA1; 
-			if(this.numeroSprite == 2)
-				sprite = this.estaticoA2; 
-			break;	
-		case "estaticoDerecha" : 
-			if(this.numeroSprite == 1)
-				sprite = this.estaticoD1; 
-			if(this.numeroSprite == 2)
-				sprite = this.estaticoD2; 
-			break;
-		case "estaticoIzquierda" : 
-			if(this.numeroSprite == 1)
-				sprite = this.estaticoI1; 
-			if(this.numeroSprite == 2)
-				sprite = this.estaticoI2; 
-			break;	
-		}
+		String dirActual = this.direccion;
+		
+		 if (atacando) {
+		        // Determinar qué sprite de ataque usar basado en la dirección original y numeroSprite
+		        String dirBase = "abajo"; // Dirección base por defecto
+		        if (this.direccion.contains("Arriba")) dirBase = "arriba";
+		        else if (this.direccion.contains("Abajo") || this.direccion.equals("estatico")) dirBase = "abajo"; // estatico por defecto mira abajo
+		        else if (this.direccion.contains("Izquierda")) dirBase = "izquierda";
+		        else if (this.direccion.contains("Derecha")) dirBase = "derecha";
+
+		        switch (dirBase) {
+		            case "arriba": sprite = (numeroSprite == 1) ? ataqueArriba1 : ataqueArriba2; break;
+		            case "abajo": sprite = (numeroSprite == 1) ? ataqueAbajo1 : ataqueAbajo2; break;
+		            case "izquierda": sprite = (numeroSprite == 1) ? ataqueIzquierda1 : ataqueIzquierda2; break;
+		            case "derecha": sprite = (numeroSprite == 1) ? ataqueDerecha1 : ataqueDerecha2; break;
+		            default: sprite = (numeroSprite == 1) ? ataqueAbajo1 : ataqueAbajo2; 
+		        }
+		    } else {
+		        // Lógica de dibujado de movimiento/estático existente
+		        switch (dirActual) {
+		            case "arriba": sprite = (numeroSprite == 1) ? arriba1 : arriba2; break;
+		            case "abajo": sprite = (numeroSprite == 1) ? abajo1 : abajo2; break;
+		            case "izquierda": sprite = (numeroSprite == 1) ? izquierda1 : izquierda2; break;
+		            case "derecha": sprite = (numeroSprite == 1) ? derecha1 : derecha2; break;
+		            case "estatico": sprite = (numeroSprite == 1) ? estatico1 : estatico2; break;
+		            case "estaticoArriba": sprite = (numeroSprite == 1) ? estaticoA1 : estaticoA2; break;
+		            case "estaticoDerecha": sprite = (numeroSprite == 1) ? estaticoD1 : estaticoD2; break;
+		            case "estaticoIzquierda": sprite = (numeroSprite == 1) ? estaticoI1 : estaticoI2; break;
+		            default: sprite = estatico1; 
+		        }
+		    }
 		
 		int x = this.pantallaX; 
 		int y = this.pantallaY; 

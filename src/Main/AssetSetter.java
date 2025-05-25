@@ -42,10 +42,10 @@ public class AssetSetter {
 		    case 1: o = new Alimento(5.0, true, 7.5, "Torta Chilaquil", "Una deliciosa torta de chilaquiles que restaura 20 puntos de energía."); break;
 		    case 2: o = new Bebida(10.0, true, 6.0, "Aguita", "Agua fresca que restaura 15 puntos de hidratación."); break;
 		    case 3: o = new ItemVelocidad(5.0, true, 6.0, "Aumenta tu velocidad un 50% por 6 segundos."); break;
-		    case 4: o = new Mochila(3, 3.0, true, 6.0, "Mochila", "Aumenta tu capacidad de inventario en +4 ranuras."); break;
-		    case 5: o = new Laptop(4, 10.0, true, 12.5, "Portátil", "Laptop potente que mejora tu visión del mapa."); break;
-		    case 6: o = new Celular(4, 8.5, true, 10.0, "Celular", "Emite una señal que aturde a los enemigos cercanos."); break;
-		    case 7: o = new Extintor(5, 7.0, true, 8.0, "Extintor", "Apaga incendios y hace 5 puntos de daño a enemigos."); break;
+		    case 4: o = new Mochila(15, 3.0, true, 6.0, "Mochila", "Aumenta tu capacidad de inventario en +4 ranuras."); break;
+		    case 5: o = new Laptop(40, 10.0, true, 12.5, "Portátil", "Laptop potente que mejora tu visión del mapa."); break;
+		    case 6: o = new Celular(40, 8.5, true, 10.0, "Celular", "Emite una señal que aturde a los enemigos cercanos."); break;
+		    case 7: o = new Extintor(50, 7.0, true, 8.0, "Extintor", "Apaga incendios y hace 5 puntos de daño a enemigos."); break;
 		}
 
 			// posición aleatoria

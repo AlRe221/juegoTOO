@@ -18,7 +18,7 @@ public class ManejadorTeclas extends KeyAdapter {
     // MOVIMIENTO Y ACCIONES
     private boolean teclaArriba, teclaAbajo, teclaIzquierda, teclaDerecha;
     private boolean teclaInventario, teclaArribaInv, teclaAbajoInv, teclaEnter, teclaIzqInvCol, teclaDerInvCol;
-    private boolean teclaCorrer,teclaSaltar,tecladisparar;
+    private boolean teclaCorrer,teclaSaltar,tecladisparar, teclaAtacar;
  
 	
     private static final int OPCIONES_MENU_INICIO = 4;
@@ -132,6 +132,7 @@ public class ManejadorTeclas extends KeyAdapter {
             case KeyEvent.VK_ESCAPE-> alternarPausa();
             case KeyEvent.VK_SPACE -> teclaSaltar     = false;
             case KeyEvent.VK_B     -> tecladisparar   = false;
+            case KeyEvent.VK_F     -> teclaAtacar     = false; 
         }
     }
 
@@ -319,6 +320,7 @@ public class ManejadorTeclas extends KeyAdapter {
             case KeyEvent.VK_RIGHT  -> teclaDerInvCol  = true;
             case KeyEvent.VK_ENTER  -> teclaEnter      = true;
             case KeyEvent.VK_Q      -> teclaCorrer     = true;
+            case KeyEvent.VK_F      -> teclaAtacar     = true;
         }
     }
     
@@ -351,6 +353,7 @@ public class ManejadorTeclas extends KeyAdapter {
     public boolean isTeclaCorrer()     { return teclaCorrer; }
     public boolean getTeclaSaltar()     { return teclaSaltar; }
     public boolean getTeclaDisparar()   { return tecladisparar; }
+    public boolean getTeclaAtacar() { return teclaAtacar; } 
 
     public void setTeclaInventario(boolean b) { this.teclaInventario = b; }
     public void setTeclaCorrer(boolean b)     { this.teclaCorrer     = b; }
