@@ -59,6 +59,7 @@ public class Jugador extends Entidad
 		
 		this.velocidad = velocidadBase;
 		this.direccion = "abajo";
+		restaurarVidaCompleta(); 
 		
 	}
 	
@@ -594,15 +595,6 @@ public class Jugador extends Entidad
 					}
 	}
 	
-	
-
-	
-	public void dañoInfeccion(double infeccion) {
-		this.vida -= infeccion;
-		if(this.vida <0) {
-			this.vida = 0;
-		}
-	}
 	
 	//colision
 	public boolean isColisionOn() {

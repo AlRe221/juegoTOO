@@ -94,23 +94,20 @@ public class FightGame {
 	            path = "/ImagenesPantallas/fondo_jefe_2.png"; // Jefe 2 -> Imagen 2
 	            break;
 	        case 3: 
-	            // Para el Jefe 3, podemos usar la imagen 4 que tienes, o la 1, ¡la que prefieras!
-	            // Voy a usar la 4 como ejemplo. Si creas fondo_jefe_3.png, cambia el nombre aquí.
 	            path = "/ImagenesPantallas/fondo_jefe_4.png"; // Jefe 3 -> Imagen 4
 	            break;
-	        default:
-	            // Si por alguna razón el ID no es 1, 2, o 3, no hacemos nada.
+	        default:	           
 	            break;
 	    }
 
-	    // 2. Intentamos cargar y dibujar la imagen desde la ruta que elegimos
+	    
 	    if (!path.isEmpty()) {
 	        try {
-	            // Carga y dibuja la imagen de forma directa
+	            
 	            image = ImageIO.read(getClass().getResourceAsStream(path));
 	            g2.drawImage(image, 0, 0, gP.getAnchoPantalla(), gP.getAltoPantalla(), null);
 	        } catch (Exception e) {
-	            // El bloque catch está vacío como preferías.
+	        		           
 	        }
 	    }
 	            
@@ -122,6 +119,10 @@ public class FightGame {
 		this.gano = win; 
 		this.peleaTerminada = true;
 	}
+	// Devuelve la instancia del jefe actual en combate.
+	public JefePorNivel getJefe() {
+        return this.jN;
+    }
 	
 
 }

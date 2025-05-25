@@ -24,16 +24,41 @@ public abstract class Proyectil extends Entidad{
 		
 	}
 	public void update() {
-		  if(direccion.equals("izquierda")) {
-		        mundoX -= velocidad;
-		    } else if(direccion.equals("derecha")) {
-		        mundoX += velocidad;
-		    }
+	    JefePorNivel jefe = gP.getJefeActualEnCombate(); 
 
-		    // Condición para marcarlo como no vivo y eliminarlo
-		    if(mundoX < 0 || mundoX > gP.getAnchoPantalla()) {
-		        vivo = false;
-		    }
+	    if (jefe != null && jefe.getVivo()) {
+	        // Se actualiza la posición del área de colisión del proyectil para el frame actual.
+	        solidArea.x = mundoX + solidArea.x;
+	        solidArea.y = mundoY + solidArea.y;
+	       	        
+	        jefe.getSolidArea().x = 1000 + jefe.getSolidAreaDefaultX();
+	        jefe.getSolidArea().y = 400 + jefe.getSolidAreaDefaultY();
+
+	        // Si el área del proyectil se intersecta 
+	        if (this.getSolidArea().intersects(jefe.getSolidArea())) {
+	            jefe.recibirDaño(this.ataque); 
+	            this.vivo = false;            
+	        }
+
+	        // Se restauran las posiciones relativas de las áreas de colisión.
+	        solidArea.x = solidAreaDefaultX;
+	        solidArea.y = solidAreaDefaultY;
+	        jefe.getSolidArea().x = jefe.getSolidAreaDefaultX();
+	        jefe.getSolidArea().y = jefe.getSolidAreaDefaultY();
+	    }
+
+	    if (this.vivo) {
+	        if (direccion.equals("izquierda")) {
+	            mundoX -= velocidad;
+	        } else if (direccion.equals("derecha")) {
+	            mundoX += velocidad;
+	        }
+
+	        
+	        if (mundoX < 0 || mundoX > gP.getAnchoPantalla()) {
+	            this.vivo = false;
+	        }
+	    }
 	}
 	public abstract void dibujar(Graphics2D g2);
 

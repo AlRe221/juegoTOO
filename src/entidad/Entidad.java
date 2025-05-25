@@ -16,7 +16,7 @@ public abstract class Entidad
 	GamePanel gP;
 	protected int tipoE; //0 jugador, 1, zombie, 2,proyectilJug, 3 proyectilJefe
 	protected int mundoX, mundoY;
-	protected int velocidad;
+	protected int velocidad; 
 	
 	protected BufferedImage arriba1, arriba2, abajo1, abajo2, izquierda1,
 							izquierda2, derecha1, derecha2,estatico1,estatico2,
@@ -52,9 +52,16 @@ public abstract class Entidad
 	protected int useCost;
 	
 	protected BufferedImage i;
+	
 	public Entidad(GamePanel gp) {
-		this.gP = gp;
-	}
+        this.gP = gp;
+
+        // Inicializa solidArea con un rectángulo por defecto.
+        // Puedes ajustar las coordenadas (0,0) y el tamaño (32,32) según sea necesario  
+        this.solidArea = new Rectangle(0, 0, 32, 32); 
+        this.solidAreaDefaultX = this.solidArea.x;
+        this.solidAreaDefaultY = this.solidArea.y;       
+    }
 	
 	
 	protected BufferedImage setup1(String rutaBase) {
@@ -76,7 +83,24 @@ public abstract class Entidad
 		        this.contadorSprites = 0;
 		    }
 	}
+	public void recibirDaño(double daño) {
+        this.vida -= daño;
+        if (this.vida <= 0) {
+            this.vida = 0;
+            this.vivo = false; // La entidad ha sido derrotada
+        }
+    }
 	
+	public void curar(double cantidad) {
+        this.vida += cantidad;
+        if (this.vida > this.vidaMaxima) {
+            this.vida = this.vidaMaxima;
+        }
+    }
+	
+	public void restaurarVidaCompleta() {
+        this.vida = this.vidaMaxima;
+    }
 	public boolean getColisionOn() {
 		return colisionOn;
 	}

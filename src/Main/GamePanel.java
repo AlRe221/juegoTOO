@@ -34,7 +34,6 @@ public class GamePanel extends JPanel implements Runnable
 		Jugador jugador = new Jugador(this, mT,se);
 		ManejadorTiles mTi =new ManejadorTiles(this);
 		ChecadorColision cC = new ChecadorColision(this);
-		//Inventario inv = new Inventario();
 		Objeto o[] = new Objeto[10];
 		Zombie z[] = new Zombie[15];
 		AssetSetter asSet = new AssetSetter(this);
@@ -78,7 +77,7 @@ public class GamePanel extends JPanel implements Runnable
 			
 			vidaTimer = new javax.swing.Timer(1_200_000, e -> {
 	            if (gameState == playState) {
-	                jugador.dañoInfeccion(0.5);
+	            	jugador.recibirDaño(0.5);
 	                repaint();
 	            }
 	        });
@@ -91,7 +90,6 @@ public class GamePanel extends JPanel implements Runnable
 		public void setupGame() {
 			// Reposicionar y curar al jugador
 	        jugador.configuracionInicial();                 // Pone mundoX/mundoY al inicio
-	        jugador.setVida(jugador.getVidaMax());          // rellena la barra
 	        jugador.getInventario().clear();                
 
 	        // Repoblar objetos y zombis
@@ -263,6 +261,13 @@ public class GamePanel extends JPanel implements Runnable
            //   d) HUD general 
            ui.draw(g2);
        }
+       
+       public JefePorNivel getJefeActualEnCombate() {    	    
+    	    if (this.fg != null) {    	       
+    	        return this.fg.getJefe();
+    	    }    	  
+    	    return null;
+    	}
 
 		
 		public void playMusic(int i) {
