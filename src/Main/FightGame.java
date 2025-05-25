@@ -119,13 +119,13 @@ public class FightGame {
 	    // 1. Asignamos la ruta correcta según el ID del jefe
 	    switch (nivelId) {
 	        case 1: 
-	            path = "/ImagenesPantallas/fondo_jefe_1.png"; // Jefe 1 -> Imagen 1
+	            path = "/ImagenesPantallas/fondo_jefe_4.png"; // Jefe 1 -> Imagen 1
 	            break;
 	        case 2: 
 	            path = "/ImagenesPantallas/fondo_jefe_2.png"; // Jefe 2 -> Imagen 2
 	            break;
 	        case 3: 
-	            path = "/ImagenesPantallas/fondo_jefe_4.png"; // Jefe 3 -> Imagen 4
+	            path = "/ImagenesPantallas/fondo_jefe_1.png"; // Jefe 3 -> Imagen 4
 	            break;
 	        default:	           
 	            break;
