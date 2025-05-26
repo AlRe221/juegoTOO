@@ -1,5 +1,6 @@
 package entidad;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -7,23 +8,27 @@ import java.util.Random;
 
 import Main.GamePanel;
 
-public abstract class Zombie extends Entidad{
+public class Zombie extends Entidad{
 	String nombre;
-	BufferedImage i;
 	private final int radioDeteccion = 200;
 	private boolean persiguiendo = false;
 	private char currentAxis  = 'x'; 
 	
 
-	public Zombie(String n, GamePanel gP) {
+	public Zombie(GamePanel gP, String nombreInstancia, int tipoZombieKey, double vidaMaxima, int velocidad) {
 		super(gP);
 		this.tipoE = 1;
-		this.nombre = n; 
-		velocidad = 1;
-		direccion = "abajo";
+		this.nombre = nombreInstancia; 
+		this.velocidad = velocidad;
+        this.vidaMaxima = vidaMaxima;
+        this.vida = this.vidaMaxima;
+        this.direccion = "abajo";
+        
 		this.solidArea = new Rectangle(8,16,32,32); 
 		this.solidAreaDefaultX = this.solidArea.x;
 		this.solidAreaDefaultY = this.solidArea.y;
+		
+		getZombieSprites(tipoZombieKey);
 		
 	}
 	
@@ -43,16 +48,25 @@ public abstract class Zombie extends Entidad{
 		            currentAxis  = (Math.abs(dx) >= Math.abs(dy)) ? 'x' : 'y';
 		        }
 	
-		        if (currentAxis == 'x' && dx == 0) currentAxis = 'y';
-		        if (currentAxis == 'y' && dy == 0) currentAxis = 'x';
-	
-		        if (currentAxis == 'x') {
+		        // Cambiar de eje 
+		        boolean alineadoEnX = Math.abs(dx) < velocidad; 
+		        boolean alineadoEnY = Math.abs(dy) < velocidad; 
+
+		        
+		        if (currentAxis == 'x' && alineadoEnX && !alineadoEnY) {
+		            currentAxis = 'y';
+		        } else if (currentAxis == 'y' && alineadoEnY && !alineadoEnX) {
+		            currentAxis = 'x';
+		        }
+
+		        // Establecer dirección basada en el eje actual
+		        if (currentAxis == 'x' && !alineadoEnX) {
 		            direccion = (dx > 0) ? "derecha" : "izquierda";
-		        } else { 
+		        } else if (currentAxis == 'y' && !alineadoEnY) {
 		            direccion = (dy > 0) ? "abajo" : "arriba";
 		        }
-	
-		        return;             
+
+		        return;
 		    }
 	
 		    // Patrulla
@@ -69,7 +83,17 @@ public abstract class Zombie extends Entidad{
 		    }
 		}
 
-
+		public void getZombieSprites(int tipoID) {
+	        String carpeta = "/Zombie" + tipoID + "/infectado"; 	        	        	       
+	            abajo1 = setup1(carpeta + "Abajo1");
+	            abajo2 = setup1(carpeta + "Abajo2");
+	            arriba1 = setup1(carpeta + "Arriba1");
+	            arriba2 = setup1(carpeta + "Arriba2");
+	            derecha1 = setup1(carpeta + "CamD1");
+                derecha2 = setup1(carpeta + "EstaticoD1"); 
+                izquierda1 = setup1(carpeta + "CamIz1");
+                izquierda2 = setup1(carpeta + "EstaticoIz1"); 	           
+	    }
 
 		
 		int dañototal = 60; 
@@ -80,6 +104,15 @@ public abstract class Zombie extends Entidad{
 		        return;
 		    }
 			
+		    // ---> AÑADIR LÓGICA PARA EL CONTADOR DEL FLASH <---
+		    if (fueGolpeadoRecientemente) {
+		        contadorFlashDaño--;
+		        if (contadorFlashDaño <= 0) {
+		            fueGolpeadoRecientemente = false;
+		        }
+		    }
+		    // ---> FIN DE LÓGICA PARA EL CONTADOR DEL FLASH <---
+
 			setAction();
 			colisionOn = false;
 			gP.getchecadorColision().checkTile(this);
@@ -182,14 +215,41 @@ public abstract class Zombie extends Entidad{
 			   mundoY + gP.getTamanioTile() > gP.getJugador().getMundoY() - gP.getJugador().getPantallaY() &&
 			   mundoY- gP.getTamanioTile() < gP.getJugador().getMundoY() + gP.getJugador().getPantallaY()) {
 				i = direcciones();
-				g2.drawImage(i, x, y, gP.getTamanioTile(), gP.getTamanioTile(), null);				
+				if (i != null) {
+		            g2.drawImage(i, x, y, gP.getTamanioTile(), gP.getTamanioTile(), null);
+				
+				// ---> AÑADIR PARA DIBUJAR EL FLASH ROJO <---
+	            if (fueGolpeadoRecientemente) {
+	                // Guardar la composición original
+	                java.awt.Composite originalComposite = g2.getComposite();
+	                // Aplicar transparencia
+	                g2.setComposite(java.awt.AlphaComposite.getInstance(java.awt.AlphaComposite.SRC_OVER, 0.5f)); // 50% de opacidad
+	                g2.setColor(Color.RED);
+	                g2.fillRect(x, y, gP.getTamanioTile(), gP.getTamanioTile());
+	                // Restaurar la composición original para no afectar otros dibujos
+	                g2.setComposite(originalComposite);
+	            }            
+	            // ---> FIN DE DIBUJAR EL FLASH ROJO <---
+				}            
 				
 			}else {
 				if(gP.getJugador().getMundoX() < gP.getJugador().getPantallaX() ||
 						gP.getJugador().getMundoY() < gP.getJugador().getPantallaY() ||
 						rOffs > gP.getAnchoMundo() - gP.getJugador().getMundoX() ||
 						bOffs > gP.getAltoMundo() - gP.getJugador().getMundoY()) {
-						g2.drawImage(i, x, y, gP.getTamanioTile(), gP.getTamanioTile(), null);
+						i = direcciones();
+			            if (i != null) {
+			                g2.drawImage(i, x, y, gP.getTamanioTile(), gP.getTamanioTile(), null);
+			                // ---> AÑADIR PARA DIBUJAR EL FLASH ROJO (también aquí) <---
+			                if (fueGolpeadoRecientemente) {
+			                    java.awt.Composite originalComposite = g2.getComposite();
+			                    g2.setComposite(java.awt.AlphaComposite.getInstance(java.awt.AlphaComposite.SRC_OVER, 0.5f));
+			                    g2.setColor(Color.RED);
+			                    g2.fillRect(x, y, gP.getTamanioTile(), gP.getTamanioTile());
+			                    g2.setComposite(originalComposite);
+			                }
+			                // ---> FIN DE DIBUJAR EL FLASH ROJO <---
+			            }
 						
 						
 					}
@@ -199,56 +259,15 @@ public abstract class Zombie extends Entidad{
 		
 public BufferedImage direcciones() {
 	BufferedImage sprite = null;
-	switch(this.direccion)
-	{
-	case "arriba" : 
-		if(this.numeroSprite == 1)
-			sprite = this.arriba1; 
-		if(this.numeroSprite == 2)
-			sprite = this.arriba2; 
-		break;
-	case "abajo" : 
-		if(this.numeroSprite == 1)
-			sprite = this.abajo1; 
-		if(this.numeroSprite == 2)
-			sprite = this.abajo2; 
-		break;
-	case "izquierda" : 
-		if(this.numeroSprite == 1)
-			sprite = this.izquierda1; 
-		if(this.numeroSprite == 2)
-			sprite = this.izquierda2; 
-		break;
-	case "derecha" : 
-		if(this.numeroSprite == 1)
-			sprite = this.derecha1; 
-		if(this.numeroSprite == 2)
-			sprite = this.derecha2; 
-		break;
-	case "estatico" : 
-		if(this.numeroSprite == 1)
-			sprite = this.estatico1; 
-		if(this.numeroSprite == 2)
-			sprite = this.estatico2; 
-		break;
-	case "estaticoArriba" : 
-		if(this.numeroSprite == 1)
-			sprite = this.estaticoA1; 
-		if(this.numeroSprite == 2)
-			sprite = this.estaticoA2; 
-		break;	
-	case "estaticoDerecha" : 
-		if(this.numeroSprite == 1)
-			sprite = this.estaticoD1; 
-		if(this.numeroSprite == 2)
-			sprite = this.estaticoD2; 
-		break;
-	case "estaticoIzquierda" : 
-		if(this.numeroSprite == 1)
-			sprite = this.estaticoI1; 
-		if(this.numeroSprite == 2)
-			sprite = this.estaticoI2; 
-		break;	
+	switch(this.direccion) {
+		case "arriba" : sprite = (this.numeroSprite == 1) ? this.arriba1 : this.arriba2; break;
+	    case "abajo" : sprite = (this.numeroSprite == 1) ? this.abajo1 : this.abajo2; break;
+	    case "izquierda" : sprite = (this.numeroSprite == 1) ? this.izquierda1 : this.izquierda2; break;
+	    case "derecha" : sprite = (this.numeroSprite == 1) ? this.derecha1 : this.derecha2; break;
+	    case "estatico" : sprite = (this.numeroSprite == 1) ? this.estatico1 : this.estatico2; break;
+	    case "estaticoArriba" : sprite = (this.numeroSprite == 1) ? this.estaticoA1 : this.estaticoA2; break;	
+	    case "estaticoDerecha" : sprite = (this.numeroSprite == 1) ? this.estaticoD1 : this.estaticoD2; break;
+	    case "estaticoIzquierda" : sprite = (this.numeroSprite == 1) ? this.estaticoI1 : this.estaticoI2; break;
 	}
 	return sprite;
 }

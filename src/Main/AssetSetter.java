@@ -16,9 +16,7 @@ import Inventario.Mochila;
 import Inventario.Objeto;
 import entidad.JefePorNivel;
 import entidad.Zombie;
-import entidad.Zombie1;
-import entidad.Zombie2;
-import entidad.Zombie3;
+
 
 import java.util.Random;
 
@@ -73,36 +71,52 @@ public class AssetSetter {
 
 	public Zombie zombieUnico() {
 		Random rand = new Random();
-		int tipo = rand.nextInt(3); //1.z1, 2.z2, 3.z3 
+		int tipoAleatorio = rand.nextInt(3) + 1; //1.z1, 2.z2, 3.z3 
 		Zombie z =null;
 
-		switch (tipo) {
-			case 0:
-				z = new Zombie1("inf1", gP);
-				break;
-			case 1:
-				z = new Zombie2("inf2", gP);
-				break;
-			case 2 :
-				z = new Zombie3("inf3", gP);
-				break;	
-			
-		}	
+		String nombreInstancia = "";
+	    double vida = 100;
+	    int vel = 1;
 
-		// posición aleatoria
-		int x,y,tilen;
-		do { //esto es para que los objetos no salgan en espacios donde el perosnaje no puede pasar por colisión
-		x = rand.nextInt(109); // suponiendo 109 tiles en X
-		y = rand.nextInt(109); // suponiendo 109tiles en Y
-		
-		tilen = gP.mTi.getCodigoMapaTiles(y,x);
-		
-		}while(gP.mTi.getColisionDeTile(tilen) == true);
-		
-		z.setMundoX(x * gP.getTamanioTile());
-		z.setMundoY(y * gP.getTamanioTile());
-		
-		return z;
+	    switch (tipoAleatorio) {
+	        case 1: 
+	            nombreInstancia = "Inf1";
+	            vida = 80; vel = 1;
+	            break;
+	        case 2: 
+	            nombreInstancia = "Inf2";
+	            vida = 100; vel = 1;
+	            break;
+	        case 3: 
+	            nombreInstancia = "Inf3";
+	            vida = 120; vel = 2;
+	            break;
+	    }
+	    z = new Zombie(gP, nombreInstancia, tipoAleatorio, vida, vel);
+
+	    int x, y, tilen;
+	    int intentos = 0;
+	    final int MAX_INTENTOS = 100; 
+	    boolean posicionValida;
+	    do {
+	        x = rand.nextInt(109); 
+	        y = rand.nextInt(109);
+	        tilen = gP.mTi.getCodigoMapaTiles(y, x);
+	        posicionValida = (gP.mTi.getColisionDeTile(tilen) == false);
+	        intentos++;
+	    } while (!posicionValida && intentos < MAX_INTENTOS);
+
+	    if (!posicionValida) {
+	        System.out.println("ADVERTENCIA (Zombie Refactorizado): No se encontró posición válida. Colocado en defecto (22,90).");
+	        x = 22; y = 90; // Posición por defecto segura
+	    }
+	    
+	    if (z != null) {
+	        z.setMundoX(x * gP.getTamanioTile());
+	        z.setMundoY(y * gP.getTamanioTile());
+	    }
+	    
+	    return z;
 	}
 	
 	private double tiempoAparecer = 0;

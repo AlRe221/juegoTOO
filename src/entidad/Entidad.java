@@ -44,6 +44,11 @@ public abstract class Entidad
 	protected double ataque = 5;
 	protected boolean vivo = true;
 	
+	 // ---> NUEVAS VARIABLES PARA EL FEEDBACK VISUAL DE DAÑO <---
+    protected boolean fueGolpeadoRecientemente = false;
+    protected int contadorFlashDaño = 0;
+    protected final int DURACION_FLASH_DAÑO = 15; // Duración del flash en frames (aprox. 0.25 seg a 60FPS)
+    // ---> FIN DE NUEVAS VARIABLES <---
 	
 	//PROYECTILES
 	protected int maxProy; 
@@ -51,11 +56,7 @@ public abstract class Entidad
 	protected Proyectil pro; 
 	protected int useCost;
 	
-	 // ---> NUEVAS VARIABLES PARA EL FEEDBACK VISUAL DE DAÑO <---
-    protected boolean fueGolpeadoRecientemente = false;
-    protected int contadorFlashDaño = 0;
-    protected final int DURACION_FLASH_DAÑO = 15; // Duración del flash en frames (aprox. 0.25 seg a 60FPS)
-    // ---> FIN DE NUEVAS VARIABLES <---
+
 	
 	protected BufferedImage i;
 	
