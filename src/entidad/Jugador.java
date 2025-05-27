@@ -32,6 +32,7 @@ public class Jugador extends Entidad
 	private Inventario inventario;
 	private String spriteKeyActual = "normal"; 
 	
+	private boolean danioAplicadoEnEsteAtaque = false;
 	private boolean atacando = false;
     private int contadorAnimacionAtaque = 0;
     private final int DURACION_FRAME_ATAQUE = 15; // Duración de cada frame del sprite de ataque 
@@ -122,6 +123,7 @@ public class Jugador extends Entidad
 	    estaticoD2 = setup1(carpeta + prefijo + "EstaticoD2");
 	    
 	    // Cargar sprites de ataque (ejemplo para abajo)
+	    if(!("normal".equals(key))) {
 	    ataqueAbajo1     = setup1(carpeta + prefijoAtaque + prefijo + "Abajo1"); 
 	    ataqueAbajo2     = setup1(carpeta + prefijoAtaque + prefijo + "Abajo2");
 	    ataqueArriba1    = setup1(carpeta + prefijoAtaque + prefijo + "Arriba1");
@@ -130,28 +132,27 @@ public class Jugador extends Entidad
 	    ataqueIzquierda2 = setup1(carpeta + prefijoAtaque + prefijo + "Izquierda2");
 	    ataqueDerecha1   = setup1(carpeta + prefijo + "EstaticoD1");
 	    ataqueDerecha2   = setup1(carpeta + prefijoAtaque + prefijo + "Derecha2");
-	}
+	    }
+    }
 	
 	int index=0;
 
 	public void update() {	 
 	    if (atacando) {
 	        contadorAnimacionAtaque++;
-	        contadorSprites(); 
+	        contadorSprites(); 	        
 
-	        
-	        // FRAME_DE_DAÑO duración de cada sprite.
-
-	        // Aquí asumimos que el daño se aplica a la mitad de la duración del segundo sprite.
-	        if (numeroSprite == FRAME_DE_DAÑO && contadorAnimacionAtaque == (DURACION_FRAME_ATAQUE + (DURACION_FRAME_ATAQUE / 2))) {
+	        // Si estamos en el frame de ataque (el segundo sprite) Y aún no hemos aplicado daño en este golpe
+	        if (numeroSprite == FRAME_DE_DAÑO && !danioAplicadoEnEsteAtaque) {
 	            aplicarDañoAZombiesCercanos();
+	            danioAplicadoEnEsteAtaque = true; // Marcamos que el daño ya fue aplicado
 	        }
-
+	        
 	        // Terminar la animación 
 	        if (contadorAnimacionAtaque >= DURACION_FRAME_ATAQUE * 2) {
 	            atacando = false;
 	            contadorAnimacionAtaque = 0;
-	            
+	            danioAplicadoEnEsteAtaque = false;	            
 	        }	        
 	        return; 
 	    }
@@ -171,11 +172,12 @@ public class Jugador extends Entidad
 	        this.direccion = "derecha";
 	        moviendo = true;
 	    }
-
+ 
 	    // Iniciar Ataque 
 	    if (mT.getTeclaAtacar() && (System.currentTimeMillis() - tiempoUltimoAtaque > COOLDOWN_ATAQUE)) {
 	        atacando = true;
 	        moviendo = false; 
+	        danioAplicadoEnEsteAtaque = false;
 	        contadorAnimacionAtaque = 0;
 	        numeroSprite = 1;          
 	        contadorSprites = 0;       
