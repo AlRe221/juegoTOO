@@ -390,6 +390,7 @@ public class Jugador extends Entidad
 	            );
 
 	            if (areaAtaque.intersects(zombieHitbox)) {
+	            	gP.playSE(21);
 	                zombie.recibirDaño(dañoInfligido);
 	                System.out.println("Zombie golpeado! Vida restante: " + zombie.getVida()); // Para depuración
 	            }
@@ -449,6 +450,7 @@ public class Jugador extends Entidad
 	    		 
 	    		 //SE AGREGARON SPRITES PARA LA PANTALLA DE FORMA LINEAL, POR ELLO DE CAMBIA
 	    		 //SE GUARDAN LOS VALORES ORIGINALES DE LAS PANTALLAS Y LOS MUNDOS 
+	    		 this.vida = this.vidaMaxima;
 	    		 cambiarSpriteCombate();       
 	    		 direccion = "estatico";     
 	    		 numeroSprite = 1; 
