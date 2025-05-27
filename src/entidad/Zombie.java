@@ -127,6 +127,7 @@ public class Zombie extends Entidad{
 		public void reducirVidaPocoApoco(boolean res) {
 			if (this.tipoE == 1 && res == true) {
 			    if (dañoContador <= 0) {
+			    	gP.playSE(5);
 			        gP.getJugador().setVida(gP.getJugador().getVida() - 3);
 			        dañoContador = dañototal;
 			    }
