@@ -41,7 +41,7 @@ public abstract class Entidad
 	protected double vida = vidaMaxima;
 	
 	//COMBATE
-	protected double ataque = 5;
+	protected double ataque = 30;
 	protected boolean vivo = true;
 	
 	 // ---> NUEVAS VARIABLES PARA EL FEEDBACK VISUAL DE DAÑO <---

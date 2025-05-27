@@ -158,7 +158,7 @@ public class UI {
    public void mostrarPantallaSettings(Graphics2D g2) {
 	   
 	   try {
-		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/juegoPortadaComtroles.png"));
+		   image = ImageIO.read(getClass().getResourceAsStream("/ImagenesPantallas/juegoPortadaControles.png"));
 		   g2.drawImage(image, 0, 0, gP.getAnchoPantalla(), gP.getAltoPantalla(), null);
 	   }catch(Exception e) {   
 	   }
@@ -166,8 +166,8 @@ public class UI {
 	   
 	   g2.setFont(Tipografia.cargaFuente(20F));
 	  String text = "EXIT";
-	 int x = gP.getTamanioTile()*2 ; 
-	   int y = gP.getTamanioTile() *1;
+	 int x = gP.getTamanioTile()*3 ; 
+	   int y = gP.getTamanioTile() *14;
 	   g2.drawString(text, x, y);
 	   
 	   setNUmCom(0);
