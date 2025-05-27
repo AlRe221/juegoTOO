@@ -9,7 +9,6 @@ import Inventario.Equipable;
 import Inventario.Inventario;
 import Inventario.ItemVelocidad;
 import Inventario.Objeto;
-import Inventario.ProyectilPaco;
 import Main.Ambientacion;
 import Main.FightGame;
 import Main.GamePanel;
@@ -40,7 +39,8 @@ public class Jugador extends Entidad
     private long tiempoUltimoAtaque = 0;
     private final long COOLDOWN_ATAQUE = 500; // 0.5 segundos
     private Rectangle areaAtaque; // Alcance del golpe
-	
+    private final long COOLDOWN_DISPARO = 1000; // Cooldown de 1 segundo
+    private long tiempoUltimoDisparo = 0;
     
     // BufferedImages para los sprites de ataque
     protected BufferedImage ataqueAbajo1, ataqueAbajo2; 
@@ -315,12 +315,15 @@ public class Jugador extends Entidad
 	    }
 	    
 	    // DISPARO DE PROYECTILES
-	    if (mT.getTeclaDisparar()) {	   
-	        ProyectilPaco newP = new ProyectilPaco(gP); 
+	    if (mT.getTeclaDisparar() && (System.currentTimeMillis() - tiempoUltimoDisparo > COOLDOWN_DISPARO)) {
+	        tiempoUltimoDisparo = System.currentTimeMillis();
 
-	        newP.set(this.mundoX, this.mundoY, "derecha", true, this);
+	        // 1. Crear el proyectil inactivo
+	        Proyectil newP = new Proyectil(gP);
+	        // 2. Activarlo con sus propiedades
+	        newP.set(this, "/ProyectilesCombate/poderPaco", 2, 5, "derecha");
+	        // 3. Añadirlo al juego
 	        gP.getListaProyectilJugador().add(newP);
-
 	    }	    	    
 	    contadorSprites();
 	}

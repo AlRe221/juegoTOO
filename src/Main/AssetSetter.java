@@ -89,7 +89,7 @@ public class AssetSetter {
 	            break;
 	        case 3: 
 	            nombreInstancia = "Inf3";
-	            vida = 120; vel = 2;
+	            vida = 120; vel = 3;
 	            break;
 	    }
 	    z = new Zombie(gP, nombreInstancia, tipoAleatorio, vida, vel);

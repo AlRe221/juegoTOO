@@ -26,6 +26,8 @@ public class GamePanel extends JPanel implements Runnable
 	private final int anchoPantalla = tamanioTile * maxColPantalla;
 	private final int altoPantalla = tamanioTile * maxRenPantalla;
 	private javax.swing.Timer vidaTimer;
+	// En GamePanel.java
+	protected ArrayList<Proyectil> listaProyectilJefe = new ArrayList<>(); // <-- ASEGÚRATE DE TENER ESTA LÍNEA
 		
 		Thread hebraJuego;
 		Ambientacion musica = new Ambientacion(this);
@@ -452,6 +454,14 @@ public class GamePanel extends JPanel implements Runnable
 
 		public void setListaProyectilJugador(ArrayList<Proyectil> listaProyectilJugador) {
 			this.listaProyectilJugador = listaProyectilJugador;
+		}
+		// En GamePanel.java (al final)
+		public ArrayList<Proyectil> getListaProyectilJefe() {
+		    return listaProyectilJefe;
+		}
+
+		public void setListaProyectilJefe(ArrayList<Proyectil> listaProyectilJefe) {
+		    this.listaProyectilJefe = listaProyectilJefe;
 		}
 		
 		

@@ -1,71 +1,97 @@
 package entidad;
 
 import java.awt.Graphics2D;
-
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import Main.GamePanel;
 
-public abstract class Proyectil extends Entidad{
-	
-	Entidad e;
-	Graphics2D g2;
-	public Proyectil(GamePanel gp) {
-		super(gp);
-		// TODO Auto-generated constructor stub
-	}
-	
-	public void set(int wX, int wY, String direccion, boolean vivo, Entidad usuario) {
-		this.mundoX = wX; 
-		this.mundoY = wY; 
-		this.direccion = direccion; 
-		this.vivo = vivo; 
-		this.e = usuario;
-		this.vida = this.vidaMaxima;
-		
-		
-	}
-	public void update() {
-	    JefePorNivel jefe = gP.getJefeActualEnCombate(); 
+public class Proyectil extends Entidad {
 
-	    if (jefe != null && jefe.getVivo()) {
-	        // Se actualiza la posición del área de colisión del proyectil para el frame actual.
-	        solidArea.x = mundoX + solidArea.x;
-	        solidArea.y = mundoY + solidArea.y;
-	       	        
-	        jefe.getSolidArea().x = 1000 + jefe.getSolidAreaDefaultX();
-	        jefe.getSolidArea().y = 400 + jefe.getSolidAreaDefaultY();
+    Entidad usuario;
+    BufferedImage proyectilSprite;
 
-	        // Si el área del proyectil se intersecta 
-	        if (this.getSolidArea().intersects(jefe.getSolidArea())) {
-	            jefe.recibirDaño(this.ataque); 
-	            this.vivo = false;            
-	        }
+    /**
+     * Constructor simple. Crea un proyectil "inactivo".
+     */
+    public Proyectil(GamePanel gp) {
+        super(gp);
+        this.vivo = false; // El proyectil nace "muerto" y se activa con set()
+    }
 
-	        // Se restauran las posiciones relativas de las áreas de colisión.
-	        solidArea.x = solidAreaDefaultX;
-	        solidArea.y = solidAreaDefaultY;
-	        jefe.getSolidArea().x = jefe.getSolidAreaDefaultX();
-	        jefe.getSolidArea().y = jefe.getSolidAreaDefaultY();
-	    }
+    /**
+     * Configura y activa el proyectil en el momento del disparo.
+     * Esta es la lógica clave que recuperamos del sistema original.
+     * @param usuario La entidad que dispara (Jugador o Jefe).
+     * @param spritePath La ruta a la imagen.
+     * @param ataque El daño del proyectil.
+     * @param velocidad La velocidad del proyectil.
+     * @param direccion La dirección en que viaja.
+     */
+    public void set(Entidad usuario, String spritePath, double ataque, int velocidad, String direccion) {
+        this.usuario = usuario;
+        this.velocidad = velocidad;
+        this.ataque = ataque;
+        this.direccion = direccion;
+        
+        // Toma las coordenadas dinámicas del usuario en el momento del disparo.
+        this.mundoX = usuario.getMundoX();
+        this.mundoY = usuario.getMundoY();
 
-	    if (this.vivo) {
-	        if (direccion.equals("izquierda")) {
-	            mundoX -= velocidad;
-	        } else if (direccion.equals("derecha")) {
-	            mundoX += velocidad;
-	        }
+        this.solidArea = new Rectangle(0, 0, 48, 48); // Hitbox por defecto.
+        getImage(spritePath); // Carga la imagen correcta.
+        
+        this.vivo = true; // ¡Activamos el proyectil!
+    }
+    
+    private void getImage(String path) {
+        this.proyectilSprite = setup1(path);
+    }
+    
+    public void update() {
+        if (!this.vivo) return;
 
-	        
-	        if (mundoX < 0 || mundoX > gP.getAnchoPantalla()) {
-	            this.vivo = false;
-	        }
-	    }
-	}
-	public abstract void dibujar(Graphics2D g2);
+        // 1. Mover
+        switch (direccion) {
+            case "derecha": mundoX += velocidad; break;
+            case "izquierda": mundoX -= velocidad; break;
+        }
 
-	@Override
-	public void setColisionOn(boolean colisionOn) {
-		// TODO Auto-generated method stub
-		
-	}
+        // 2. Actualizar hitbox
+        this.solidArea.x = this.mundoX;
+        this.solidArea.y = this.mundoY;
 
+        // 3. Comprobar colisión
+        if (usuario.tipoE == 0) { // Disparo del Jugador
+            JefePorNivel jefe = gP.getJefeActualEnCombate();
+            if (jefe != null && jefe.getVivo()) {
+                Rectangle hitboxJefe = new Rectangle(1000, 400, jefe.getSolidArea().width, jefe.getSolidArea().height);
+                if (this.solidArea.intersects(hitboxJefe)) {
+                    jefe.recibirDaño(this.ataque);
+                    this.vivo = false;
+                }
+            }
+        } else { // Disparo del Jefe
+            Rectangle hitboxJugador = new Rectangle(gP.getJugador().getMundoX(), gP.getJugador().getMundoY(), gP.getJugador().getSolidArea().width, gP.getJugador().getSolidArea().height);
+            if (this.solidArea.intersects(hitboxJugador)) {
+                gP.getJugador().recibirDaño(this.ataque);
+                this.vivo = false;
+            }
+        }
+
+        // 4. Comprobar límites de pantalla
+        if (mundoX < 0 || mundoX > gP.getAnchoPantalla()) {
+            this.vivo = false;
+        }
+    }
+
+    public void dibujar(Graphics2D g2) {
+        if (vivo && proyectilSprite != null) {
+            g2.drawImage(proyectilSprite, mundoX, mundoY, 120, 120, null);
+        }
+    }
+
+    @Override
+    public void setColisionOn(boolean colisionOn) {
+        // No es necesario para este proyectil
+    }
 }
