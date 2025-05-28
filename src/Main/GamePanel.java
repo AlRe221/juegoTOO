@@ -26,58 +26,71 @@ public class GamePanel extends JPanel implements Runnable
 	private final int anchoPantalla = tamanioTile * maxColPantalla;
 	private final int altoPantalla = tamanioTile * maxRenPantalla;
 	private javax.swing.Timer vidaTimer;
-	// En GamePanel.java
-	protected ArrayList<Proyectil> listaProyectilJefe = new ArrayList<>(); // <-- ASEGÚRATE DE TENER ESTA LÍNEA
-		
-		Thread hebraJuego;
-		Ambientacion musica = new Ambientacion(this);
-		Ambientacion se = new Ambientacion(this);
-		ManejadorTeclas mT = new ManejadorTeclas(this);
-		Jugador jugador = new Jugador(this, mT,se);
-		ManejadorTiles mTi =new ManejadorTiles(this);
-		ChecadorColision cC = new ChecadorColision(this);
-		Objeto o[] = new Objeto[10];
-		Zombie z[] = new Zombie[15];
-		AssetSetter asSet = new AssetSetter(this);
-		UI ui = new UI(this);
-		JefePorNivel jF[] = new JefePorNivel[3];
-		protected ArrayList<Proyectil> listaProyectilJugador = new ArrayList<>();
-		
-		//PELEA 
-		FightGame fg = null;
-		
-		//GAME STATE
-		protected int gameState; 
-		protected final int pantallaInicio = 0;
-		protected final int playState = 1;
-		protected final int pauseState = 2;
-		protected final int pantallaSetting = 3;
-		protected final int pantallaInfo = 4; 
-		protected final int pantallaDecision = 5;
-		protected final int win=6; 
-		protected final int gameOver1 = 7;
-		protected final int gameOver2 = 8;
-		protected final int fightState = 9;
-		
-		
-		
-	//WORLD SETTINGS
-	public final int maxColMundo = 42; 
-	public final int maxRenMundo = 109; 
-	public final int anchoMundo = tamanioTile * maxColMundo;
-	public final int altoMundo = tamanioTile * maxRenMundo;
+
+	// Pool de Proyectiles del Jefe
+	private final int MAX_PROYECTILES_JEFE_POOL = 20; // Define cuántos proyectiles puede tener el jefe activos a la vez (ajustable)
+	protected ArrayList<Proyectil> poolProyectilesJefe; // Ya no se inicializa aquí directamente
+
+	Thread hebraJuego;
+	Ambientacion musica = new Ambientacion(this);
+	Ambientacion se = new Ambientacion(this);
+	ManejadorTeclas mT = new ManejadorTeclas(this);
+	Jugador jugador = new Jugador(this, mT,se);
+	ManejadorTiles mTi =new ManejadorTiles(this);
+	ChecadorColision cC = new ChecadorColision(this);
+	Objeto o[] = new Objeto[10];
+	Zombie z[] = new Zombie[15];
+	AssetSetter asSet = new AssetSetter(this);
+	UI ui = new UI(this);
+	JefePorNivel jF[] = new JefePorNivel[3];
+	protected ArrayList<Proyectil> listaProyectilJugador = new ArrayList<>();
 	
-	int FPS = 60;
+	//PELEA 
+	FightGame fg = null;
+	
+	//GAME STATE
+	protected int gameState;
+	protected final int pantallaInicio = 0;
+	protected final int playState = 1;
+	protected final int pauseState = 2;
+	protected final int pantallaSetting = 3;
+	protected final int pantallaInfo = 4; 
+	protected final int pantallaDecision = 5;
+	protected final int win=6; 
+	protected final int gameOver1 = 7;
+	protected final int gameOver2 = 8;
+	protected final int fightState = 9;
+	
+	
+
+//WORLD SETTINGS
+public final int maxColMundo = 42; 
+public final int maxRenMundo = 109; 
+public final int anchoMundo = tamanioTile * maxColMundo;
+public final int altoMundo = tamanioTile * maxRenMundo;
+
+int FPS = 60;
+
+	// Variables para medición de FPS
+	private long tiempoUltimoFPSCheck = System.nanoTime();
+	private int framesDesdeUltimoCheck = 0;
+	private final long intervaloFPSCheckNS = 1_000_000_000L; // 1 segundo en nanosegundos
 		
-		public GamePanel()
-		{
-			this.setPreferredSize(new Dimension(this.anchoPantalla, this.altoPantalla));
-			this.setBackground(Color.black);
-			this.setDoubleBuffered(true);
-			this.addKeyListener(mT);
-			this.setFocusable(true);
-			
-			vidaTimer = new javax.swing.Timer(1_200_000, e -> {
+	public GamePanel()
+	{
+		this.setPreferredSize(new Dimension(this.anchoPantalla, this.altoPantalla));
+		this.setBackground(Color.black);
+		this.setDoubleBuffered(true);
+		this.addKeyListener(mT);
+		this.setFocusable(true);
+		
+		// Inicializar el pool de proyectiles del jefe
+		poolProyectilesJefe = new ArrayList<>(MAX_PROYECTILES_JEFE_POOL);
+		for (int i = 0; i < MAX_PROYECTILES_JEFE_POOL; i++) {
+		    poolProyectilesJefe.add(new Proyectil(this)); // Se añaden inactivos por defecto
+		}
+
+		vidaTimer = new javax.swing.Timer(1_200_000, e -> {
 	            if (gameState == playState) {
 	            	jugador.recibirDaño(0.5);
 	                repaint();
@@ -86,30 +99,31 @@ public class GamePanel extends JPanel implements Runnable
 	        vidaTimer.start();
 			
 
-		}
+	}
 		
 		
 		public void setupGame() {
-			// Reposicionar y curar al jugador
-	        jugador.configuracionInicial();                 // Pone mundoX/mundoY al inicio
-	        jugador.getInventario().clear();                
-
-	        // Repoblar objetos y zombis
-	        asSet.setObject();       
-	       // asSet.setObjectZ();      // inicializa el array z[] de zombis
-	        
-	       
-
-	        // Reset de alarma y timer
-	        alarme = false;
-	        vidaTimer.restart();     
-
-	        // Pantalla de Inicio
-	        playMusic(4);
-	        gameState = pantallaInicio;
+			jugador.configuracionInicial();
+			jugador.getInventario().clear();
+			asSet.setObject();
+			alarme = false;
+			vidaTimer.restart();
+			playMusic(4);
+			gameState = pantallaInicio;
+			// Al reiniciar el juego o salir de una pelea, asegurarse de que todos los proyectiles del pool estén inactivos.
+			resetearPoolProyectilesJefe();
 		}
 		
-		
+		public void resetearPoolProyectilesJefe() {
+		    if (poolProyectilesJefe != null) {
+		        for (Proyectil p : poolProyectilesJefe) {
+		            if (p != null) {
+		                p.setVivo(false); // Método setter para vivo en Proyectil.java es necesario
+		            }
+		        }
+		    }
+		}
+
 		
 		
 		public void iniciaHebraJuego()
@@ -455,15 +469,27 @@ public class GamePanel extends JPanel implements Runnable
 		public void setListaProyectilJugador(ArrayList<Proyectil> listaProyectilJugador) {
 			this.listaProyectilJugador = listaProyectilJugador;
 		}
-		// En GamePanel.java (al final)
-		public ArrayList<Proyectil> getListaProyectilJefe() {
-		    return listaProyectilJefe;
+		
+		/**
+		 * Obtiene la lista completa del pool de proyectiles del jefe (activos e inactivos).
+		 * FightGame iterará sobre esta lista y solo procesará/dibujará los activos.
+		 */
+		public ArrayList<Proyectil> getPoolProyectilesJefe() {
+		    return poolProyectilesJefe;
 		}
 
-		public void setListaProyectilJefe(ArrayList<Proyectil> listaProyectilJefe) {
-		    this.listaProyectilJefe = listaProyectilJefe;
+		/**
+		 * Busca y devuelve el primer proyectil inactivo del pool del jefe.
+		 * Si no hay ninguno disponible, devuelve null.
+		 */
+		public Proyectil getProyectilJefeDelPool() {
+		    for (Proyectil p : poolProyectilesJefe) {
+		        if (!p.getVivo()) {
+		            return p; // Devuelve el primer inactivo que encuentra
+		        }
+		    }
+		    return null; // No hay proyectiles inactivos disponibles
 		}
-		
 		
 	
 	

@@ -50,6 +50,8 @@ public class Proyectil extends Entidad {
     public void update() {
         if (!this.vivo) return;
 
+        boolean esProyectilJefe = (this.usuario != null && this.usuario.getTipoE() == 4);
+
         // 1. Mover
         switch (direccion) {
             case "derecha": mundoX += velocidad; break;
@@ -71,7 +73,14 @@ public class Proyectil extends Entidad {
                 }
             }
         } else { // Disparo del Jefe
-            Rectangle hitboxJugador = new Rectangle(gP.getJugador().getMundoX(), gP.getJugador().getMundoY(), gP.getJugador().getSolidArea().width, gP.getJugador().getSolidArea().height);
+            // Coordenadas y dimensiones del jugador en la pantalla de combate
+            int jugadorCombateX = gP.getJugador().getMundoX(); // Usar las coordenadas dinámicas del jugador
+            int jugadorCombateY = gP.getJugador().getMundoY(); // Usar las coordenadas dinámicas del jugador
+            int jugadorCombateAncho = 150; // Ancho visual del jugador en combate (ajustar si es necesario para hitbox)
+            int jugadorCombateAlto = 150;  // Alto visual del jugador en combate (ajustar si es necesario para hitbox)
+            
+            Rectangle hitboxJugador = new Rectangle(jugadorCombateX, jugadorCombateY, jugadorCombateAncho, jugadorCombateAlto);
+
             if (this.solidArea.intersects(hitboxJugador)) {
                 gP.getJugador().recibirDaño(this.ataque);
                 this.vivo = false;
@@ -93,5 +102,8 @@ public class Proyectil extends Entidad {
     @Override
     public void setColisionOn(boolean colisionOn) {
         // No es necesario para este proyectil
+    }
+    public Entidad getUsuario() {
+        return this.usuario;
     }
 }

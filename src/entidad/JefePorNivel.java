@@ -11,6 +11,10 @@ public class JefePorNivel extends Entidad{
 	String nombre;
     String ubicacion;
 
+    // Atributos para el disparo de proyectiles
+    private long tiempoUltimoDisparoJefe = 0;
+    private final long COOLDOWN_DISPARO_JEFE = 2000; // Disparar cada 2 segundos (ajustable)
+
     public JefePorNivel(GamePanel gp, int id, String nombre, String ubicacion, String spritePath1, String spritePath2) {
         super(gp);
         this.id_Nivel = id;
@@ -24,6 +28,7 @@ public class JefePorNivel extends Entidad{
         this.solidAreaDefaultY = this.solidArea.y;
         
         getImage(spritePath1, spritePath2);
+        this.tipoE = 4;
     }
     
     public void getImage(String path1, String path2) {

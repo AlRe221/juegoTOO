@@ -168,11 +168,11 @@ public abstract class Entidad
 	public int getMundoY() {
 		return this.mundoY;
 	}
-	public void setMundoX(int v) {
-		this.mundoX = v;
+	public void setMundoX(int mundoX) {
+		this.mundoX = mundoX;
 	}
-	public void setMundoY(int v) {
-		this.mundoY = v;
+	public void setMundoY(int mundoY) {
+		this.mundoY = mundoY;
 	}
 	
 	//direccion
@@ -204,8 +204,12 @@ public abstract class Entidad
 	public boolean getVivo() {
 		return this.vivo;
 	}
-	
 
+	public void setVivo(boolean vivo) {
+        this.vivo = vivo;
+    }
 	
-	
+	public int getTipoE() {
+        return this.tipoE;
+    }		
 }

@@ -22,6 +22,12 @@ public class FightGame {
 	private boolean peleaTerminada = false; 
 	private boolean gano = false;
 	
+	// Variables para perfilado simple
+	private long tiempoTotalUpdateNS = 0;
+	private long tiempoTotalDrawNS = 0;
+	private int contadorUpdates = 0;
+	private int contadorDraws = 0;
+	private final int INTERVALO_REPORTE_PERFILADO = 60; // Reportar cada 60 frames (aprox. 1 segundo)
 	
 	public FightGame(GamePanel gP, Jugador jug, JefePorNivel jN) {
 		this.gP = gP;
@@ -31,10 +37,12 @@ public class FightGame {
 	
 	
 	public void iniciaCombate() {
-		
+		System.out.println("[FightGame] ========== INICIO DE COMBATE ==========");
 	}
 	
 	public void update() {
+		long inicioUpdate = System.nanoTime();
+
 		if (peleaTerminada) {
 			gP.stopMusic();
 		    gP.getJugador().setMundoX(gP.getJugador().getMundoX_previo());
@@ -43,29 +51,11 @@ public class FightGame {
 		    gP.getJugador().setPantallaY(gP.getJugador().getPantallaY_previa());
 		    gP.getJugador().setDireccion("estatico");        
 	        
-	        // Limpiamos la lista de proyectiles
+	        // Limpiamos la lista de proyectiles del jugador
 	        gP.getListaProyectilJugador().clear();
-	     // En FightGame.java
-	        if (System.currentTimeMillis() - tiempoUltimoAtaqueJefe > COOLDOWN_ATAQUE_JEFE) {
-	            tiempoUltimoAtaqueJefe = System.currentTimeMillis();
-
-	            Proyectil proyectilJefe = new Proyectil(gP); // 1. Crear proyectil inactivo
-
-	            switch (jN.getIdNivel()) {
-	                case 1: // Miguelito
-	                    // 2. Activarlo con las propiedades de Miguelito
-	                    proyectilJefe.set(jN, "/ProyectilesCombate/poderMiguelito", 5, 4, "izquierda");
-	                    break;
-	                case 2: // Eloy
-	                    proyectilJefe.set(jN, "/ProyectilesCombate/poderEloy", 7, 5, "izquierda");
-	                    break;
-	                case 3: // Nacho
-	                    proyectilJefe.set(jN, "/ProyectilesCombate/poderNacho", 6, 6, "izquierda");
-	                    break;
-	            }
-
-	            gP.getListaProyectilJefe().add(proyectilJefe); // 3. Añadirlo al juego
-	        }
+	        // Reseteamos el pool de proyectiles del jefe
+	        gP.resetearPoolProyectilesJefe();
+	        
 	        // Jugador ganó 
 	        if (gano) {
 	            
@@ -83,15 +73,73 @@ public class FightGame {
 	  jefeAparecer();
 	  jug.updateCombate();
 	  
-	  for (int i = 0; i < gP.getListaProyectilJugador().size(); i++) {
-		    Proyectil p = gP.getListaProyectilJugador().get(i);
-		    if (p != null) {
-		        if (p.getVivo()) {
-		            p.update();
-		        } else {
-		            gP.getListaProyectilJugador().remove(i);
-		            i--; // <-- para revisar correctamente el siguiente proyectil
-		        }
+	// En FightGame.java
+		  if (System.currentTimeMillis() - tiempoUltimoAtaqueJefe > COOLDOWN_ATAQUE_JEFE) {
+		      tiempoUltimoAtaqueJefe = System.currentTimeMillis();
+
+		      Proyectil proyectilJefe = gP.getProyectilJefeDelPool(); 
+
+		      if (proyectilJefe != null) { // Solo proceder si obtuvimos un proyectil del pool
+		          String spritePathJefe = "";
+		          double ataqueJefe = 0;
+		          int velocidadJefe = 0;
+		          String direccionJefe = "izquierda";
+
+		          // --- NUEVO: Coordenadas de origen para el proyectil del jefe en la pantalla de combate ---
+		          int origenXJefe = 1000; // La X donde se dibuja el jefe en combate
+		          int origenYJefe = 400 + (200 / 2) - (48 / 2); // La Y donde se dibuja el jefe + la mitad de su alto - la mitad del alto del proyectil (para centrarlo un poco)
+
+		          switch (jN.getIdNivel()) {
+		              case 1: // Miguelito
+		                  spritePathJefe = "/ProyectilesCombate/poderMiguelito";
+		                  ataqueJefe = 5;
+		                  velocidadJefe = 4;
+		                  // NO usamos jN directamente para set, sino las coordenadas de origen
+		                  // y creamos una Entidad "dummy" o pasamos null si Proyectil.set lo maneja.
+		                  // Por ahora, vamos a modificar Proyectil.set para que acepte coordenadas directamente.
+		                  break;
+		              case 2: // Eloy
+		                  spritePathJefe = "/ProyectilesCombate/poderEloy";
+		                  ataqueJefe = 7;
+		                  velocidadJefe = 5;
+		                  break;
+		              case 3: // Nacho
+		                  spritePathJefe = "/ProyectilesCombate/poderNacho";
+		                  ataqueJefe = 6;
+		                  velocidadJefe = 6;
+		                  break;
+		          }
+		          
+		          // ANTES: proyectilJefe.set(jN, spritePathJefe, ataqueJefe, velocidadJefe, direccionJefe);
+		          // NECESITAREMOS MODIFICAR Proyectil.set o crear uno nuevo para pasar coordenadas directamente
+		          // O, pasar el Jefe (jN) pero luego SOBREESCRIBIR mundoX y mundoY del proyectil.
+		          proyectilJefe.set(jN, spritePathJefe, ataqueJefe, velocidadJefe, direccionJefe); // Mantenemos esto por ahora por el 'usuario'
+		          proyectilJefe.setMundoX(origenXJefe); 
+		          proyectilJefe.setMundoY(origenYJefe); 
+
+		          // gP.getListaProyectilJefe().add(proyectilJefe); // ESTA LÍNEA YA NO ES NECESARIA, el proyectil ya está en el pool, solo se activa.
+		      } // Fin de if (proyectilJefe != null)
+		  }
+		  
+		  // Actualizar proyectiles del Jugador
+		  for (int i = 0; i < gP.getListaProyectilJugador().size(); i++) {
+			    Proyectil p = gP.getListaProyectilJugador().get(i);
+			    if (p != null) {
+			        if (p.getVivo()) {
+			            p.update();
+			        } else {
+			            gP.getListaProyectilJugador().remove(i);
+			            i--; // <-- para revisar correctamente el siguiente proyectil
+			        }
+			    }
+			}
+	  
+	  // Actualizar proyectiles del Jefe (iterar sobre el pool y solo actualizar los activos)
+	  for (Proyectil p : gP.getPoolProyectilesJefe()) {
+		    if (p != null && p.getVivo()) {
+		        p.update();
+		        // La lógica de "p.getVivo() == false" dentro de p.update() ya lo marcará como no vivo.
+		        // No necesitamos removerlo del pool aquí.
 		    }
 		}
   	
@@ -101,11 +149,21 @@ public class FightGame {
         terminaCombate(true); // El jugador gana (jefe derrotado)
     }
 
-		
+    long finUpdate = System.nanoTime();
+    tiempoTotalUpdateNS += (finUpdate - inicioUpdate);
+    contadorUpdates++;
+
+    if (contadorUpdates >= INTERVALO_REPORTE_PERFILADO) {
+        System.out.printf("[FightGame Profiler] Tiempo medio Update(): %.4f ms%n", (tiempoTotalUpdateNS / (double)contadorUpdates) / 1_000_000.0);
+        tiempoTotalUpdateNS = 0;
+        contadorUpdates = 0;
+    }		
 	}
 	
 	
 	public void draw(Graphics2D g2) {
+		long inicioDraw = System.nanoTime();
+
 		mostrarFondoCombates(g2);
 		if (jN != null) {
 	        // Coordenadas y tamaño del jefe en pantalla
@@ -119,6 +177,16 @@ public class FightGame {
 		pintarProyectil(g2);
 		g2.setColor(Color.GRAY);
 	    g2.fillRect(0, 590, gP.getWidth(), 150);
+
+	    long finDraw = System.nanoTime();
+	    tiempoTotalDrawNS += (finDraw - inicioDraw);
+	    contadorDraws++;
+
+	    if (contadorDraws >= INTERVALO_REPORTE_PERFILADO) {
+	        System.out.printf("[FightGame Profiler] Tiempo medio Draw(): %.4f ms%n", (tiempoTotalDrawNS / (double)contadorDraws) / 1_000_000.0);
+	        tiempoTotalDrawNS = 0;
+	        contadorDraws = 0;
+	    }
 	}
 	
 	public void jefeAparecer() {
@@ -127,11 +195,18 @@ public class FightGame {
 	
 	
 	public void pintarProyectil(Graphics2D g2) {
+		// Dibujar proyectiles del Jugador
 		for(int i = 0; i < gP.getListaProyectilJugador().size(); i++) {
 			  if(gP.getListaProyectilJugador().get(i) != null) {
 				  gP.getListaProyectilJugador().get(i).dibujar(g2);
 			  }
 		  }
+		// Dibujar proyectiles del Jefe (iterar sobre el pool y solo dibujar los activos)
+		for(Proyectil p : gP.getPoolProyectilesJefe()) {
+			  if(p != null && p.getVivo()) {
+				  p.dibujar(g2);
+			  }
+		}
 	}
 	
 	public void mostrarFondoCombates(Graphics2D g2) {
@@ -177,5 +252,5 @@ public class FightGame {
         return this.jN;
     }
 	
-
 }
+
