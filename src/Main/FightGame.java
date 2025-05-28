@@ -53,9 +53,17 @@ public class FightGame {
 	                gP.getJF()[indiceJefeDerrotado] = null; 
 	            }
 	            // Opcional: podrías querer resetear idJFN en AssetSetter
-	            // gP.getAssS().setidJFN(-1); // Para indicar que no hay jefe activo para notificación	            
-	        }	        
+	            // gP.getAssS().setidJFN(-1); // Para indicar que no hay jefe activo para notificación	  
+	            if(jN.getIdNivel() == 3) {
+		        	gP.stopMusic();
+		        	gP.playSE(17);
+		        gP.setGameState(gP.getWin());
+		        return;
+		        }
+	        }	
+	       
 	        gP.setGameState(gP.getPlayState());
+	       
 	        return; 
 	    }
 	

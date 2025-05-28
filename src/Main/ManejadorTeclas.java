@@ -277,6 +277,7 @@ public class ManejadorTeclas extends KeyAdapter {
         	if(gP.getUi().getNumCom() == 0) {
             gP.setupGame();                          // reposiciona jugador, zombies, objetos, inventario…            gP.setGameState(gP.getPantallaInicio());
             gP.getUi().setNUmCom(0); // RESETEA LA SELECCIÓN DEL MENÚ
+            gP.stopMusic(); 
             gP.playMusic(4);
     	   }
          break;
