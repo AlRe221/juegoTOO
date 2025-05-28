@@ -22,7 +22,6 @@ import java.util.Random;
 
 public class AssetSetter {
 	private GamePanel gP;
-	private Graphics2D g2;
 	private int idNivel;
 	
 	public AssetSetter(GamePanel gP) {
@@ -107,7 +106,6 @@ public class AssetSetter {
 	    } while (!posicionValida && intentos < MAX_INTENTOS);
 
 	    if (!posicionValida) {
-	        System.out.println("ADVERTENCIA (Zombie Refactorizado): No se encontró posición válida. Colocado en defecto (22,90).");
 	        x = 22; y = 90; // Posición por defecto segura
 	    }
 	    

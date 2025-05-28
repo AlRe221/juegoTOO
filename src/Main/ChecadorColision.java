@@ -258,12 +258,6 @@ public class ChecadorColision {
 	}
 	
 	
-	public boolean checkJefe(Entidad e) {
-		//aquí hacemos lo mismo que arriba, para que jugador choquie con jefe y no lo atraviese
-		//igual que jefe, haya esa colisión, para que cuando se toquen mutuamente y ambos tengan colisión true
-		//cambie la pantalla a la de pelea.
-		return true;
-	}
 		
 	}
 

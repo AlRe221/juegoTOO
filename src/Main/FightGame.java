@@ -3,7 +3,6 @@ package Main;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -15,14 +14,12 @@ public class FightGame {
 	protected GamePanel gP; 
 	protected Jugador jug; 
 	protected JefePorNivel jN;
-	protected BufferedImage image;
 	
 	private long tiempoUltimoAtaqueJefe = 0;
 	private final long COOLDOWN_ATAQUE_JEFE = 2000;
 	private boolean peleaTerminada = false; 
 	private boolean gano = false;
 	
-	// Variables para perfilado simple
 	private long tiempoTotalUpdateNS = 0;
 	private long tiempoTotalDrawNS = 0;
 	private int contadorUpdates = 0;
@@ -37,7 +34,6 @@ public class FightGame {
 	
 	
 	public void iniciaCombate() {
-		System.out.println("[FightGame] ========== INICIO DE COMBATE ==========");
 	}
 	
 	public void update() {
@@ -49,6 +45,7 @@ public class FightGame {
 		    gP.getJugador().setMundoY(gP.getJugador().getMundoY_previo());
 		    gP.getJugador().setPantallaX(gP.getJugador().getPantallaX_previa());
 		    gP.getJugador().setPantallaY(gP.getJugador().getPantallaY_previa());
+		    // System.out.println("[FightGame] DESPUÉS DEL COMBATE (tras restaurar): mundoX=" + gP.getJugador().getMundoX() + ", mundoY=" + gP.getJugador().getMundoY() + ", pantallaX=" + gP.getJugador().getPantallaX() + ", pantallaY=" + gP.getJugador().getPantallaY());
 		    gP.getJugador().setDireccion("estatico");        
 	        
 	        // Limpiamos la lista de proyectiles del jugador
@@ -154,7 +151,6 @@ public class FightGame {
     contadorUpdates++;
 
     if (contadorUpdates >= INTERVALO_REPORTE_PERFILADO) {
-        System.out.printf("[FightGame Profiler] Tiempo medio Update(): %.4f ms%n", (tiempoTotalUpdateNS / (double)contadorUpdates) / 1_000_000.0);
         tiempoTotalUpdateNS = 0;
         contadorUpdates = 0;
     }		
@@ -183,7 +179,6 @@ public class FightGame {
 	    contadorDraws++;
 
 	    if (contadorDraws >= INTERVALO_REPORTE_PERFILADO) {
-	        System.out.printf("[FightGame Profiler] Tiempo medio Draw(): %.4f ms%n", (tiempoTotalDrawNS / (double)contadorDraws) / 1_000_000.0);
 	        tiempoTotalDrawNS = 0;
 	        contadorDraws = 0;
 	    }
@@ -232,7 +227,7 @@ public class FightGame {
 	    if (!path.isEmpty()) {
 	        try {
 	            
-	            image = ImageIO.read(getClass().getResourceAsStream(path));
+	            BufferedImage image = ImageIO.read(getClass().getResourceAsStream(path));
 	            g2.drawImage(image, 0, 0, gP.getAnchoPantalla(), gP.getAltoPantalla(), null);
 	        } catch (Exception e) {
 	        		           

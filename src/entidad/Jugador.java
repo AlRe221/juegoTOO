@@ -99,7 +99,6 @@ public class Jugador extends Entidad
 	        prefijo = "paco";
 	    } else {
 	        char pref = Character.toUpperCase(key.charAt(0));    // E, C, L, M…
-	        System.out.println(pref);
 	        carpeta = "/paquitoCobjetos/" + key + "/";
 	        prefijo = "paco" + pref;
 	        prefijoAtaque = "Pegar/";  
@@ -321,7 +320,7 @@ public class Jugador extends Entidad
 	        // 1. Crear el proyectil inactivo
 	        Proyectil newP = new Proyectil(gP);
 	        // 2. Activarlo con sus propiedades
-	        newP.set(this, "/ProyectilesCombate/poderPaco", 2, 5, "derecha");
+	        newP.set(this, "/ProyectilesCombate/poderPaco", 10, 5, "derecha");
 	        // 3. Añadirlo al juego
 	        gP.getListaProyectilJugador().add(newP);
 	    }	    	    
@@ -392,7 +391,6 @@ public class Jugador extends Entidad
 	            if (areaAtaque.intersects(zombieHitbox)) {
 	            	gP.playSE(21);
 	                zombie.recibirDaño(dañoInfligido);
-	                System.out.println("Zombie golpeado! Vida restante: " + zombie.getVida()); // Para depuración
 	            }
 	        }
 	    }
@@ -459,7 +457,8 @@ public class Jugador extends Entidad
 	    		 mundoY_previo = this.mundoY;
 	    		 mundoX_previo = this.mundoX;
 	    		 
-	    		 gP.setFightGame(new FightGame(gP, this, gP.getJF()[gP.getAssS().getidJFN()]));
+	    		 FightGame nuevoCombate = new FightGame(gP, this, gP.getJF()[jefind]);
+	    		 gP.setFightGame(nuevoCombate);
 	    		 gP.setGameState(gP.getFightState());
 	    	 }
 	    }

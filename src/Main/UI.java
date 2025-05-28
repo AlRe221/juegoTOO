@@ -4,18 +4,13 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-
-import Inventario.Coins;
 import Inventario.Objeto;
 import entidad.JefePorNivel;
 
@@ -24,11 +19,8 @@ public class UI {
    protected Graphics2D g2;
    protected BufferedImage image;
    protected boolean inventoryOpen = false;
-   protected int     inventoryCursor = 0;
    protected Font arial_30;
-   protected double playTime; 
    DecimalFormat dFormat = new DecimalFormat("#0.00");
-   private boolean tiempoActivo = true;  // variable de control
    protected int numCommand = 0;
 
    public int espacioCol = 0;
@@ -577,14 +569,6 @@ public class UI {
 	
 	public boolean getInventorOpen() {
 		return this.inventoryOpen;
-	}
-	
-	public void setInventorCursor(int val) {
-		this.inventoryCursor = val;
-	}
-	
-	public int getInventorCursor(){
-		return this.inventoryCursor;
 	}
 	
 	public int getNumCom() {

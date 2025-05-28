@@ -71,10 +71,6 @@ public final int altoMundo = tamanioTile * maxRenMundo;
 
 int FPS = 60;
 
-	// Variables para medición de FPS
-	private long tiempoUltimoFPSCheck = System.nanoTime();
-	private int framesDesdeUltimoCheck = 0;
-	private final long intervaloFPSCheckNS = 1_000_000_000L; // 1 segundo en nanosegundos
 		
 	public GamePanel()
 	{
@@ -346,24 +342,15 @@ int FPS = 60;
 		public Jugador getJugador() {
 			return jugador;
 		}
-		public void setJugador(Jugador jugador) {
-			this.jugador = jugador;
-		}
 		
 		
 		public ChecadorColision getchecadorColision() {
 			return cC;
 		}
-		public void setcC(ChecadorColision cC) {
-			this.cC = cC;
-		}
 		
 		
 		public ManejadorTiles getmTi() {
 			return mTi;
-		}
-		public void setmTi(ManejadorTiles mTi) {
-			this.mTi = mTi;
 		}
 		
 		public Objeto[] getObjetoInv() {
@@ -447,10 +434,6 @@ int FPS = 60;
 			return ui;
 		}
 
-		public void setUi(UI ui) {
-			this.ui = ui;
-		}
-		 
 		public AssetSetter getAssS() {
 			return this.asSet;
 		}
@@ -466,10 +449,6 @@ int FPS = 60;
 		}
 
 
-		public void setListaProyectilJugador(ArrayList<Proyectil> listaProyectilJugador) {
-			this.listaProyectilJugador = listaProyectilJugador;
-		}
-		
 		/**
 		 * Obtiene la lista completa del pool de proyectiles del jefe (activos e inactivos).
 		 * FightGame iterará sobre esta lista y solo procesará/dibujará los activos.
