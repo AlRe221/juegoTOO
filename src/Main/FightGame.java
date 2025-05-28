@@ -45,27 +45,6 @@ public class FightGame {
 	        
 	        // Limpiamos la lista de proyectiles
 	        gP.getListaProyectilJugador().clear();
-	     // En FightGame.java
-	        if (System.currentTimeMillis() - tiempoUltimoAtaqueJefe > COOLDOWN_ATAQUE_JEFE) {
-	            tiempoUltimoAtaqueJefe = System.currentTimeMillis();
-
-	            Proyectil proyectilJefe = new Proyectil(gP); // 1. Crear proyectil inactivo
-
-	            switch (jN.getIdNivel()) {
-	                case 1: // Miguelito
-	                    // 2. Activarlo con las propiedades de Miguelito
-	                    proyectilJefe.set(jN, "/ProyectilesCombate/poderMiguelito", 5, 4, "izquierda");
-	                    break;
-	                case 2: // Eloy
-	                    proyectilJefe.set(jN, "/ProyectilesCombate/poderEloy", 7, 5, "izquierda");
-	                    break;
-	                case 3: // Nacho
-	                    proyectilJefe.set(jN, "/ProyectilesCombate/poderNacho", 6, 6, "izquierda");
-	                    break;
-	            }
-
-	            gP.getListaProyectilJefe().add(proyectilJefe); // 3. Añadirlo al juego
-	        }
 	        // Jugador ganó 
 	        if (gano) {
 	            
@@ -83,6 +62,28 @@ public class FightGame {
 	  jefeAparecer();
 	  jug.updateCombate();
 	  
+	  // En FightGame.java
+	  if (System.currentTimeMillis() - tiempoUltimoAtaqueJefe > COOLDOWN_ATAQUE_JEFE) {
+	      tiempoUltimoAtaqueJefe = System.currentTimeMillis();
+
+	      Proyectil proyectilJefe = new Proyectil(gP); // 1. Crear proyectil inactivo
+
+	      switch (jN.getIdNivel()) {
+	          case 1: // Miguelito
+	              // 2. Activarlo con las propiedades de Miguelito
+	              proyectilJefe.set(jN, "/ProyectilesCombate/poderMiguelito", 5, 4, "izquierda");
+	              break;
+	          case 2: // Eloy
+	              proyectilJefe.set(jN, "/ProyectilesCombate/poderEloy", 7, 5, "izquierda");
+	              break;
+	          case 3: // Nacho
+	              proyectilJefe.set(jN, "/ProyectilesCombate/poderNacho", 6, 6, "izquierda");
+	              break;
+	      }
+
+	      gP.getListaProyectilJefe().add(proyectilJefe); // 3. Añadirlo al juego
+	  }
+	  
 	  for (int i = 0; i < gP.getListaProyectilJugador().size(); i++) {
 		    Proyectil p = gP.getListaProyectilJugador().get(i);
 		    if (p != null) {
@@ -90,6 +91,19 @@ public class FightGame {
 		            p.update();
 		        } else {
 		            gP.getListaProyectilJugador().remove(i);
+		            i--; // <-- para revisar correctamente el siguiente proyectil
+		        }
+		    }
+		}
+		
+		// Actualizar proyectiles del Jefe
+		for (int i = 0; i < gP.getListaProyectilJefe().size(); i++) {
+		    Proyectil p = gP.getListaProyectilJefe().get(i);
+		    if (p != null) {
+		        if (p.getVivo()) {
+		            p.update();
+		        } else {
+		            gP.getListaProyectilJefe().remove(i);
 		            i--; // <-- para revisar correctamente el siguiente proyectil
 		        }
 		    }
@@ -127,9 +141,17 @@ public class FightGame {
 	
 	
 	public void pintarProyectil(Graphics2D g2) {
+		// Dibujar proyectiles del Jugador
 		for(int i = 0; i < gP.getListaProyectilJugador().size(); i++) {
 			  if(gP.getListaProyectilJugador().get(i) != null) {
 				  gP.getListaProyectilJugador().get(i).dibujar(g2);
+			  }
+		  }
+		
+		// Dibujar proyectiles del Jefe
+		for(int i = 0; i < gP.getListaProyectilJefe().size(); i++) {
+			  if(gP.getListaProyectilJefe().get(i) != null && gP.getListaProyectilJefe().get(i).getVivo()) {
+				  gP.getListaProyectilJefe().get(i).dibujar(g2);
 			  }
 		  }
 	}
