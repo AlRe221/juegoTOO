@@ -248,7 +248,7 @@ public class Jugador extends Entidad
 	private int velocidadY = 0;     // Velocidad vertical
 	private boolean saltando = false; // Si está saltando
 	private final int sueloY = 400;     // Piso (posicion Y donde está el suelo)
-	private final int fuerzaSalto = -15; // Velocidad inicial al saltar (negativo para subir)
+	private final int fuerzaSalto = -25; // Velocidad inicial al saltar (negativo para subir)
 	private final int gravedad = 1;  
 		
 	public void updateCombate() {
